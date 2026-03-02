@@ -28,6 +28,19 @@
                 {% endif %}
                 {% endif %}
             </ul>
+            <!-- Theme Toggle -->
+            <div class="theme-toggle btn-group btn-group-sm me-3" role="group" aria-label="Theme toggle">
+                <button type="button" class="btn" data-theme="light" title="Light">
+                    <i class="bi bi-sun-fill"></i>
+                </button>
+                <button type="button" class="btn" data-theme="dark" title="Dark">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+                <button type="button" class="btn" data-theme="auto" title="Auto (System)">
+                    <i class="bi bi-circle-half"></i>
+                </button>
+            </div>
+
             <ul class="navbar-nav">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item dropdown">
