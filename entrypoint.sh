@@ -196,6 +196,15 @@ with app.app_context():
     admin_username = os.environ.get('ADMIN_USERNAME')
     admin_email = os.environ.get('ADMIN_EMAIL')
     admin_password = os.environ.get('ADMIN_PASSWORD')
+
+    # Diagnostic logging (safe — only shows length and first/last char)
+    print(f'  ENV ADMIN_USERNAME = {repr(admin_username)}')
+    print(f'  ENV ADMIN_EMAIL    = {repr(admin_email)}')
+    if admin_password:
+        print(f'  ENV ADMIN_PASSWORD = ({len(admin_password)} chars) {admin_password[0]}...{admin_password[-1]}')
+    else:
+        print(f'  ENV ADMIN_PASSWORD = None')
+
     if admin_username and admin_email and admin_password:
         admin = User.query.filter_by(username=admin_username).first()
         if not admin:
@@ -208,17 +217,27 @@ with app.app_context():
             admin.set_password(admin_password)
             db.session.add(admin)
             db.session.commit()
-            print(f'  Admin user created.')
+            print(f'  Admin user created: {admin_username}')
         else:
+            print(f'  Admin found: id={admin.id}, username={admin.username}, is_admin={admin.is_admin}')
             # Ensure password stays in sync with env var
             if not admin.check_password(admin_password):
                 admin.set_password(admin_password)
                 db.session.commit()
-                print('  Admin password updated from env.')
+                print('  Admin password UPDATED from env var.')
             else:
-                print('  Admin user OK.')
+                print('  Admin password matches env var. OK.')
+
+            # Verify the password was set correctly by re-checking
+            admin_recheck = User.query.filter_by(username=admin_username).first()
+            verify = admin_recheck.check_password(admin_password)
+            print(f'  Password verification after sync: {verify}')
     else:
-        print('  No ADMIN env vars set. Skipping admin creation.')
+        missing = []
+        if not admin_username: missing.append('ADMIN_USERNAME')
+        if not admin_email: missing.append('ADMIN_EMAIL')
+        if not admin_password: missing.append('ADMIN_PASSWORD')
+        print(f'  Missing env vars: {missing}. Skipping admin creation.')
 "
 
 echo ""
