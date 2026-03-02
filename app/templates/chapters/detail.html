@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}{{ chapter.title }} - Python Learning Tool{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('chapters.chapter_list') }}">Chapters</a></li>
+        <li class="breadcrumb-item active">{{ chapter.title }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-3">
+            <h2 class="mb-0 me-3">{{ chapter.order }}. {{ chapter.title }}</h2>
+            <span class="badge bg-{{ 'success' if chapter.difficulty_level == 'beginner' else ('warning text-dark' if chapter.difficulty_level == 'intermediate' else 'danger') }} fs-6">
+                {{ chapter.difficulty_level|capitalize }}
+            </span>
+        </div>
+        <p class="text-muted">{{ chapter.description }}</p>
+
+        {% if objectives %}
+        <div class="card mb-4 border-0 bg-light">
+            <div class="card-body">
+                <h6><i class="bi bi-bullseye"></i> Learning Objectives</h6>
+                <ul class="mb-0">
+                    {% for obj in objectives %}
+                    <li>{{ obj }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 bg-light">
+            <div class="card-body">
+                <h6><i class="bi bi-info-circle"></i> Chapter Info</h6>
+                <p class="mb-1"><small><i class="bi bi-clock"></i> Est. time: ~{{ chapter.estimated_time_minutes }} min</small></p>
+                <p class="mb-1"><small><i class="bi bi-journal-text"></i> {{ lessons|length }} lesson{{ 's' if lessons|length != 1 }}</small></p>
+                <p class="mb-0"><small><i class="bi bi-pencil-square"></i> {{ assignments|length }} assignment{{ 's' if assignments|length != 1 }}</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4 mb-3"><i class="bi bi-list-task"></i> Course Content</h4>
+<div class="list-group">
+    {% for item in unified_items %}
+    {% if item.type == 'lesson' %}
+    <a href="{{ url_for('lessons.view_lesson', lesson_id=item.item.id) }}"
+       class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">
+                    <i class="bi bi-journal-text text-primary"></i>
+                    {{ item.item.title }}
+                    <span class="badge bg-info ms-2">Lesson</span>
+                </h6>
+                <small class="text-muted">{{ item.item.description|truncate(100) }}</small>
+            </div>
+            <div class="text-end">
+                {% if lesson_status[item.item.id].completed %}
+                    <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Completed</span>
+                    {% if lesson_status[item.item.id].exercises_total > 0 %}
+                    <br><small class="text-muted">{{ lesson_status[item.item.id].exercises_completed }}/{{ lesson_status[item.item.id].exercises_total }} exercises</small>
+                    {% endif %}
+                {% else %}
+                    <span class="badge bg-secondary">Not viewed</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% elif item.type == 'assignment' %}
+    <a href="{{ url_for('assignments.view_assignment', assignment_id=item.item.id) }}"
+       class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">
+                    <i class="bi bi-pencil-square text-warning"></i>
+                    {{ item.item.title }}
+                    <span class="badge bg-{{ 'success' if item.item.difficulty == 'easy' else ('warning text-dark' if item.item.difficulty == 'medium' else 'danger') }} ms-2">
+                        {{ item.item.difficulty|capitalize }}
+                    </span>
+                </h6>
+                <small class="text-muted">Max score: {{ item.item.max_score }}</small>
+            </div>
+            <div class="text-end">
+                {% if status[item.item.id].best_score is not none %}
+                    {% set score = status[item.item.id].best_score %}
+                    <span class="badge fs-6 bg-{{ 'success' if score >= 80 else ('warning text-dark' if score >= 50 else 'danger') }}">
+                        {{ score|int }}/{{ item.item.max_score }}
+                    </span>
+                    <br><small class="text-muted">{{ status[item.item.id].attempts }} attempt{{ 's' if status[item.item.id].attempts != 1 }}</small>
+                {% else %}
+                    <span class="badge bg-secondary">Not attempted</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<div class="mt-4">
+    <a href="{{ url_for('chapters.chapter_list') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Chapters
+    </a>
+</div>
+{% endblock %}

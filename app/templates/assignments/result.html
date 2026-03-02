@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% block title %}Results - {{ assignment.title }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('chapters.chapter_list') }}">Chapters</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('chapters.chapter_detail', chapter_id=assignment.chapter.id) }}">{{ assignment.chapter.title }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('assignments.view_assignment', assignment_id=assignment.id) }}">{{ assignment.title }}</a></li>
+        <li class="breadcrumb-item active">Result</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h3 class="mb-4">Submission Results</h3>
+
+        <!-- Score Card -->
+        <div class="card mb-4 border-{{ 'success' if submission.score >= 80 else ('warning' if submission.score >= 50 else 'danger') }}">
+            <div class="card-body text-center py-4">
+                <h1 class="display-3 fw-bold text-{{ 'success' if submission.score >= 80 else ('warning' if submission.score >= 50 else 'danger') }}">
+                    {{ submission.score|int }}<small class="fs-4">/{{ assignment.max_score }}</small>
+                </h1>
+                <p class="text-muted mb-0">
+                    {% if submission.score >= 100 %}
+                        Perfect Score! Excellent work!
+                    {% elif submission.score >= 80 %}
+                        Great job! Almost perfect!
+                    {% elif submission.score >= 50 %}
+                        Good effort! Keep improving!
+                    {% elif submission.score > 0 %}
+                        Keep trying! Review the feedback below.
+                    {% else %}
+                        Don't give up! Check the errors below.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        {% if submission.error_message %}
+        <div class="card mb-4 border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-exclamation-triangle"></i> Error Messages
+            </div>
+            <div class="card-body">
+                <pre class="mb-0 text-danger"><code>{{ submission.error_message }}</code></pre>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Test Results -->
+        {% if test_details %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-check2-square"></i> Test Cases
+                <span class="badge bg-{{ 'success' if submission.passed_tests == submission.total_tests else 'warning' }} ms-2">
+                    {{ submission.passed_tests }}/{{ submission.total_tests }} passed
+                </span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Test</th>
+                            <th>Status</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for test in test_details %}
+                        <tr>
+                            <td><code>{{ test.name }}</code></td>
+                            <td>
+                                {% if test.status == 'PASSED' %}
+                                    <span class="badge bg-success"><i class="bi bi-check"></i> Passed</span>
+                                {% elif test.status == 'FAILED' %}
+                                    <span class="badge bg-danger"><i class="bi bi-x"></i> Failed</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ test.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td><small class="text-muted">{{ test.message|truncate(100) }}</small></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Output Comparison -->
+        {% if output_comparison %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-file-diff"></i> Output Comparison
+                <span class="badge bg-{{ 'success' if submission.output_match else 'warning' }} ms-2">
+                    {{ submission.output_matches_count }}/{{ submission.output_total_count }} matched
+                </span>
+            </div>
+            <div class="card-body">
+                {% for oc in output_comparison %}
+                <div class="mb-3 {{ '' if loop.last else 'border-bottom pb-3' }}">
+                    <h6>Test Case {{ loop.index }}
+                        {% if oc.match %}
+                            <span class="badge bg-success">Match</span>
+                        {% else %}
+                            <span class="badge bg-danger">Mismatch</span>
+                        {% endif %}
+                    </h6>
+                    {% if oc.input %}
+                    <div class="mb-2">
+                        <small class="text-muted fw-bold">Input:</small>
+                        <pre class="bg-light p-2 rounded small mb-0"><code>{{ oc.input }}</code></pre>
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <small class="text-muted fw-bold">Expected Output:</small>
+                            <pre class="bg-light p-2 rounded small mb-0"><code>{{ oc.expected }}</code></pre>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted fw-bold">Your Output:</small>
+                            <pre class="p-2 rounded small mb-0 {{ 'bg-success bg-opacity-10' if oc.match else 'bg-danger bg-opacity-10' }}"><code>{{ oc.actual }}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><i class="bi bi-info-circle"></i> Submission Details</h6>
+                <table class="table table-sm table-borderless mb-0">
+                    <tr>
+                        <td class="text-muted">Status</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if submission.status == 'completed' else ('danger' if submission.status == 'error' else 'warning') }}">
+                                {{ submission.status|capitalize }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Submitted</td>
+                        <td>{{ submission.submitted_at.strftime('%b %d, %Y %H:%M') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Exec Time</td>
+                        <td>{{ submission.execution_time_ms }}ms</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2">
+            <a href="{{ url_for('assignments.view_assignment', assignment_id=assignment.id) }}"
+               class="btn btn-primary">
+                <i class="bi bi-arrow-counterclockwise"></i> Try Again
+            </a>
+            <a href="{{ url_for('assignments.submission_history', assignment_id=assignment.id) }}"
+               class="btn btn-outline-secondary">
+                <i class="bi bi-clock-history"></i> View History
+            </a>
+            <a href="{{ url_for('chapters.chapter_detail', chapter_id=assignment.chapter.id) }}"
+               class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Chapter
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

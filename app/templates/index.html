@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Python Learning Tool - Learn Python from Beginner to Advanced{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-4 fw-bold text-primary mb-3">
+        <i class="bi bi-code-slash"></i> Python Learning Tool
+    </h1>
+    <p class="lead text-muted mb-4">
+        Master Python programming from beginner to advanced with interactive assignments,
+        instant feedback, and progress tracking.
+    </p>
+    <div class="d-flex justify-content-center gap-3 mb-5">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4">
+            Get Started <i class="bi bi-arrow-right"></i>
+        </a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg px-4">
+            Login
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="display-5 text-primary mb-3"><i class="bi bi-book"></i></div>
+                <h5>8 Structured Chapters</h5>
+                <p class="text-muted">From data types and variables to OOP and advanced concepts, organized by difficulty.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="display-5 text-success mb-3"><i class="bi bi-check-circle"></i></div>
+                <h5>Auto-Graded Assignments</h5>
+                <p class="text-muted">Submit your code and get instant feedback with test cases and output validation.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="display-5 text-warning mb-3"><i class="bi bi-graph-up"></i></div>
+                <h5>Track Your Progress</h5>
+                <p class="text-muted">Monitor your scores, see completion status, and track your learning journey.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h3 class="text-center mb-4">Course Curriculum</h3>
+        <div class="row g-3">
+            {% set chapters = [
+                ('Data Types & Variables', 'beginner', 'bi-123'),
+                ('Conditional Statements', 'beginner', 'bi-signpost-split'),
+                ('Loops', 'beginner', 'bi-arrow-repeat'),
+                ('Functions', 'intermediate', 'bi-braces'),
+                ('Data Structures', 'intermediate', 'bi-collection'),
+                ('File I/O & Error Handling', 'intermediate', 'bi-file-earmark-code'),
+                ('Object-Oriented Programming', 'advanced', 'bi-diagram-3'),
+                ('Modules & Advanced Concepts', 'advanced', 'bi-puzzle'),
+                ('NumPy Fundamentals', 'data-science', 'bi-grid-3x3'),
+                ('Pandas for Data Analysis', 'data-science', 'bi-table'),
+                ('Scikit-learn for ML', 'data-science', 'bi-robot')
+            ] %}
+            {% for title, level, icon in chapters %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-3">
+                        <i class="bi {{ icon }} fs-3 text-primary"></i>
+                        <h6 class="mt-2 mb-1">{{ title }}</h6>
+                        <span class="badge bg-{{ 'success' if level == 'beginner' else ('warning text-dark' if level == 'intermediate' else ('info' if level == 'data-science' else 'danger')) }}">
+                            {{ level|capitalize|replace('-', ' ') }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

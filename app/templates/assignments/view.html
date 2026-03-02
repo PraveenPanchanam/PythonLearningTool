@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}{{ assignment.title }} - Python Learning Tool{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/monokai.min.css">
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('chapters.chapter_list') }}">Chapters</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('chapters.chapter_detail', chapter_id=chapter.id) }}">{{ chapter.title }}</a></li>
+        <li class="breadcrumb-item active">{{ assignment.title }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-3">
+            <h3 class="mb-0 me-3">{{ assignment.title }}</h3>
+            <span class="badge bg-{{ 'success' if assignment.difficulty == 'easy' else ('warning text-dark' if assignment.difficulty == 'medium' else 'danger') }}">
+                {{ assignment.difficulty|capitalize }}
+            </span>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h6 class="card-title"><i class="bi bi-file-text"></i> Problem Description</h6>
+                <div class="description-content">
+                    {{ assignment.description|markdown }}
+                </div>
+            </div>
+        </div>
+
+        <form id="submit-form" method="POST" action="{{ url_for('assignments.submit_assignment', assignment_id=assignment.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-light d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-code-slash"></i> Code Editor</span>
+                    <small class="text-muted">Python 3</small>
+                </div>
+                <div class="card-body p-0">
+                    <textarea id="code-editor" name="code" class="d-none">{{ starter_code }}</textarea>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+                    <i class="bi bi-play-fill"></i> Submit & Run
+                </button>
+                <a href="{{ url_for('assignments.submission_history', assignment_id=assignment.id) }}"
+                   class="btn btn-outline-secondary">
+                    <i class="bi bi-clock-history"></i> History
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6><i class="bi bi-info-circle"></i> Assignment Info</h6>
+                <table class="table table-sm table-borderless mb-0">
+                    <tr>
+                        <td class="text-muted">Max Score</td>
+                        <td class="fw-bold">{{ assignment.max_score }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Tests Weight</td>
+                        <td>{{ (assignment.test_weight * 100)|int }}%</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Output Weight</td>
+                        <td>{{ (assignment.output_weight * 100)|int }}%</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Attempts</td>
+                        <td>{{ attempt_count }}</td>
+                    </tr>
+                    {% if best_score is not none %}
+                    <tr>
+                        <td class="text-muted">Best Score</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if best_score >= 80 else ('warning text-dark' if best_score >= 50 else 'danger') }}">
+                                {{ best_score|int }}/{{ assignment.max_score }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+
+        {% if hints %}
+        <div class="card">
+            <div class="card-body">
+                <h6><i class="bi bi-lightbulb"></i> Hints</h6>
+                <div class="accordion accordion-flush" id="hintsAccordion">
+                    {% for hint in hints %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed py-2" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#hint{{ loop.index }}">
+                                Hint {{ loop.index }}
+                            </button>
+                        </h2>
+                        <div id="hint{{ loop.index }}" class="accordion-collapse collapse"
+                             data-bs-parent="#hintsAccordion">
+                            <div class="accordion-body small">{{ hint }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/closebrackets.min.js"></script>
+<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+{% endblock %}

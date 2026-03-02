@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: pythonlearning
+      POSTGRES_USER: ${POSTGRES_USER:-pluser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pluser}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      FLASK_CONFIG: production
+      SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-pluser}:${POSTGRES_PASSWORD:-changeme}@db:5432/pythonlearning
+      SANDBOX_MODE: ${SANDBOX_MODE:-docker}
+      SANDBOX_IMAGE: pythonlearning-sandbox:latest
+      SANDBOX_MEMORY_LIMIT: 256m
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # For Docker sandbox
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

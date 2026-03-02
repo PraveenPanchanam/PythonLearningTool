@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Register - Python Learning Tool{% endblock %}
+
+{% block extra_css %}
+<style>
+    .level-card {
+        cursor: pointer;
+        border: 2px solid #dee2e6;
+        transition: all 0.2s;
+    }
+    .level-card:hover {
+        border-color: #0d6efd;
+        background-color: #f8f9ff;
+    }
+    .level-card.selected {
+        border-color: #0d6efd;
+        background-color: #e7f1ff;
+    }
+    .level-card .level-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+    .level-card input[type="radio"] {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h2 class="card-title text-center mb-4">
+                    <i class="bi bi-person-plus"></i> Register
+                </h2>
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   required autofocus placeholder="3-30 characters"
+                                   value="{{ username|default('') }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   required placeholder="your@email.com"
+                                   value="{{ email|default('') }}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   required placeholder="Min 8 chars, letter + number">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="confirm_password" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                                   required placeholder="Repeat your password">
+                        </div>
+                    </div>
+
+                    <!-- Python Experience Level -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="bi bi-mortarboard"></i> What's your Python experience?
+                        </label>
+                        <p class="text-muted small mb-3">This helps us create a personalized learning plan for you.</p>
+
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="level-card card h-100 p-3 {{ 'selected' if python_level|default('complete_beginner') == 'complete_beginner' }}">
+                                    <input type="radio" name="python_level" value="complete_beginner"
+                                           {{ 'checked' if python_level|default('complete_beginner') == 'complete_beginner' }}>
+                                    <div class="level-icon text-primary"><i class="bi bi-egg"></i></div>
+                                    <strong>Complete Beginner</strong>
+                                    <small class="text-muted">I've never written code before or just starting out</small>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="level-card card h-100 p-3 {{ 'selected' if python_level|default('') == 'some_experience' }}">
+                                    <input type="radio" name="python_level" value="some_experience"
+                                           {{ 'checked' if python_level|default('') == 'some_experience' }}>
+                                    <div class="level-icon text-success"><i class="bi bi-code-slash"></i></div>
+                                    <strong>Some Programming Experience</strong>
+                                    <small class="text-muted">I know another language (Java, C++, JS) but new to Python</small>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="level-card card h-100 p-3 {{ 'selected' if python_level|default('') == 'python_beginner' }}">
+                                    <input type="radio" name="python_level" value="python_beginner"
+                                           {{ 'checked' if python_level|default('') == 'python_beginner' }}>
+                                    <div class="level-icon text-warning"><i class="bi bi-lightning"></i></div>
+                                    <strong>Python Beginner</strong>
+                                    <small class="text-muted">I know Python basics (variables, loops, functions) and want to go deeper</small>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="level-card card h-100 p-3 {{ 'selected' if python_level|default('') == 'intermediate' }}">
+                                    <input type="radio" name="python_level" value="intermediate"
+                                           {{ 'checked' if python_level|default('') == 'intermediate' }}>
+                                    <div class="level-icon text-danger"><i class="bi bi-rocket-takeoff"></i></div>
+                                    <strong>Intermediate Python</strong>
+                                    <small class="text-muted">I'm comfortable with Python and want to learn data science / advanced topics</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        <i class="bi bi-person-plus"></i> Create Account & Start Learning
+                    </button>
+                </form>
+                <p class="text-center text-muted mb-0">
+                    Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.level-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.level-card').forEach(function(c) {
+                c.classList.remove('selected');
+            });
+            this.classList.add('selected');
+        });
+    });
+});
+</script>
+{% endblock %}

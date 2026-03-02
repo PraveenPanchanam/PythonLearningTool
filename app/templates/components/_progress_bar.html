@@ -1,0 +1,16 @@
+{% macro render_progress(completed, total, size='') %}
+{% set percentage = (completed / total * 100) if total > 0 else 0 %}
+{% set bar_class = 'bg-success' if percentage >= 80 else ('bg-warning' if percentage >= 40 else 'bg-danger') %}
+<div class="progress {{ 'progress-sm' if size == 'sm' else '' }}" style="height: {{ '8px' if size == 'sm' else '20px' }};">
+    <div class="progress-bar {{ bar_class }}"
+         role="progressbar"
+         style="width: {{ percentage }}%"
+         aria-valuenow="{{ percentage }}"
+         aria-valuemin="0"
+         aria-valuemax="100">
+        {% if size != 'sm' %}
+        {{ percentage|int }}%
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

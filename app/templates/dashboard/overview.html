@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% from 'components/_progress_bar.html' import render_progress %}
+{% block title %}Dashboard - Python Learning Tool{% endblock %}
+
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-speedometer2"></i> My Dashboard</h2>
+
+<!-- Learning Plan Banner -->
+<div class="card border-0 bg-light mb-4">
+    <div class="card-body py-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-map text-primary me-3" style="font-size: 1.5rem;"></i>
+                <div>
+                    <strong>Learning Plan:</strong>
+                    <span class="badge bg-primary ms-1">{{ level_display_name }}</span>
+                    <br>
+                    <small class="text-muted">{{ learning_plan.description }}</small>
+                </div>
+            </div>
+            <a href="{{ url_for('chapters.chapter_list') }}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-book"></i> View Chapters
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 bg-primary text-white shadow-sm">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ completed_assignments }}/{{ total_assignments }}</h3>
+                <small>Assignments Completed</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 bg-info text-white shadow-sm">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ completed_lessons }}/{{ total_lessons }}</h3>
+                <small>Lessons Completed</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 bg-success text-white shadow-sm">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ overall_percentage }}%</h3>
+                <small>Assignment Progress</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 bg-warning text-dark shadow-sm">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ avg_score }}</h3>
+                <small>Average Score</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overall Progress Bar -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h5><i class="bi bi-bar-chart"></i> Overall Progress</h5>
+        {{ render_progress(completed_assignments, total_assignments) }}
+    </div>
+</div>
+
+<!-- Per-Chapter Progress -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-book"></i> Chapter Progress</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Chapter</th>
+                        <th>Difficulty</th>
+                        <th>Lessons</th>
+                        <th>Assignments</th>
+                        <th>Avg Score</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cs in chapter_stats %}
+                    <tr>
+                        <td>
+                            <strong>{{ cs.chapter.order }}.</strong> {{ cs.chapter.title }}
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if cs.chapter.difficulty_level == 'beginner' else ('warning text-dark' if cs.chapter.difficulty_level == 'intermediate' else 'danger') }}">
+                                {{ cs.chapter.difficulty_level|capitalize }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if cs.lesson_total > 0 %}
+                            <span class="badge bg-{{ 'success' if cs.lesson_completed == cs.lesson_total else 'secondary' }}">
+                                {{ cs.lesson_completed }}/{{ cs.lesson_total }}
+                            </span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                {{ render_progress(cs.completed, cs.total, 'sm') }}
+                                <small class="text-muted text-nowrap">{{ cs.completed }}/{{ cs.total }}</small>
+                            </div>
+                        </td>
+                        <td>
+                            {% if cs.avg_score > 0 %}
+                                <span class="badge bg-{{ 'success' if cs.avg_score >= 80 else ('warning text-dark' if cs.avg_score >= 50 else 'danger') }}">
+                                    {{ cs.avg_score }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('chapters.chapter_detail', chapter_id=cs.chapter.id) }}"
+                               class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Submissions -->
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Submissions</h5>
+    </div>
+    <div class="card-body p-0">
+        {% if recent_submissions %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Assignment</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sub in recent_submissions %}
+                    <tr>
+                        <td>{{ sub.assignment_obj.title if sub.assignment_obj else 'Unknown' }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if sub.score >= 80 else ('warning text-dark' if sub.score >= 50 else 'danger') }}">
+                                {{ sub.score|int }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if sub.status == 'completed' else ('danger' if sub.status == 'error' else 'warning') }}">
+                                {{ sub.status }}
+                            </span>
+                        </td>
+                        <td>{{ sub.submitted_at.strftime('%b %d, %H:%M') }}</td>
+                        <td>
+                            <a href="{{ url_for('assignments.view_result', assignment_id=sub.assignment_id, submission_id=sub.id) }}"
+                               class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-4">
+            <p>No submissions yet. Start learning!</p>
+            <a href="{{ url_for('chapters.chapter_list') }}" class="btn btn-primary">Browse Chapters</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

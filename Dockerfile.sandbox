@@ -1,0 +1,17 @@
+FROM python:3.13-slim
+
+# Create non-root user for running student code
+RUN groupadd -r sandbox && useradd -r -g sandbox -d /home/sandbox -s /sbin/nologin sandbox
+
+# Install only the packages students need
+RUN pip install --no-cache-dir numpy pandas scikit-learn pytest
+
+# Create working directory
+RUN mkdir -p /sandbox && chown sandbox:sandbox /sandbox
+
+USER sandbox
+WORKDIR /sandbox
+
+# Default: run the student code file
+ENTRYPOINT ["python"]
+CMD ["student_code.py"]

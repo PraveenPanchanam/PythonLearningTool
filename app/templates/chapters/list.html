@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% from 'components/_progress_bar.html' import render_progress %}
+{% block title %}Chapters - Python Learning Tool{% endblock %}
+
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-book"></i> Course Chapters</h2>
+
+<!-- Learning Plan Banner -->
+<div class="card border-0 bg-light mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div class="me-3">
+                <i class="bi bi-map text-primary" style="font-size: 2rem;"></i>
+            </div>
+            <div>
+                <h6 class="mb-1">
+                    Your Learning Plan
+                    <span class="badge bg-primary ms-2">{{ level_display_name }}</span>
+                </h6>
+                <p class="text-muted mb-0 small">{{ learning_plan.description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for chapter in chapters %}
+    {% set rec = chapter_recommendations[chapter.id] %}
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm chapter-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">
+                        <span class="text-muted">{{ chapter.order }}.</span> {{ chapter.title }}
+                    </h5>
+                    <div class="d-flex gap-1">
+                        <span class="badge {{ rec.badge.class }}">
+                            <i class="bi {{ rec.badge.icon }}"></i> {{ rec.badge.label }}
+                        </span>
+                        <span class="badge bg-{{ 'success' if chapter.difficulty_level == 'beginner' else ('warning text-dark' if chapter.difficulty_level == 'intermediate' else 'danger') }}">
+                            {{ chapter.difficulty_level|capitalize }}
+                        </span>
+                    </div>
+                </div>
+
+                {% if rec.note %}
+                <p class="small mb-2" style="color: #6c63ff;">
+                    <i class="bi bi-lightbulb"></i> {{ rec.note }}
+                </p>
+                {% endif %}
+
+                <p class="card-text text-muted small">{{ chapter.description|truncate(100) }}</p>
+
+                <div class="mb-2">
+                    <small class="text-muted">
+                        Progress: {{ progress[chapter.id].completed }}/{{ progress[chapter.id].total }} items
+                        {% if progress[chapter.id].lesson_total > 0 %}
+                        ({{ progress[chapter.id].lesson_completed }}/{{ progress[chapter.id].lesson_total }} lessons,
+                         {{ progress[chapter.id].assignment_completed }}/{{ progress[chapter.id].assignment_total }} assignments)
+                        {% endif %}
+                    </small>
+                    {{ render_progress(progress[chapter.id].completed, progress[chapter.id].total, 'sm') }}
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <small class="text-muted">
+                        <i class="bi bi-clock"></i> ~{{ chapter.estimated_time_minutes }} min
+                    </small>
+                    <a href="{{ url_for('chapters.chapter_detail', chapter_id=chapter.id) }}"
+                       class="btn btn-{{ 'primary' if rec.status == 'focus' else ('outline-primary' if rec.status == 'recommended' else 'outline-secondary') }} btn-sm">
+                        {% if progress[chapter.id].completed == 0 %}
+                            Start Chapter <i class="bi bi-arrow-right"></i>
+                        {% elif progress[chapter.id].completed < progress[chapter.id].total %}
+                            Continue <i class="bi bi-arrow-right"></i>
+                        {% else %}
+                            Review <i class="bi bi-check-circle"></i>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

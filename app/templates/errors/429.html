@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Too Many Requests - Python Learning Tool{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-1 text-muted">429</h1>
+    <h3 class="mb-3">Too Many Requests</h3>
+    <p class="text-muted mb-4">You are sending requests too quickly. Please wait a moment and try again.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+        <i class="bi bi-house"></i> Go Home
+    </a>
+</div>
+{% endblock %}
