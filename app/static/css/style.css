@@ -1,17 +1,132 @@
 /* Python Learning Tool - Custom Styles */
 
+/* ========================================
+   CSS Custom Properties (Theme Variables)
+   ======================================== */
+:root {
+    --plt-body-bg: #f8f9fa;
+    --plt-heading-color: #2c3e50;
+    --plt-subheading-color: #34495e;
+    --plt-strong-color: #1e293b;
+    --plt-heading-border: #eee;
+    --plt-inline-code-bg: #e8f0fe;
+    --plt-inline-code-color: #1a56db;
+    --plt-pre-bg: #1e1e2e;
+    --plt-pre-color: #cdd6f4;
+    --plt-pre-border: #313244;
+    --plt-table-th-bg: #f1f5f9;
+    --plt-table-th-color: #334155;
+    --plt-table-border: #dee2e6;
+    --plt-table-stripe-bg: #f8fafc;
+    --plt-blockquote-border: #3b82f6;
+    --plt-blockquote-bg: #eff6ff;
+    --plt-hr-color: #e2e8f0;
+    --plt-exercise-bg: #f8f9fa;
+    --plt-exercise-border: #e9ecef;
+    --plt-editor-header-bg: #272822;
+    --plt-editor-header-color: #f8f8f2;
+    --plt-exercise-output-bg: #1e1e2e;
+    --plt-exercise-output-color: #cdd6f4;
+    --plt-progress-pending-bg: #e9ecef;
+    --plt-progress-pending-color: #6c757d;
+    --plt-section-card-border: #0d6efd;
+    --plt-list-hover-bg: #f0f7ff;
+    --plt-level-card-border: #dee2e6;
+    --plt-level-card-hover-border: #0d6efd;
+    --plt-level-card-hover-bg: #f8f9ff;
+    --plt-level-card-selected-bg: #e7f1ff;
+    --plt-footer-bg: #212529;
+    --plt-footer-color: #f8f9fa;
+    --plt-table-header-color: #6c757d;
+    --plt-rec-note-color: #6c63ff;
+}
+
+/* Dark mode overrides */
+[data-bs-theme="dark"] {
+    --plt-body-bg: #212529;
+    --plt-heading-color: #e2e8f0;
+    --plt-subheading-color: #cbd5e1;
+    --plt-strong-color: #f1f5f9;
+    --plt-heading-border: #4a5568;
+    --plt-inline-code-bg: #1e3a5f;
+    --plt-inline-code-color: #93c5fd;
+    --plt-pre-bg: #1a1b26;
+    --plt-pre-color: #c0caf5;
+    --plt-pre-border: #3b4261;
+    --plt-table-th-bg: #2d3748;
+    --plt-table-th-color: #e2e8f0;
+    --plt-table-border: #4a5568;
+    --plt-table-stripe-bg: #2d3748;
+    --plt-blockquote-border: #60a5fa;
+    --plt-blockquote-bg: #1e3a5f;
+    --plt-hr-color: #4a5568;
+    --plt-exercise-bg: #2d3748;
+    --plt-exercise-border: #4a5568;
+    --plt-editor-header-bg: #1a1b26;
+    --plt-editor-header-color: #c0caf5;
+    --plt-exercise-output-bg: #1a1b26;
+    --plt-exercise-output-color: #c0caf5;
+    --plt-progress-pending-bg: #4a5568;
+    --plt-progress-pending-color: #a0aec0;
+    --plt-section-card-border: #60a5fa;
+    --plt-list-hover-bg: #2d3748;
+    --plt-level-card-border: #4a5568;
+    --plt-level-card-hover-border: #60a5fa;
+    --plt-level-card-hover-bg: #1e3a5f;
+    --plt-level-card-selected-bg: #1e3a5f;
+    --plt-footer-bg: #1a1d21;
+    --plt-footer-color: #adb5bd;
+    --plt-table-header-color: #adb5bd;
+    --plt-rec-note-color: #a5a0ff;
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #f8f9fa;
+    background-color: var(--plt-body-bg);
 }
 
 main {
     flex: 1;
 }
 
-/* Chapter cards */
+/* ========================================
+   Footer
+   ======================================== */
+.footer-custom {
+    background-color: var(--plt-footer-bg);
+    color: var(--plt-footer-color);
+}
+
+/* ========================================
+   Theme Toggle
+   ======================================== */
+.theme-toggle .btn {
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1;
+}
+
+.theme-toggle .btn:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-toggle .btn.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ========================================
+   Chapter Cards
+   ======================================== */
 .chapter-card {
     transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -21,26 +136,36 @@ main {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Code editor */
+[data-bs-theme="dark"] .chapter-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ========================================
+   Code Editor (CodeMirror)
+   ======================================== */
 .CodeMirror {
     min-height: 400px;
     font-size: 14px;
     border-radius: 0 0 0.375rem 0.375rem;
 }
 
-/* Progress bar small variant */
+/* ========================================
+   Progress Bar
+   ======================================== */
 .progress-sm {
     height: 8px;
 }
 
-/* Description content styling (Markdown rendered) */
+/* ========================================
+   Description Content (Markdown Rendered)
+   ======================================== */
 .description-content h2 {
     font-size: 1.3rem;
     font-weight: 600;
     margin-top: 1.25rem;
     margin-bottom: 0.75rem;
-    color: #2c3e50;
-    border-bottom: 1px solid #eee;
+    color: var(--plt-heading-color);
+    border-bottom: 1px solid var(--plt-heading-border);
     padding-bottom: 0.3rem;
 }
 
@@ -49,7 +174,7 @@ main {
     font-weight: 600;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
-    color: #34495e;
+    color: var(--plt-subheading-color);
 }
 
 .description-content h4 {
@@ -76,8 +201,8 @@ main {
 }
 
 .description-content code {
-    background-color: #e8f0fe;
-    color: #1a56db;
+    background-color: var(--plt-inline-code-bg);
+    color: var(--plt-inline-code-color);
     padding: 2px 6px;
     border-radius: 4px;
     font-size: 0.88em;
@@ -85,13 +210,13 @@ main {
 }
 
 .description-content pre {
-    background-color: #1e1e2e;
-    color: #cdd6f4;
+    background-color: var(--plt-pre-bg);
+    color: var(--plt-pre-color);
     padding: 1rem 1.25rem;
     border-radius: 0.5rem;
     overflow-x: auto;
     margin-bottom: 1rem;
-    border: 1px solid #313244;
+    border: 1px solid var(--plt-pre-border);
     font-size: 0.88em;
     line-height: 1.5;
 }
@@ -106,7 +231,7 @@ main {
 
 .description-content strong {
     font-weight: 600;
-    color: #1e293b;
+    color: var(--plt-strong-color);
 }
 
 .description-content table {
@@ -118,83 +243,212 @@ main {
 .description-content table th,
 .description-content table td {
     padding: 0.5rem 0.75rem;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--plt-table-border);
     font-size: 0.9em;
 }
 
 .description-content table th {
-    background-color: #f1f5f9;
+    background-color: var(--plt-table-th-bg);
     font-weight: 600;
     text-transform: none;
-    color: #334155;
+    color: var(--plt-table-th-color);
 }
 
 .description-content table tr:nth-child(even) {
-    background-color: #f8fafc;
+    background-color: var(--plt-table-stripe-bg);
 }
 
 .description-content blockquote {
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid var(--plt-blockquote-border);
     padding: 0.5rem 1rem;
     margin: 0.75rem 0;
-    background-color: #eff6ff;
+    background-color: var(--plt-blockquote-bg);
     border-radius: 0 0.25rem 0.25rem 0;
 }
 
 .description-content hr {
     margin: 1rem 0;
-    border-color: #e2e8f0;
+    border-color: var(--plt-hr-color);
 }
 
-/* Score display */
-.score-perfect {
-    color: #198754;
-}
+/* ========================================
+   Score Display
+   ======================================== */
+.score-perfect { color: #198754; }
+.score-good { color: #ffc107; }
+.score-low { color: #dc3545; }
 
-.score-good {
-    color: #ffc107;
-}
-
-.score-low {
-    color: #dc3545;
-}
-
-/* List group assignment items */
+/* ========================================
+   List Group Items
+   ======================================== */
 .list-group-item-action:hover {
-    background-color: #f0f7ff;
+    background-color: var(--plt-list-hover-bg);
 }
 
-/* Landing page */
+/* ========================================
+   Landing Page
+   ======================================== */
 .display-4 {
     letter-spacing: -0.5px;
 }
 
-/* Breadcrumb */
+/* ========================================
+   Breadcrumb
+   ======================================== */
 .breadcrumb {
     background: none;
     padding: 0;
 }
 
-/* Table styles */
+/* ========================================
+   Table Styles
+   ======================================== */
 .table th {
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
-    color: #6c757d;
+    color: var(--plt-table-header-color);
 }
 
-/* Badge adjustments */
+/* ========================================
+   Badge
+   ======================================== */
 .badge {
     font-weight: 500;
 }
 
-/* Result page output comparison */
+/* ========================================
+   Result Page Output
+   ======================================== */
 pre code {
     white-space: pre-wrap;
     word-break: break-word;
 }
 
-/* Mobile adjustments */
+/* ========================================
+   Lesson View — Section Cards & Exercises
+   ======================================== */
+.section-card {
+    border-left: 4px solid var(--plt-section-card-border);
+    margin-bottom: 1.5rem;
+}
+
+.section-card.completed {
+    border-left-color: #198754;
+}
+
+.exercise-result {
+    display: none;
+}
+
+.exercise-result.show {
+    display: block;
+}
+
+.exercise-output {
+    background: var(--plt-exercise-output-bg);
+    color: var(--plt-exercise-output-color);
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-family: monospace;
+    white-space: pre-wrap;
+    font-size: 0.9rem;
+}
+
+.check-icon {
+    color: #198754;
+    font-size: 1.2rem;
+}
+
+.lesson-editor .CodeMirror {
+    min-height: 120px;
+    max-height: 250px;
+    font-size: 14px;
+    border-radius: 0 0 0.375rem 0.375rem;
+}
+
+.section-progress {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.section-progress.pending {
+    background: var(--plt-progress-pending-bg);
+    color: var(--plt-progress-pending-color);
+}
+
+.section-progress.done {
+    background: #198754;
+    color: white;
+}
+
+.exercise-box {
+    background: var(--plt-exercise-bg);
+    border: 1px solid var(--plt-exercise-border);
+    border-radius: 0.375rem;
+}
+
+.exercise-box .editor-header {
+    background: var(--plt-editor-header-bg);
+    color: var(--plt-editor-header-color);
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.375rem 0.375rem 0 0;
+    font-size: 0.8rem;
+}
+
+/* ========================================
+   Assignment Editor Card Header
+   ======================================== */
+.editor-card-header {
+    background-color: var(--plt-editor-header-bg);
+    color: var(--plt-editor-header-color);
+}
+
+/* ========================================
+   Register Page — Level Cards
+   ======================================== */
+.level-card {
+    cursor: pointer;
+    border: 2px solid var(--plt-level-card-border);
+    transition: all 0.2s;
+}
+
+.level-card:hover {
+    border-color: var(--plt-level-card-hover-border);
+    background-color: var(--plt-level-card-hover-bg);
+}
+
+.level-card.selected {
+    border-color: #0d6efd;
+    background-color: var(--plt-level-card-selected-bg);
+}
+
+.level-card .level-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.level-card input[type="radio"] {
+    display: none;
+}
+
+/* ========================================
+   Chapter Recommendation Note
+   ======================================== */
+.rec-note-text {
+    color: var(--plt-rec-note-color);
+}
+
+/* ========================================
+   Mobile Adjustments
+   ======================================== */
 @media (max-width: 768px) {
     .CodeMirror {
         min-height: 300px;
@@ -206,5 +460,9 @@ pre code {
 
     .display-4 {
         font-size: 2rem;
+    }
+
+    .theme-toggle {
+        margin-bottom: 0.5rem;
     }
 }
