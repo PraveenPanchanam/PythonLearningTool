@@ -10,12 +10,82 @@
     </ol>
 </nav>
 
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h3><i class="bi bi-person"></i> {{ student.username }}</h3>
-        <p class="text-muted mb-0">{{ student.email }} &middot; Joined {{ student.created_at.strftime('%B %d, %Y') }}</p>
+<!-- Student Header -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="mb-1">
+                    <span class="status-dot {{ status }} me-2" title="{{ status|capitalize }}"></span>
+                    <i class="bi bi-person"></i> {{ student.username }}
+                </h3>
+                <p class="text-muted mb-2">{{ student.email }} &middot; Joined {{ student.created_at.strftime('%B %d, %Y') }}</p>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <span class="badge bg-secondary">{{ student.python_level or 'N/A' }}</span>
+                    <span class="badge bg-{{ 'info text-dark' if student.age_group == 'under_12' else ('primary' if student.age_group == '12_to_17' else 'secondary') }}">
+                        {{ student.age_group|replace('_', ' ')|replace('plus', '+') }}
+                    </span>
+                </div>
+                <div class="small text-muted">
+                    <i class="bi bi-clock"></i> Last active: <strong>{{ student.last_active_at|timeago }}</strong>
+                    {% if student.last_location %}
+                    &middot; <i class="bi bi-geo-alt"></i> {{ student.last_location }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mt-3 mt-md-0">
+                    <label class="form-label text-muted small mb-1">Overall Progress</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="progress flex-grow-1" style="height: 20px;">
+                            <div class="progress-bar bg-{{ 'success' if overall_progress >= 75 else ('warning' if overall_progress >= 40 else 'primary') }}"
+                                 style="width: {{ overall_progress }}%; font-size: 0.8rem;">
+                                {{ overall_progress }}%
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted">{{ total_completed_lessons }} of {{ total_lessons }} lessons completed</small>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#sendNudgeModal">
+                        <i class="bi bi-lightning"></i> Send Nudge
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Nudge History -->
+{% if nudges %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-lightning"></i> Nudge History</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="list-group list-group-flush">
+            {% for nudge in nudges %}
+            <div class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                    <span class="badge bg-{{ 'success' if nudge.nudge_type == 'encouragement' else ('warning text-dark' if nudge.nudge_type == 'reminder' else ('info' if nudge.nudge_type == 'milestone' else 'secondary')) }} me-2">
+                        {{ nudge.nudge_type }}
+                    </span>
+                    {{ nudge.message }}
+                </div>
+                <div class="text-end text-nowrap ms-3">
+                    <small class="text-muted">{{ nudge.created_at|timeago }}</small>
+                    {% if nudge.is_read %}
+                    <br><small class="text-success"><i class="bi bi-check2-all"></i> Read</small>
+                    {% else %}
+                    <br><small class="text-muted"><i class="bi bi-check2"></i> Sent</small>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <!-- Chapter Progress -->
 <div class="card mb-4">
@@ -112,4 +182,83 @@
         {% endif %}
     </div>
 </div>
+
+<!-- Send Nudge Modal -->
+<div class="modal fade" id="sendNudgeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('admin.send_nudge', user_id=student.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-lightning"></i> Send Nudge to {{ student.username }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nudge Type</label>
+                        <select name="nudge_type" class="form-select" id="detailNudgeType">
+                            <option value="encouragement">🌟 Encouragement</option>
+                            <option value="reminder">👋 Reminder</option>
+                            <option value="milestone">🏆 Milestone</option>
+                            <option value="custom">✏️ Custom</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="detailTemplateButtons">
+                        <label class="form-label">Quick Templates</label>
+                        <div class="d-grid gap-2" id="detailTemplateList">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea name="message" class="form-control" rows="3" placeholder="Write a motivational message..." id="detailNudgeMessage" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning"><i class="bi bi-send"></i> Send Nudge</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function(){
+    var typeSelect = document.getElementById('detailNudgeType');
+    if (typeSelect) {
+        typeSelect.addEventListener('change', function(){
+            var type = this.value;
+            if (type === 'custom') {
+                document.getElementById('detailTemplateButtons').style.display = 'none';
+            } else {
+                document.getElementById('detailTemplateButtons').style.display = 'block';
+                loadDetailTemplates(type);
+            }
+        });
+        // Load initial templates
+        loadDetailTemplates('encouragement');
+    }
+
+    function loadDetailTemplates(type) {
+        fetch('/admin/api/nudge-templates?type=' + type)
+            .then(function(r){ return r.json(); })
+            .then(function(templates){
+                var list = document.getElementById('detailTemplateList');
+                list.innerHTML = '';
+                templates.forEach(function(t){
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'btn btn-outline-secondary btn-sm text-start';
+                    btn.textContent = t;
+                    btn.addEventListener('click', function(){
+                        document.getElementById('detailNudgeMessage').value = t;
+                    });
+                    list.appendChild(btn);
+                });
+            });
+    }
+})();
+</script>
 {% endblock %}

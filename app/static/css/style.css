@@ -684,6 +684,53 @@ pre code {
 }
 
 /* ========================================
+   Admin — Activity Status Dots
+   ======================================== */
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.status-dot.online {
+    background-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.status-dot.today {
+    background-color: #ffc107;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.status-dot.away {
+    background-color: #6c757d;
+}
+
+[data-bs-theme="dark"] .status-dot.online {
+    background-color: #48c774;
+    box-shadow: 0 0 0 3px rgba(72, 199, 116, 0.2);
+}
+
+[data-bs-theme="dark"] .status-dot.today {
+    background-color: #ffe066;
+    box-shadow: 0 0 0 3px rgba(255, 224, 102, 0.2);
+}
+
+[data-bs-theme="dark"] .status-dot.away {
+    background-color: #868e96;
+}
+
+/* ========================================
+   Admin — Nudge Alerts on Dashboard
+   ======================================== */
+.alert .btn-close {
+    padding: 0.5rem;
+    margin-top: 0.1rem;
+}
+
+/* ========================================
    Mobile Adjustments
    ======================================== */
 @media (max-width: 768px) {
