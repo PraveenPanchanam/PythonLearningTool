@@ -13,7 +13,9 @@ from config import config
 from app.extensions import db, login_manager, csrf, limiter, migrate
 
 
-def create_app(config_name='default'):
+def create_app(config_name=None):
+    if config_name is None:
+        config_name = os.environ.get('FLASK_CONFIG', 'default')
     app = Flask(__name__)
     app.config.from_object(config[config_name])
 
