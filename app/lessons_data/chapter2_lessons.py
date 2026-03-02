@@ -68,6 +68,13 @@ if not items_in_cart:
     print("Your cart is empty")
 ```""",
                 'exercise': None,
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'age = 15\nif age >= 18:\n    print("Adult")\nelse:\n    print("Minor")',
+                    'expected_output': 'Minor',
+                    'explanation': 'Since age is 15, and 15 is NOT greater than or equal to 18, the else block runs and prints "Minor"!',
+                },
             },
             {
                 'id': 'if-else-statements',
@@ -230,6 +237,19 @@ print(f"BMI: {bmi} -> Category: {category}")
                     'starter_code': '# Day number (1=Monday, 7=Sunday)\nday_number = 6\n\n# Determine the day type\nif day_number >= 1 and day_number <= 5:\n    print("Weekday")\nelif day_number == 6:\n    print("Saturday")\nelif day_number == 7:\n    print("Sunday")\nelse:\n    print("Invalid day number")\n',
                     'expected_output': 'Saturday',
                     'hint': 'Check if the day is between 1 and 5 (inclusive) for weekdays, then check for 6 and 7 separately. Use else for any other value.',
+                },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'temperature = 35\nif temperature > 30:\n    print("Hot!")\nelif temperature > 20:\n    print("Warm")\nelse:\n    print("Cool")',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': 'Hot!', 'correct': True},
+                        {'text': 'Warm', 'correct': False},
+                        {'text': 'Cool', 'correct': False},
+                        {'text': 'Hot! Warm', 'correct': False},
+                    ],
+                    'explanation': 'temperature is 35, which IS greater than 30, so the first if block runs and prints "Hot!". Python skips the elif and else because the first condition was True!',
                 },
             },
             {
@@ -583,6 +603,20 @@ print(status)  # adult
 
 This is useful for quick assignments but should not be used for complex logic.""",
                 'exercise': None,
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these code blocks to make a correct if/elif/else statement:',
+                    'code_blocks': [
+                        'score = 85',
+                        'if score >= 90:',
+                        '    print("A")',
+                        'elif score >= 80:',
+                        '    print("B")',
+                        'else:',
+                        '    print("C")',
+                    ],
+                    'explanation': 'First we set the variable, then check the highest condition first (>=90), then the next one (>=80), and else catches everything else!',
+                },
             },
             {
                 'id': 'access-control-exercise',

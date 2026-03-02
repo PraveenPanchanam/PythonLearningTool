@@ -16,6 +16,8 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, default=False)
     python_level = db.Column(db.String(30), default='complete_beginner')
     # Levels: 'complete_beginner', 'some_experience', 'python_beginner', 'intermediate'
+    age_group = db.Column(db.String(20), default='18_plus')
+    # Age groups: 'under_12', '12_to_17', '18_plus'
 
     submissions = db.relationship('Submission', backref='user', lazy='dynamic')
     lesson_completions = db.relationship('LessonCompletion', backref='user', lazy='dynamic')

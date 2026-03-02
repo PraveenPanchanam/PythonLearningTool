@@ -70,6 +70,15 @@ x, y, z = 1, 2, 3
 a = b = c = 0
 ```""",
                 'exercise': None,
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these code blocks in the correct order to create a variable and print it:',
+                    'code_blocks': [
+                        'name = "Alice"',
+                        'print(name)',
+                    ],
+                    'explanation': 'First we create the variable and give it a value, then we use print() to display it!',
+                },
             },
             {
                 'id': 'integers-and-floats',
@@ -303,6 +312,19 @@ print(isinstance(value, (int, float)))  # True - it is one of those types
                     'starter_code': '# Create four variables of different types\nmy_int = 42\nmy_float = 3.14\nmy_str = "hello"\nmy_bool = False\n\n# Print the type of each variable\nprint(type(my_int))\nprint(type(my_float))\nprint(type(my_str))\nprint(type(my_bool))\n\n# Check if my_int is an instance of int\nprint(isinstance(my_int, int))\n',
                     'expected_output': "<class 'int'>\n<class 'float'>\n<class 'str'>\n<class 'bool'>\nTrue",
                     'hint': 'The starter code is already complete. Run it to see the output and make sure you understand what each line does.',
+                },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'x = 3.14\nprint(type(x))',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': "<class 'float'>", 'correct': True},
+                        {'text': "<class 'int'>", 'correct': False},
+                        {'text': "3.14", 'correct': False},
+                        {'text': "<class 'str'>", 'correct': False},
+                    ],
+                    'explanation': '3.14 has a decimal point, so Python treats it as a float (decimal number). type() tells us the data type!',
                 },
             },
         ],
@@ -561,6 +583,17 @@ f-strings are generally preferred for readability and performance.""",
                     'expected_output': 'Product: Widget\nPrice: $9.99 x 3\nTotal: $29.97',
                     'hint': 'Use f-strings with :.2f format specifier to show exactly 2 decimal places for currency values.',
                 },
+                'game': {
+                    'type': 'fill_blank',
+                    'instructions': 'Fill in the blanks to make a greeting using an f-string:',
+                    'code_template': 'name = "Sam"\nage = 10\nprint({0}"Hello {1}! You are {2} years old.")',
+                    'blanks': [
+                        {'id': 0, 'answer': 'f', 'hint': 'What letter goes before the quotes in an f-string?'},
+                        {'id': 1, 'answer': '{name}', 'hint': 'Put the variable name inside curly braces'},
+                        {'id': 2, 'answer': '{age}', 'hint': 'Put the variable name inside curly braces'},
+                    ],
+                    'explanation': 'f-strings start with the letter f before the quotes. You put variable names inside {curly braces} to insert their values!',
+                },
             },
             {
                 'id': 'string-slicing',
@@ -630,6 +663,13 @@ new_word = "J" + word[1:]
 print(new_word)  # Jython
 ```""",
                 'exercise': None,
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'word = "Python"\nprint(word[0:3])',
+                    'expected_output': 'Pyt',
+                    'explanation': 'String slicing word[0:3] takes characters at positions 0, 1, and 2 (it stops before position 3). So "Python"[0:3] gives us "Pyt"!',
+                },
             },
         ],
     },

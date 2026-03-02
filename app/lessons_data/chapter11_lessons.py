@@ -146,6 +146,18 @@ predictions = model.predict(X_test)   # Predict test values
                     'expected_output': 'Training set size: 6\nTest set size: 2',
                     'hint': 'Use train_test_split(X, y, test_size=0.25, random_state=42). The function returns four arrays: X_train, X_test, y_train, y_test. Use len() to count samples.',
                 },
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange the machine learning workflow steps in the correct order:',
+                    'code_blocks': [
+                        '# Step 1: Prepare data (X features, y target)',
+                        '# Step 2: Split into train and test sets',
+                        '# Step 3: Create and train the model',
+                        '# Step 4: Make predictions',
+                        '# Step 5: Evaluate the results',
+                    ],
+                    'explanation': 'The ML workflow always follows this order: prepare your data, split it for honest testing, train your model, make predictions, and then evaluate how well it did!',
+                },
             },
             {
                 'id': 'train-test-split-depth',
@@ -214,6 +226,17 @@ y_train  # Labels for training
 y_test   # Labels for testing (the "answers" for evaluation)
 ```""",
                 'exercise': None,
+                'game': {
+                    'type': 'fill_blank',
+                    'instructions': 'Fill in the blanks to split data into training and testing sets:',
+                    'code_template': 'from sklearn.model_selection import {0}\n\nX_train, X_test, y_train, y_test = {1}(\n    X, y, test_size={2}, random_state=42\n)',
+                    'blanks': [
+                        {'id': 0, 'answer': 'train_test_split', 'hint': 'What function splits data into train and test?'},
+                        {'id': 1, 'answer': 'train_test_split', 'hint': 'Call the same function we imported!'},
+                        {'id': 2, 'answer': '0.3', 'hint': 'What decimal means 30% for testing?'},
+                    ],
+                    'explanation': 'We import train_test_split from sklearn, then call it with our data. test_size=0.3 means 30% goes to testing and 70% to training. The random_state ensures the same split every time!',
+                },
             },
             {
                 'id': 'first-model-complete',
@@ -539,6 +562,19 @@ This is why more advanced models and multiple features exist - topics we build t
                     'expected_output': 'Coefficient (salary increase per year): 6396.55\nIntercept (base salary): 22818.97\nR-squared: 1.00\nPredicted salary for 12 years: 99577.59',
                     'hint': 'Follow the standard workflow: train_test_split, fit the model, then access model.coef_[0] for the slope, model.intercept_ for the intercept, and r2_score() for evaluation.',
                 },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Think about what type of problem this is:',
+                    'code_snippet': 'Predicting the price of a house\nbased on its size, bedrooms,\nand location.',
+                    'question': 'What type of machine learning task is this?',
+                    'options': [
+                        {'text': 'Regression (predicting a number)', 'correct': True},
+                        {'text': 'Classification (predicting a category)', 'correct': False},
+                        {'text': 'Clustering (grouping similar items)', 'correct': False},
+                        {'text': 'None of the above', 'correct': False},
+                    ],
+                    'explanation': 'Since we are predicting a continuous number (price in dollars), this is a regression task. Classification would be predicting categories like "expensive" vs "affordable".',
+                },
             },
             {
                 'id': 'house-price-model',
@@ -822,6 +858,13 @@ print("Pass" if prediction[0] == 1 else "Fail")
                     'expected_output': 'Predictions: [0 1 0 1 1]\nActual:      [0 1 0 1 0]\nAccuracy: 0.80\nStudent with 4 hrs study, 80% attendance: Pass',
                     'hint': 'Follow the standard sklearn workflow with LogisticRegression(random_state=42). Use accuracy_score(y_test, y_pred) to measure performance.',
                 },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'If a model correctly predicted 8 out of 10 test cases, what is the accuracy? Type just the number!',
+                    'code_snippet': 'correct = 8\ntotal = 10\naccuracy = correct / total\nprint(accuracy)',
+                    'expected_output': '0.8',
+                    'explanation': 'Accuracy = correct predictions / total predictions. So 8 / 10 = 0.8, which means the model is 80% accurate!',
+                },
             },
             {
                 'id': 'decision-tree-classifier',
@@ -891,6 +934,19 @@ complex_model = DecisionTreeClassifier(random_state=42, max_depth=10)
 
 Think of `max_depth` like the number of questions in a game of 20 Questions - too few and you cannot narrow down the answer, too many and you are overthinking it.""",
                 'exercise': None,
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Think about how Decision Trees work:',
+                    'code_snippet': 'model = DecisionTreeClassifier(\n    random_state=42,\n    max_depth=3\n)',
+                    'question': 'What does setting max_depth=3 do?',
+                    'options': [
+                        {'text': 'Limits the tree to 3 levels of yes/no questions', 'correct': True},
+                        {'text': 'Uses only the 3 best features', 'correct': False},
+                        {'text': 'Trains the model 3 times', 'correct': False},
+                        {'text': 'Splits data into 3 groups', 'correct': False},
+                    ],
+                    'explanation': 'max_depth=3 means the tree can ask at most 3 levels of yes/no questions. This prevents overfitting — like limiting a game of 20 Questions to just 3 questions, keeping the model simple and general!',
+                },
             },
             {
                 'id': 'comparing-classifiers',

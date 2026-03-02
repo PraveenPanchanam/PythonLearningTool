@@ -1,0 +1,103 @@
+{# Game Widget Macros — renders interactive learning games for kids #}
+
+{% macro render_game(section_id, game) %}
+<div class="game-widget mt-3" id="game-{{ section_id }}" data-game-type="{{ game.type }}">
+    <div class="game-header mb-2">
+        <span class="game-badge"><i class="bi bi-controller"></i> Learning Game</span>
+    </div>
+    <p class="game-instructions mb-3">{{ game.instructions }}</p>
+
+    {% if game.type == 'drag_order' %}
+        {{ _drag_order(section_id, game) }}
+    {% elif game.type == 'fill_blank' %}
+        {{ _fill_blank(section_id, game) }}
+    {% elif game.type == 'quiz' %}
+        {{ _quiz(section_id, game) }}
+    {% elif game.type == 'predict_output' %}
+        {{ _predict_output(section_id, game) }}
+    {% endif %}
+
+    <div class="game-explanation mt-2 p-3 rounded" id="game-explanation-{{ section_id }}" style="display:none;">
+        <i class="bi bi-info-circle"></i> {{ game.explanation }}
+    </div>
+    <div class="game-result mt-2" id="game-result-{{ section_id }}" style="display:none;"></div>
+</div>
+{% endmacro %}
+
+
+{# ── Drag & Drop Code Ordering ── #}
+{% macro _drag_order(section_id, game) %}
+<div class="drag-order-game" data-correct='{{ game.code_blocks | tojson }}'>
+    <p class="small text-muted mb-2"><i class="bi bi-arrows-move"></i> Drag the blocks into the correct order:</p>
+    <div class="drag-source mb-3" id="drag-source-{{ section_id }}">
+        {% for block in game.code_blocks %}
+        <div class="drag-block" draggable="true" data-index="{{ loop.index0 }}">
+            <i class="bi bi-grip-vertical drag-handle"></i>
+            <code>{{ block }}</code>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="btn btn-sm btn-primary game-check-btn" data-game-id="{{ section_id }}" data-game-type="drag_order">
+        <i class="bi bi-check2-circle"></i> Check Order
+    </button>
+    <button class="btn btn-sm btn-outline-secondary game-reset-btn ms-2" data-game-id="{{ section_id }}" data-game-type="drag_order">
+        <i class="bi bi-arrow-counterclockwise"></i> Shuffle Again
+    </button>
+</div>
+{% endmacro %}
+
+
+{# ── Fill in the Blank ── #}
+{% macro _fill_blank(section_id, game) %}
+<div class="fill-blank-game">
+    <div class="code-with-blanks p-3 rounded mb-3" id="fill-code-{{ section_id }}"
+         data-template="{{ game.code_template }}"
+         data-blanks='{{ game.blanks | tojson }}'>
+        {# JS will render the code with input fields #}
+    </div>
+    <button class="btn btn-sm btn-primary game-check-btn" data-game-id="{{ section_id }}" data-game-type="fill_blank">
+        <i class="bi bi-check2-circle"></i> Check Answers
+    </button>
+    <button class="btn btn-sm btn-outline-warning game-hint-btn ms-2" data-game-id="{{ section_id }}" style="display:none;">
+        <i class="bi bi-lightbulb"></i> Show Hints
+    </button>
+</div>
+{% endmacro %}
+
+
+{# ── Multiple Choice Quiz ── #}
+{% macro _quiz(section_id, game) %}
+<div class="quiz-game">
+    {% if game.code_snippet %}
+    <pre class="quiz-code-snippet p-3 rounded mb-3"><code>{{ game.code_snippet }}</code></pre>
+    {% endif %}
+    <p class="fw-bold mb-2">{{ game.question }}</p>
+    <div class="quiz-options" id="quiz-options-{{ section_id }}" data-options='{{ game.options | tojson }}'>
+        {% for option in game.options %}
+        <label class="quiz-option d-flex align-items-center p-2 rounded mb-2">
+            <input type="radio" name="quiz-{{ section_id }}" value="{{ loop.index0 }}" class="me-2">
+            <code>{{ option.text }}</code>
+        </label>
+        {% endfor %}
+    </div>
+    <button class="btn btn-sm btn-primary game-check-btn mt-2" data-game-id="{{ section_id }}" data-game-type="quiz">
+        <i class="bi bi-check2-circle"></i> Submit Answer
+    </button>
+</div>
+{% endmacro %}
+
+
+{# ── Output Prediction ── #}
+{% macro _predict_output(section_id, game) %}
+<div class="predict-output-game" data-expected="{{ game.expected_output }}">
+    <pre class="predict-code-snippet p-3 rounded mb-3"><code>{{ game.code_snippet }}</code></pre>
+    <div class="mb-3">
+        <label class="form-label small fw-bold">Type your guess:</label>
+        <input type="text" class="form-control predict-input" id="predict-input-{{ section_id }}"
+               placeholder="What will this code print?">
+    </div>
+    <button class="btn btn-sm btn-primary game-check-btn" data-game-id="{{ section_id }}" data-game-type="predict_output">
+        <i class="bi bi-eye"></i> Reveal Answer
+    </button>
+</div>
+{% endmacro %}

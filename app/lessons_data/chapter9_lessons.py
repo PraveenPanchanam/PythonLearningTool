@@ -108,6 +108,17 @@ print(stock_prices)
                     'expected_output': '[85 92 78 95 88]\n[[1 2 3]\n [4 5 6]]',
                     'hint': 'Use np.array() with a list to create a 1D array. For a 2D array, pass a list of lists where each inner list is a row.',
                 },
+                'game': {
+                    'type': 'fill_blank',
+                    'instructions': 'Fill in the blanks to create a NumPy array and print its shape:',
+                    'code_template': 'import {0} as np\ndata = np.{1}([10, 20, 30])\nprint(data.{2})',
+                    'blanks': [
+                        {'id': 0, 'answer': 'numpy', 'hint': 'What library do we import for arrays?'},
+                        {'id': 1, 'answer': 'array', 'hint': 'What function creates an array from a list?'},
+                        {'id': 2, 'answer': 'shape', 'hint': 'What attribute tells us the array dimensions?'},
+                    ],
+                    'explanation': 'We import numpy as np, use np.array() to create an array from a list, and .shape tells us the dimensions — (3,) for a 1D array with 3 elements!',
+                },
             },
             {
                 'id': 'array-attributes',
@@ -267,6 +278,13 @@ sensor_readings[1] = 71.8   # 1 AM reading
                     'starter_code': 'import numpy as np\n\n# Create an array of 4 zeros (integer)\nzeros = np.zeros(4, dtype=int)\nprint(zeros)\n\n# Create array [1, 2, 3, 4, 5] using arange\nsequence = np.arange(1, 6)\nprint(sequence)\n\n# Create 5 evenly spaced values from 0 to 1\nspaced = np.linspace(0, 1, 5)\nprint(spaced)\n\n# Create 3x3 identity matrix (integer)\nidentity = np.eye(3, dtype=int)\nprint(identity)\n',
                     'expected_output': '[0 0 0 0]\n[1 2 3 4 5]\n[0.   0.25 0.5  0.75 1.  ]\n[[1 0 0]\n [0 1 0]\n [0 0 1]]',
                     'hint': 'Use np.zeros(4, dtype=int) for integer zeros. Use np.arange(1, 6) to get 1 through 5. Use np.linspace(0, 1, 5) for evenly spaced values. Use np.eye(3, dtype=int) for the identity matrix.',
+                },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'import numpy as np\narr = np.arange(1, 6)\nprint(arr * 2)',
+                    'expected_output': '[ 2  4  6  8 10]',
+                    'explanation': 'np.arange(1, 6) creates [1 2 3 4 5]. When you multiply by 2, NumPy does it element-wise: each number gets doubled! This is called vectorized operations.',
                 },
             },
             {
@@ -463,6 +481,16 @@ print(original)  # [ 1 99  3  4  5] -- original unchanged
                     'expected_output': '[120 150 130 160]\n[130 210  95]\n[[120 150]\n [200 180]]',
                     'hint': 'Use sales[0] for the first row. Use sales[:, 2] for the third column (index 2). Use sales[0:2, 0:2] for the top-left 2x2 sub-array.',
                 },
+                'game': {
+                    'type': 'fill_blank',
+                    'instructions': 'Fill in the blanks to get a column from a 2D array:',
+                    'code_template': 'import numpy as np\ndata = np.array([[1, 2, 3], [4, 5, 6]])\n# Get all rows, second column\nresult = data[{0}, {1}]\nprint(result)',
+                    'blanks': [
+                        {'id': 0, 'answer': ':', 'hint': 'What symbol selects ALL rows?'},
+                        {'id': 1, 'answer': '1', 'hint': 'What index is the second column?'},
+                    ],
+                    'explanation': 'In 2D arrays, data[:, 1] means "all rows (:), column at index 1". This gives us [2, 5] — the second column!',
+                },
             },
             {
                 'id': 'fancy-and-boolean-indexing',
@@ -557,6 +585,19 @@ print(labels)  # ['Pass' 'Fail' 'Pass' 'Fail' 'Pass']
                     'starter_code': 'import numpy as np\n\n# Daily temperatures for 10 days\ntemps = np.array([72, 85, 68, 91, 75, 88, 70, 79, 82, 66])\n\n# Temperatures above 75\nabove_75 = temps[temps > 75]\nprint(above_75)\n\n# Count of temperatures between 70 and 80 (inclusive)\nmild_count = ((temps >= 70) & (temps <= 80)).sum()\nprint(mild_count)\n\n# Label as "Hot" (above 80) or "Cool"\nlabels = np.where(temps > 80, "Hot", "Cool")\nprint(labels)\n',
                     'expected_output': "[85 91 88 79 82]\n4\n['Cool' 'Hot' 'Cool' 'Hot' 'Cool' 'Hot' 'Cool' 'Cool' 'Hot' 'Cool']",
                     'hint': 'Use temps[temps > 75] for boolean indexing. Use ((temps >= 70) & (temps <= 80)).sum() to count elements meeting both conditions. Use np.where(temps > 80, "Hot", "Cool") for conditional labeling.',
+                },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'import numpy as np\nscores = np.array([85, 60, 92, 45, 78])\nmask = scores > 70\nprint(mask.sum())',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': '3', 'correct': True},
+                        {'text': '5', 'correct': False},
+                        {'text': '255', 'correct': False},
+                        {'text': '[True, False, True, False, True]', 'correct': False},
+                    ],
+                    'explanation': 'scores > 70 creates a boolean array [True, False, True, False, True]. When you call .sum() on booleans, True counts as 1 and False as 0. So 1+0+1+0+1 = 3!',
                 },
             },
             {
@@ -654,6 +695,13 @@ print(np.round(final_grades, 1))
                     'starter_code': 'import numpy as np\n\n# Base prices for 3 products\nprices = np.array([25.00, 15.00, 40.00])\n\n# Apply 15% discount using broadcasting\ndiscounted = np.round(prices * 0.85, 2)\nprint(discounted)\n\n# Quantities sold by 2 cashiers for each of the 3 products\nquantities = np.array([\n    [4, 7, 2],  # Cashier 1\n    [3, 5, 6],  # Cashier 2\n])\n\n# Revenue: quantities * discounted prices (broadcasting)\nrevenue = quantities * discounted\nprint(revenue)\n',
                     'expected_output': '[21.25 12.75 34.  ]\n[[ 85.    89.25  68.  ]\n [ 63.75  63.75 204.  ]]',
                     'hint': 'Multiply the prices array by 0.85 for the discount. For revenue, multiply the 2D quantities array (2, 3) by the 1D discounted prices (3,). Broadcasting will stretch the 1D array across each row.',
+                },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this broadcasting code will print? Type your guess!',
+                    'code_snippet': 'import numpy as np\nprices = np.array([10, 20, 30])\ntax = 1.1\nresult = prices * tax\nprint(result)',
+                    'expected_output': '[11. 22. 33.]',
+                    'explanation': 'Broadcasting multiplies the single number 1.1 with every element: 10*1.1=11, 20*1.1=22, 30*1.1=33. NumPy shows them as floats because 1.1 is a float!',
                 },
             },
             {

@@ -125,6 +125,19 @@ Notice that `readlines()` keeps the newline characters (`\\n`). You typically us
                     'expected_output': 'Alice: 92\nBob: 85\nCharlie: 78',
                     'hint': 'The readlines() method returns a list of strings. Use a for loop with .strip() on each line to remove trailing newline characters.',
                 },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'import io\nf = io.StringIO("Line 1\\nLine 2\\nLine 3")\nresult = f.readline()\nprint(result.strip())',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': 'Line 1', 'correct': True},
+                        {'text': 'Line 1\\nLine 2\\nLine 3', 'correct': False},
+                        {'text': "['Line 1\\n', 'Line 2\\n', 'Line 3']", 'correct': False},
+                        {'text': 'Line 3', 'correct': False},
+                    ],
+                    'explanation': 'readline() reads only ONE line at a time! It returns the first line "Line 1\\n", and .strip() removes the newline character, leaving just "Line 1".',
+                },
             },
             {
                 'id': 'iterating-over-files',
@@ -294,6 +307,17 @@ f.close()
                     'starter_code': 'import io\n\n# Simulating an app configuration file\nconfig_data = "app_name=WeatherTracker\\nversion=2.5\\nauthor=Jane Smith\\nlanguage=Python"\n\n# Parse config into a dictionary using with statement\nconfig = {}\nwith io.StringIO(config_data) as config_file:\n    for line in config_file:\n        key, value = line.strip().split("=")\n        config[key] = value\n\n# Print the configuration values\nprint(f"Application: {config[\'app_name\']}")\nprint(f"Version: {config[\'version\']}")\nprint(f"Author: {config[\'author\']}")\n',
                     'expected_output': 'Application: WeatherTracker\nVersion: 2.5\nAuthor: Jane Smith',
                     'hint': 'Use io.StringIO inside a with statement. Split each line by "=" to separate the key and value, then store them in a dictionary.',
+                },
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these code blocks in the correct order to read a file safely using a with statement:',
+                    'code_blocks': [
+                        'import io',
+                        'with io.StringIO("Hello World") as f:',
+                        '    content = f.read()',
+                        'print(content)',
+                    ],
+                    'explanation': 'First we import io, then open the file with a "with" statement (which closes it automatically), read inside the block, and print after!',
                 },
             },
             {
@@ -481,6 +505,17 @@ Think of writing to a file like writing in a notebook:
                     'starter_code': 'import io\n\n# Create an in-memory file for our report\nreport = io.StringIO()\n\n# Write the report header\nreport.write("Monthly Sales Report\\n")\nreport.write("-" * 25 + "\\n")\n\n# Write sales data\nreport.write("Week 1: $12,500\\n")\nreport.write("Week 2: $15,300\\n")\nreport.write("Week 3: $11,800\\n")\n\n# Retrieve and print the full report\nprint(report.getvalue())\n',
                     'expected_output': 'Monthly Sales Report\n-------------------------\nWeek 1: $12,500\nWeek 2: $15,300\nWeek 3: $11,800\n',
                     'hint': 'Use the write() method on the StringIO object. Remember to add "\\n" at the end of each line. Use getvalue() to retrieve everything that was written.',
+                },
+                'game': {
+                    'type': 'fill_blank',
+                    'instructions': 'Fill in the blanks to write text to a StringIO object and read it back:',
+                    'code_template': 'import io\noutput = io.{0}()\noutput.{1}("Hello!\\n")\nprint(output.{2}())',
+                    'blanks': [
+                        {'id': 0, 'answer': 'StringIO', 'hint': 'What class creates an in-memory file?'},
+                        {'id': 1, 'answer': 'write', 'hint': 'What method sends text to a file?'},
+                        {'id': 2, 'answer': 'getvalue', 'hint': 'What method reads back everything written?'},
+                    ],
+                    'explanation': 'io.StringIO() creates an in-memory file, .write() adds text to it, and .getvalue() retrieves all the text that was written!',
                 },
             },
             {

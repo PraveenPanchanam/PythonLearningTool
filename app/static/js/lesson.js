@@ -44,6 +44,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Count game widgets (for kids) and include in total activities
+    var gameWidgets = document.querySelectorAll('.game-widget');
+    totalExercises += gameWidgets.length;
+
+    // Listen for game completion events from game.js
+    window.addEventListener('gamepassed', function (e) {
+        var sectionId = e.detail.sectionId;
+        if (!passedExercises.has('game-' + sectionId)) {
+            passedExercises.add('game-' + sectionId);
+            markSectionDone(sectionId);
+            updateProgress();
+        }
+    });
+
     // Run & Check button handlers
     document.querySelectorAll('.run-exercise-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {

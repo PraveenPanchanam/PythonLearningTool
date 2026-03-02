@@ -447,6 +447,243 @@ pre code {
 }
 
 /* ========================================
+   Interactive Learning Games (Kids)
+   ======================================== */
+.game-widget {
+    background: var(--plt-exercise-bg);
+    border: 2px solid #ffc107;
+    border-left: 5px solid #ffc107;
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+}
+
+.game-header {
+    display: flex;
+    align-items: center;
+}
+
+.game-badge {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #000;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.game-instructions {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.game-explanation {
+    background-color: var(--plt-blockquote-bg);
+    border-left: 3px solid var(--plt-blockquote-border);
+    font-size: 0.9rem;
+}
+
+.game-result {
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+}
+
+.game-result.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.game-result.try-again {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+[data-bs-theme="dark"] .game-result.success {
+    background-color: #051b11;
+    color: #75b798;
+}
+
+[data-bs-theme="dark"] .game-result.try-again {
+    background-color: #332701;
+    color: #ffda6a;
+}
+
+/* ── Drag & Drop ── */
+.drag-source {
+    min-height: 50px;
+}
+
+.drag-block {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--plt-inline-code-bg);
+    border: 1px solid var(--plt-exercise-border);
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.4rem;
+    cursor: grab;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    user-select: none;
+}
+
+.drag-block:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateX(2px);
+}
+
+.drag-block.dragging {
+    opacity: 0.4;
+}
+
+.drag-block.correct {
+    border-color: #198754;
+    background-color: #d1e7dd;
+}
+
+.drag-block.wrong {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+[data-bs-theme="dark"] .drag-block.correct {
+    border-color: #75b798;
+    background-color: #051b11;
+}
+
+[data-bs-theme="dark"] .drag-block.wrong {
+    border-color: #ea868f;
+    background-color: #2c0b0e;
+}
+
+.drag-handle {
+    color: var(--plt-progress-pending-color);
+    font-size: 1.1rem;
+}
+
+.drag-block code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9rem;
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+/* ── Fill in the Blank ── */
+.code-with-blanks {
+    background: var(--plt-pre-bg);
+    color: var(--plt-pre-color);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.9rem;
+    line-height: 2;
+    white-space: pre-wrap;
+}
+
+.blank-input {
+    display: inline-block;
+    width: auto;
+    min-width: 80px;
+    max-width: 160px;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 1px 6px;
+    border: 2px dashed #ffc107;
+    border-radius: 4px;
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.blank-input:focus {
+    border-color: #0d6efd;
+    background: rgba(13, 110, 253, 0.15);
+}
+
+.blank-input.correct {
+    border-color: #198754;
+    background: rgba(25, 135, 84, 0.2);
+    color: #75b798;
+}
+
+.blank-input.wrong {
+    border-color: #dc3545;
+    background: rgba(220, 53, 69, 0.2);
+    color: #ea868f;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+}
+
+/* ── Quiz ── */
+.quiz-code-snippet,
+.predict-code-snippet {
+    background: var(--plt-pre-bg);
+    color: var(--plt-pre-color);
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.9rem;
+    border: 1px solid var(--plt-pre-border);
+}
+
+.quiz-option {
+    cursor: pointer;
+    border: 2px solid var(--plt-exercise-border);
+    transition: all 0.15s;
+}
+
+.quiz-option:hover {
+    border-color: var(--plt-level-card-hover-border);
+    background-color: var(--plt-level-card-hover-bg);
+}
+
+.quiz-option.selected {
+    border-color: #0d6efd;
+    background-color: var(--plt-level-card-selected-bg);
+}
+
+.quiz-option.correct {
+    border-color: #198754;
+    background-color: #d1e7dd;
+}
+
+.quiz-option.wrong {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+[data-bs-theme="dark"] .quiz-option.correct {
+    border-color: #75b798;
+    background-color: #051b11;
+}
+
+[data-bs-theme="dark"] .quiz-option.wrong {
+    border-color: #ea868f;
+    background-color: #2c0b0e;
+}
+
+.quiz-option input[type="radio"] {
+    accent-color: #0d6efd;
+}
+
+.quiz-option code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+/* ── Predict Output ── */
+.predict-input {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.95rem;
+}
+
+/* ========================================
    Mobile Adjustments
    ======================================== */
 @media (max-width: 768px) {
@@ -464,5 +701,13 @@ pre code {
 
     .theme-toggle {
         margin-bottom: 0.5rem;
+    }
+
+    .game-widget {
+        padding: 0.75rem;
+    }
+
+    .drag-block {
+        font-size: 0.85rem;
     }
 }

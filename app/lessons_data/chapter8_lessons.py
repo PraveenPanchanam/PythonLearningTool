@@ -181,6 +181,19 @@ say_hello("Alice")
                     'expected_output': '<b>Hello, Alice</b>\n<b>Hello, Bob</b>\ngreet',
                     'hint': 'The wrapper function should call the original function, capture its return value, and return that value wrapped in <b> tags using an f-string.',
                 },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': '@shout\ndef greet(name):\n    return f"Hello, {name}"',
+                    'question': 'What is the @ symbol doing here?',
+                    'options': [
+                        {'text': 'Applying the shout decorator to greet', 'correct': True},
+                        {'text': 'Creating a new variable called shout', 'correct': False},
+                        {'text': 'Importing the shout module', 'correct': False},
+                        {'text': 'Adding a comment to the function', 'correct': False},
+                    ],
+                    'explanation': 'The @shout syntax is a decorator! It is the same as writing greet = shout(greet). It wraps the greet function with extra behavior from the shout function.',
+                },
             },
             {
                 'id': 'generator-functions',
@@ -549,6 +562,13 @@ result = [x ** 2 for x in range(5)]
                     'starter_code': '# Product prices in USD\nusd_prices = [29.99, 49.99, 9.99, 99.99]\n\n# Convert to EUR (rate: 1 USD = 0.85 EUR), rounded to 2 decimals\neur_prices = list(map(lambda p: round(p * 0.85, 2), usd_prices))\nprint(eur_prices)\n\n# String numbers to convert\nstr_nums = ["10", "20", "30", "40", "50"]\n\n# Convert to integers using map with int\nnumbers = list(map(int, str_nums))\nprint(numbers)\n\n# Bonus: calculate squares of the numbers\nsquares = list(map(lambda x: x ** 2, numbers))\nprint(squares)\n',
                     'expected_output': '[25.49, 42.49, 8.49, 84.99]\n[10, 20, 30, 40, 50]\n[100, 400, 900, 1600, 2500]',
                     'hint': 'Use lambda p: round(p * 0.85, 2) inside map() for the currency conversion. Use map(int, str_nums) to convert strings to integers.',
+                },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'numbers = [1, 2, 3, 4]\nresult = list(map(lambda x: x * 10, numbers))\nprint(result)',
+                    'expected_output': '[10, 20, 30, 40]',
+                    'explanation': 'map() applies the lambda function to each item. Each number gets multiplied by 10: 1*10=10, 2*10=20, 3*10=30, 4*10=40. So we get [10, 20, 30, 40]!',
                 },
             },
             {
@@ -953,6 +973,17 @@ def read_config(filename):
                     'starter_code': 'def safe_calculator(a, b, operator):\n    """Perform a calculation with error handling."""\n    try:\n        if operator == "+":\n            result = a + b\n        elif operator == "-":\n            result = a - b\n        elif operator == "*":\n            result = a * b\n        elif operator == "/":\n            result = a / b\n        else:\n            return "Error: Invalid operator"\n    except ZeroDivisionError:\n        return "Error: Division by zero"\n    else:\n        return result\n\n\n# Test the calculator\nprint(safe_calculator(10, 3, "+"))\nprint(safe_calculator(10, 3, "-"))\nprint(safe_calculator(10, 3, "*"))\nprint(safe_calculator(10, 3, "/"))\nprint(safe_calculator(10, 0, "/"))\nprint(safe_calculator(10, 3, "%"))\n',
                     'expected_output': '13\n7\n30\n3.3333333333333335\nError: Division by zero\nError: Invalid operator',
                     'hint': 'Use if/elif/else inside the try block to check the operator. The ZeroDivisionError will be raised automatically when dividing by zero. Return the error message string for each error case.',
+                },
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these code blocks to handle a division error safely:',
+                    'code_blocks': [
+                        'try:',
+                        '    result = 10 / 0',
+                        'except ZeroDivisionError:',
+                        '    print("Cannot divide by zero!")',
+                    ],
+                    'explanation': 'First comes "try:" to start the block we want to protect, then the risky code, then "except ZeroDivisionError:" to catch the error, and finally the error message!',
                 },
             },
             {
