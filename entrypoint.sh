@@ -39,5 +39,34 @@ with app.app_context():
             print('Lessons loaded.')
 "
 
+echo "Checking admin user..."
+python -c "
+import os
+from app import create_app
+from app.extensions import db
+from app.models.user import User
+app = create_app('production')
+with app.app_context():
+    admin_username = os.environ.get('ADMIN_USERNAME')
+    admin_email = os.environ.get('ADMIN_EMAIL')
+    admin_password = os.environ.get('ADMIN_PASSWORD')
+    if admin_username and admin_email and admin_password:
+        if not User.query.filter_by(username=admin_username).first():
+            admin = User(
+                username=admin_username,
+                email=admin_email,
+                is_admin=True,
+                python_level='intermediate',
+            )
+            admin.set_password(admin_password)
+            db.session.add(admin)
+            db.session.commit()
+            print(f'Admin user created.')
+        else:
+            print('Admin user already exists.')
+    else:
+        print('No ADMIN env vars set. Skipping admin creation.')
+"
+
 echo "Starting Gunicorn..."
 exec gunicorn --config gunicorn.conf.py run:app

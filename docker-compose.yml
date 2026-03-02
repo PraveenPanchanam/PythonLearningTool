@@ -27,6 +27,9 @@ services:
       SANDBOX_IMAGE: pythonlearning-sandbox:latest
       SANDBOX_MEMORY_LIMIT: 256m
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     ports:
       - "${APP_PORT:-8000}:8000"
     depends_on:
