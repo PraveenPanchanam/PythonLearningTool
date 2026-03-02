@@ -21,6 +21,9 @@
                         <input type="password" class="form-control" id="password" name="password"
                                required placeholder="Enter your password">
                     </div>
+                    <div class="mb-3 text-end">
+                        <a href="{{ url_for('auth.forgot_password') }}" class="small text-muted">Forgot Password?</a>
+                    </div>
                     <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                 </form>
                 <p class="text-center text-muted mb-0">

@@ -10,7 +10,7 @@ from markupsafe import Markup
 import markdown as md
 
 from config import config
-from app.extensions import db, login_manager, csrf, limiter, migrate
+from app.extensions import db, login_manager, csrf, limiter, migrate, mail
 
 
 def create_app(config_name=None):
@@ -27,6 +27,7 @@ def create_app(config_name=None):
     csrf.init_app(app)
     limiter.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
 
     # Security headers via Flask-Talisman (production only)
     if not app.debug and not app.testing:
