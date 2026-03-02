@@ -12,7 +12,7 @@ with app.app_context():
 "
 
 echo "Running database migrations..."
-flask db upgrade 2>/dev/null || echo "No pending migrations."
+flask db upgrade 2>&1 || echo "Migration note: flask db upgrade returned non-zero (may be first run)."
 
 echo "Seeding data if needed..."
 python -c "

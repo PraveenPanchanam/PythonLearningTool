@@ -139,17 +139,21 @@ def create_app(config_name=None):
     # Track user activity (last active time + IP)
     @app.before_request
     def update_last_active():
-        if current_user.is_authenticated:
-            now = datetime.utcnow()
-            # Throttle: only write every 5 minutes
-            if not current_user.last_active_at or \
-               (now - current_user.last_active_at).total_seconds() > 300:
-                current_user.last_active_at = now
-                ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-                if ip:
-                    ip = ip.split(',')[0].strip()
-                current_user.last_ip = ip
-                db.session.commit()
+        try:
+            if current_user.is_authenticated:
+                now = datetime.utcnow()
+                # Throttle: only write every 5 minutes
+                if not current_user.last_active_at or \
+                   (now - current_user.last_active_at).total_seconds() > 300:
+                    current_user.last_active_at = now
+                    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+                    if ip:
+                        ip = ip.split(',')[0].strip()
+                    current_user.last_ip = ip
+                    db.session.commit()
+        except Exception:
+            # Gracefully handle missing columns during migration transition
+            db.session.rollback()
 
     # Import models (for Flask-Migrate to detect them)
     with app.app_context():
