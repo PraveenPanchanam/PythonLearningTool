@@ -19,6 +19,10 @@ class User(UserMixin, db.Model):
     age_group = db.Column(db.String(20), default='18_plus')
     # Age groups: 'under_12', '12_to_17', '18_plus'
 
+    last_active_at = db.Column(db.DateTime, nullable=True)
+    last_ip = db.Column(db.String(45), nullable=True)        # supports IPv6
+    last_location = db.Column(db.String(100), nullable=True)  # "City, Country"
+
     submissions = db.relationship('Submission', backref='user', lazy='dynamic')
     lesson_completions = db.relationship('LessonCompletion', backref='user', lazy='dynamic')
 

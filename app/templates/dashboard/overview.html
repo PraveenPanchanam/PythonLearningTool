@@ -25,6 +25,27 @@
     </div>
 </div>
 
+<!-- Nudge Notifications -->
+{% if unread_nudges %}
+<div class="mb-4">
+    {% for nudge in unread_nudges %}
+    <div class="alert alert-{{ 'success' if nudge.nudge_type == 'encouragement' else ('warning' if nudge.nudge_type == 'reminder' else ('info' if nudge.nudge_type == 'milestone' else 'secondary')) }} d-flex align-items-start" role="alert">
+        <div class="flex-grow-1">
+            <strong>
+                {% if nudge.nudge_type == 'encouragement' %}🌟{% elif nudge.nudge_type == 'reminder' %}👋{% elif nudge.nudge_type == 'milestone' %}🏆{% else %}💬{% endif %}
+                From your instructor:
+            </strong>
+            <p class="mb-0 mt-1">{{ nudge.message }}</p>
+        </div>
+        <form method="POST" action="{{ url_for('dashboard.dismiss_nudge', nudge_id=nudge.id) }}" class="ms-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn-close" aria-label="Dismiss"></button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <!-- Summary Cards -->
 <div class="row g-3 mb-4">
     <div class="col-md-3">

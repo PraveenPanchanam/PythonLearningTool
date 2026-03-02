@@ -2,7 +2,10 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-from flask import Flask, render_template
+from datetime import datetime
+
+from flask import Flask, render_template, request
+from flask_login import current_user
 from markupsafe import Markup
 import markdown as md
 
@@ -97,6 +100,23 @@ def create_app(config_name='default'):
         )
         return Markup(html)
 
+    # Timeago filter for relative timestamps
+    @app.template_filter('timeago')
+    def timeago_filter(dt):
+        if not dt:
+            return 'Never'
+        diff = datetime.utcnow() - dt
+        seconds = diff.total_seconds()
+        if seconds < 60:
+            return 'Just now'
+        if seconds < 3600:
+            return f'{int(seconds // 60)}m ago'
+        if seconds < 86400:
+            return f'{int(seconds // 3600)}h ago'
+        if seconds < 604800:
+            return f'{int(seconds // 86400)}d ago'
+        return dt.strftime('%b %d, %Y')
+
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.main import main_bp
@@ -114,9 +134,24 @@ def create_app(config_name='default'):
     app.register_blueprint(lessons_bp, url_prefix='/lessons')
     app.register_blueprint(admin_bp, url_prefix='/admin')
 
+    # Track user activity (last active time + IP)
+    @app.before_request
+    def update_last_active():
+        if current_user.is_authenticated:
+            now = datetime.utcnow()
+            # Throttle: only write every 5 minutes
+            if not current_user.last_active_at or \
+               (now - current_user.last_active_at).total_seconds() > 300:
+                current_user.last_active_at = now
+                ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+                if ip:
+                    ip = ip.split(',')[0].strip()
+                current_user.last_ip = ip
+                db.session.commit()
+
     # Import models (for Flask-Migrate to detect them)
     with app.app_context():
-        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion  # noqa: F401
+        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion, Nudge  # noqa: F401
         # In development, auto-create tables. In production, use: flask db upgrade
         if app.debug:
             db.create_all()

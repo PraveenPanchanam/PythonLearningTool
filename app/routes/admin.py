@@ -1,6 +1,10 @@
+from datetime import datetime, timedelta
 from functools import wraps
-from flask import Blueprint, render_template, abort
+
+from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
+from sqlalchemy import func
+
 from app.extensions import db
 from app.models.user import User
 from app.models.chapter import Chapter
@@ -8,8 +12,28 @@ from app.models.assignment import Assignment
 from app.models.submission import Submission
 from app.models.lesson import Lesson
 from app.models.lesson_completion import LessonCompletion
+from app.models.nudge import Nudge
 
 admin_bp = Blueprint('admin', __name__)
+
+# ── Predefined nudge templates ──────────────────────────────────
+NUDGE_TEMPLATES = {
+    'encouragement': [
+        "🌟 Great start! Keep up the momentum — you're doing awesome!",
+        "💪 You've got this! Every lesson brings you closer to mastering Python.",
+        "🎉 Amazing progress so far! Don't stop now — the best is yet to come.",
+    ],
+    'reminder': [
+        "👋 Hey! We miss you. Jump back in and pick up where you left off!",
+        "📚 It's been a while! Your Python journey is waiting — come back and continue learning.",
+        "⏰ Don't let your progress fade! A quick lesson today can make a big difference.",
+    ],
+    'milestone': [
+        "🏆 You're so close to completing this chapter! Push through the finish line!",
+        "🚀 Almost halfway through the course! Keep going — you're building real skills.",
+        "⭐ You've completed multiple chapters! That's a huge achievement. What's next?",
+    ],
+}
 
 
 def admin_required(f):
@@ -23,13 +47,90 @@ def admin_required(f):
     return decorated
 
 
+def geolocate_ip(ip):
+    """Resolve IP to 'City, Country' using free ip-api.com."""
+    if not ip or ip in ('127.0.0.1', '::1', 'localhost', '172.', '10.', '192.168.'):
+        return 'Local'
+    # Skip private IPs
+    if ip.startswith(('172.', '10.', '192.168.')):
+        return 'Local'
+    try:
+        import requests as http_requests
+        resp = http_requests.get(
+            f'http://ip-api.com/json/{ip}?fields=city,country',
+            timeout=2
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            city = data.get('city', '')
+            country = data.get('country', '')
+            if city and country:
+                return f'{city}, {country}'
+            return country or 'Unknown'
+    except Exception:
+        pass
+    return 'Unknown'
+
+
+def get_activity_status(last_active_at):
+    """Return activity status string based on last active time."""
+    if not last_active_at:
+        return 'away'
+    diff = (datetime.utcnow() - last_active_at).total_seconds()
+    if diff < 300:      # 5 minutes
+        return 'online'
+    if diff < 86400:    # 24 hours
+        return 'today'
+    return 'away'
+
+
 @admin_bp.route('/')
 @admin_required
 def admin_dashboard():
+    now = datetime.utcnow()
     total_students = User.query.filter_by(is_admin=False).count()
     total_submissions = Submission.query.count()
     total_lessons_completed = LessonCompletion.query.count()
+    total_lessons = Lesson.query.count()
 
+    # Activity counts
+    active_now = User.query.filter(
+        User.is_admin == False,
+        User.last_active_at >= now - timedelta(minutes=5)
+    ).count()
+    active_today = User.query.filter(
+        User.is_admin == False,
+        User.last_active_at >= now - timedelta(hours=24)
+    ).count()
+    active_week = User.query.filter(
+        User.is_admin == False,
+        User.last_active_at >= now - timedelta(days=7)
+    ).count()
+
+    # Recently active users (last 10)
+    recent_active_users = User.query.filter(
+        User.is_admin == False,
+        User.last_active_at.isnot(None)
+    ).order_by(User.last_active_at.desc()).limit(10).all()
+
+    recent_user_data = []
+    for user in recent_active_users:
+        # Resolve geolocation lazily
+        if user.last_ip and not user.last_location:
+            user.last_location = geolocate_ip(user.last_ip)
+            db.session.commit()
+
+        lesson_count = LessonCompletion.query.filter_by(user_id=user.id).count()
+        progress = round(lesson_count / total_lessons * 100, 1) if total_lessons > 0 else 0
+
+        recent_user_data.append({
+            'user': user,
+            'status': get_activity_status(user.last_active_at),
+            'progress': progress,
+            'lesson_count': lesson_count,
+        })
+
+    # Chapter stats
     chapters = Chapter.query.order_by(Chapter.order).all()
     chapter_stats = []
     for chapter in chapters:
@@ -51,6 +152,11 @@ def admin_dashboard():
         total_students=total_students,
         total_submissions=total_submissions,
         total_lessons_completed=total_lessons_completed,
+        total_lessons=total_lessons,
+        active_now=active_now,
+        active_today=active_today,
+        active_week=active_week,
+        recent_active_users=recent_user_data,
         chapter_stats=chapter_stats,
     )
 
@@ -58,24 +164,63 @@ def admin_dashboard():
 @admin_bp.route('/students')
 @admin_required
 def student_list():
-    students = User.query.filter_by(is_admin=False).order_by(User.created_at.desc()).all()
+    now = datetime.utcnow()
+    filter_type = request.args.get('filter', 'all')
+    total_lessons = Lesson.query.count()
+
+    query = User.query.filter_by(is_admin=False)
+
+    if filter_type == 'today':
+        query = query.filter(User.last_active_at >= now - timedelta(hours=24))
+    elif filter_type == 'week':
+        query = query.filter(User.last_active_at >= now - timedelta(days=7))
+    elif filter_type == 'inactive':
+        query = query.filter(
+            db.or_(
+                User.last_active_at.is_(None),
+                User.last_active_at < now - timedelta(days=7)
+            )
+        )
+
+    # Sort by last_active_at (most recent first), nulls last
+    students = query.order_by(
+        db.case((User.last_active_at.is_(None), 1), else_=0),
+        User.last_active_at.desc()
+    ).all()
+
     student_data = []
     for student in students:
+        # Resolve geolocation lazily
+        if student.last_ip and not student.last_location:
+            student.last_location = geolocate_ip(student.last_ip)
+            db.session.commit()
+
         sub_count = Submission.query.filter_by(user_id=student.id).count()
         lesson_count = LessonCompletion.query.filter_by(user_id=student.id).count()
-        # Calculate average score
-        from sqlalchemy import func
         avg_score = db.session.query(func.avg(Submission.score)).filter_by(
             user_id=student.id
         ).scalar() or 0
+        progress = round(lesson_count / total_lessons * 100, 1) if total_lessons > 0 else 0
+
+        # Count unread nudges for this student
+        unread_nudges = Nudge.query.filter_by(user_id=student.id, read_at=None).count()
 
         student_data.append({
             'user': student,
             'submission_count': sub_count,
             'lesson_count': lesson_count,
             'avg_score': round(avg_score, 1),
+            'progress': progress,
+            'status': get_activity_status(student.last_active_at),
+            'unread_nudges': unread_nudges,
         })
-    return render_template('admin/students.html', students=student_data)
+
+    return render_template(
+        'admin/students.html',
+        students=student_data,
+        filter_type=filter_type,
+        total_lessons=total_lessons,
+    )
 
 
 @admin_bp.route('/students/<int:user_id>')
@@ -85,8 +230,16 @@ def student_detail(user_id):
     if not student:
         abort(404)
 
+    total_lessons = Lesson.query.count()
+
+    # Resolve geolocation lazily
+    if student.last_ip and not student.last_location:
+        student.last_location = geolocate_ip(student.last_ip)
+        db.session.commit()
+
     chapters = Chapter.query.order_by(Chapter.order).all()
     chapter_progress = []
+    total_completed_lessons = 0
     for chapter in chapters:
         assignments = chapter.assignments.all()
         lessons = chapter.lessons.all()
@@ -108,6 +261,7 @@ def student_detail(user_id):
         ).join(Lesson).filter(
             Lesson.chapter_id == chapter.id
         ).count()
+        total_completed_lessons += completed_lessons
 
         chapter_progress.append({
             'chapter': chapter,
@@ -118,13 +272,101 @@ def student_detail(user_id):
             'completed_lessons': completed_lessons,
         })
 
+    overall_progress = round(total_completed_lessons / total_lessons * 100, 1) if total_lessons > 0 else 0
+
     recent_submissions = Submission.query.filter_by(user_id=user_id).order_by(
         Submission.submitted_at.desc()
     ).limit(20).all()
+
+    # Get nudge history for this student
+    nudges = Nudge.query.filter_by(user_id=user_id).order_by(
+        Nudge.created_at.desc()
+    ).limit(10).all()
 
     return render_template(
         'admin/student_detail.html',
         student=student,
         chapter_progress=chapter_progress,
         recent_submissions=recent_submissions,
+        overall_progress=overall_progress,
+        total_completed_lessons=total_completed_lessons,
+        total_lessons=total_lessons,
+        status=get_activity_status(student.last_active_at),
+        nudges=nudges,
+        nudge_templates=NUDGE_TEMPLATES,
     )
+
+
+@admin_bp.route('/nudge/<int:user_id>', methods=['POST'])
+@admin_required
+def send_nudge(user_id):
+    """Send a motivational nudge to a student."""
+    student = db.session.get(User, user_id)
+    if not student:
+        abort(404)
+
+    message = request.form.get('message', '').strip()
+    nudge_type = request.form.get('nudge_type', 'encouragement')
+
+    if not message:
+        flash('Please provide a message.', 'warning')
+        return redirect(url_for('admin.student_detail', user_id=user_id))
+
+    nudge = Nudge(
+        user_id=user_id,
+        message=message,
+        nudge_type=nudge_type,
+    )
+    db.session.add(nudge)
+    db.session.commit()
+
+    flash(f'Nudge sent to {student.username}! 🎯', 'success')
+    return redirect(url_for('admin.student_detail', user_id=user_id))
+
+
+@admin_bp.route('/nudge/bulk', methods=['POST'])
+@admin_required
+def send_bulk_nudge():
+    """Send a nudge to multiple students at once (e.g., all inactive)."""
+    message = request.form.get('message', '').strip()
+    nudge_type = request.form.get('nudge_type', 'reminder')
+    target = request.form.get('target', 'inactive')  # 'inactive', 'all'
+
+    if not message:
+        flash('Please provide a message.', 'warning')
+        return redirect(url_for('admin.student_list'))
+
+    now = datetime.utcnow()
+    if target == 'inactive':
+        students = User.query.filter(
+            User.is_admin == False,
+            db.or_(
+                User.last_active_at.is_(None),
+                User.last_active_at < now - timedelta(days=7)
+            )
+        ).all()
+    else:
+        students = User.query.filter_by(is_admin=False).all()
+
+    count = 0
+    for student in students:
+        nudge = Nudge(
+            user_id=student.id,
+            message=message,
+            nudge_type=nudge_type,
+        )
+        db.session.add(nudge)
+        count += 1
+
+    db.session.commit()
+    flash(f'Nudge sent to {count} students! 🎯', 'success')
+    return redirect(url_for('admin.student_list'))
+
+
+@admin_bp.route('/api/nudge-templates')
+@admin_required
+def get_nudge_templates():
+    """API endpoint to get nudge templates by type."""
+    nudge_type = request.args.get('type', 'encouragement')
+    templates = NUDGE_TEMPLATES.get(nudge_type, NUDGE_TEMPLATES['encouragement'])
+    return jsonify(templates)

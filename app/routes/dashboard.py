@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template
+from datetime import datetime
+
+from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy import func
 from app.extensions import db
@@ -7,6 +9,7 @@ from app.models.assignment import Assignment
 from app.models.submission import Submission
 from app.models.lesson import Lesson
 from app.models.lesson_completion import LessonCompletion
+from app.models.nudge import Nudge
 from app.utils.learning_plan import get_learning_plan, get_level_display_name, get_start_chapter
 
 dashboard_bp = Blueprint('dashboard', __name__)
@@ -72,6 +75,11 @@ def overview():
     for sub in recent_submissions:
         sub.assignment_obj = db.session.get(Assignment, sub.assignment_id)
 
+    # Get unread nudges for this student
+    unread_nudges = Nudge.query.filter_by(
+        user_id=current_user.id, read_at=None
+    ).order_by(Nudge.created_at.desc()).all()
+
     return render_template(
         'dashboard/overview.html',
         chapter_stats=chapter_stats,
@@ -86,4 +94,16 @@ def overview():
         level_display_name=get_level_display_name(current_user.python_level or 'complete_beginner'),
         learning_plan=get_learning_plan(current_user.python_level or 'complete_beginner'),
         start_chapter=get_start_chapter(current_user.python_level or 'complete_beginner'),
+        unread_nudges=unread_nudges,
     )
+
+
+@dashboard_bp.route('/dismiss-nudge/<int:nudge_id>', methods=['POST'])
+@login_required
+def dismiss_nudge(nudge_id):
+    """Mark a nudge as read."""
+    nudge = db.session.get(Nudge, nudge_id)
+    if nudge and nudge.user_id == current_user.id:
+        nudge.read_at = datetime.utcnow()
+        db.session.commit()
+    return redirect(url_for('dashboard.overview'))
