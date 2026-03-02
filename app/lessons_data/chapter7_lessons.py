@@ -151,6 +151,18 @@ print(student.grade)   # 11
                     'expected_output': 'Owner: Alice\nBalance: $1750.00',
                     'hint': 'In __init__, store the owner and balance as self.owner and self.balance. The deposit method adds amount to self.balance. The display method uses f-strings with :.2f formatting.',
                 },
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these code blocks to define a Dog class and create an object:',
+                    'code_blocks': [
+                        'class Dog:',
+                        '    def __init__(self, name):',
+                        '        self.name = name',
+                        'my_dog = Dog("Buddy")',
+                        'print(my_dog.name)',
+                    ],
+                    'explanation': 'First we define the class with "class Dog:", then the __init__ method with self and name, store the name with self.name, create an object, and finally print its name!',
+                },
             },
             {
                 'id': 'methods-and-behavior',
@@ -642,6 +654,19 @@ logger.log("Server started")  # [LOG] 2024-01-15 | Server started
                     'expected_output': 'Alice: $8,000.00/month\nBob: $4,000.00/month',
                     'hint': 'SalariedEmployee overrides calculate_monthly_pay to return annual_salary / 12. HourlyEmployee overrides it to return hourly_rate * hours_per_week * 4 (weeks in a month).',
                 },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'class Animal:\n    def speak(self):\n        return "..."\n\nclass Cat(Animal):\n    def speak(self):\n        return "Meow!"\n\nmy_cat = Cat()\nprint(my_cat.speak())',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': 'Meow!', 'correct': True},
+                        {'text': '...', 'correct': False},
+                        {'text': 'Error', 'correct': False},
+                        {'text': 'None', 'correct': False},
+                    ],
+                    'explanation': 'Cat overrides the speak() method from Animal. When we call speak() on a Cat object, it uses the Cat version which returns "Meow!" — this is called method overriding!',
+                },
             },
             {
                 'id': 'polymorphism',
@@ -1040,6 +1065,13 @@ print(repr(alice))  # Contact('Alice Smith', 'alice@email.com', '555-1234')
                     'starter_code': 'class Book:\n    def __init__(self, title, author, pages):\n        self.title = title\n        self.author = author\n        self.pages = pages\n\n    def __str__(self):\n        return f"{self.title} by {self.author}"\n\n    def __repr__(self):\n        return f"Book(\'{self.title}\', \'{self.author}\', {self.pages})"\n\n\n# Create two books\nbook1 = Book("Python Crash Course", "Eric Matthes", 544)\nbook2 = Book("Clean Code", "Robert Martin", 464)\n\n# Print user-friendly format (uses __str__)\nprint(book1)\nprint(book2)\n\n# Print developer format (uses __repr__)\nprint(repr(book1))\nprint(repr(book2))\n',
                     'expected_output': "Python Crash Course by Eric Matthes\nClean Code by Robert Martin\nBook('Python Crash Course', 'Eric Matthes', 544)\nBook('Clean Code', 'Robert Martin', 464)",
                     'hint': '__str__ should return a user-friendly string like "Title by Author". __repr__ should return a string that looks like the constructor call: Book(\'title\', \'author\', pages).',
+                },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'class Pet:\n    def __init__(self, name, kind):\n        self.name = name\n        self.kind = kind\n    def __str__(self):\n        return f"{self.name} the {self.kind}"\n\nmy_pet = Pet("Buddy", "Dog")\nprint(my_pet)',
+                    'expected_output': 'Buddy the Dog',
+                    'explanation': 'When you print() an object, Python calls its __str__ method. Our __str__ returns an f-string combining name and kind, so we get "Buddy the Dog"!',
                 },
             },
             {

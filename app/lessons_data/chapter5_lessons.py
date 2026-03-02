@@ -86,6 +86,16 @@ print("Zara" not in vip_list) # True
                     'expected_output': 'Monday\nFriday\n5\nTrue',
                     'hint': 'Use index [0] for the first item, [-1] for the last, len() for the count, and the "in" operator to check membership.',
                 },
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these code blocks in the correct order to create a list, add an item, and print the length:',
+                    'code_blocks': [
+                        'fruits = ["apple", "banana"]',
+                        'fruits.append("cherry")',
+                        'print(len(fruits))',
+                    ],
+                    'explanation': 'First we create the list with two items, then we use append() to add a third, and finally we print the length which is 3!',
+                },
             },
             {
                 'id': 'list-slicing-and-modification',
@@ -427,6 +437,19 @@ print("dark" in settings)       # False - "dark" is a value, not a key
                     'starter_code': '# Create the book dictionary\nbook = {\n    "title": "Python Crash Course",\n    "author": "Eric Matthes",\n    "year": 2019,\n    "pages": 544\n}\n\n# Print title and author\nprint(f"Title: {book[\'title\']}")\nprint(f"Author: {book[\'author\']}")\n\n# Check if "isbn" key exists\nprint(f"Has ISBN: {\'isbn\' in book}")\n\n# Use .get() with a default value\nprint(f"ISBN: {book.get(\'isbn\', \'Not Available\')}")\n',
                     'expected_output': 'Title: Python Crash Course\nAuthor: Eric Matthes\nHas ISBN: False\nISBN: Not Available',
                     'hint': 'Use square brackets to access existing keys. Use the "in" operator to check key existence. Use .get(key, default) to safely access a key that might not exist.',
+                },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'settings = {"theme": "dark", "font_size": 14}\nprint("dark" in settings)',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': 'False', 'correct': True},
+                        {'text': 'True', 'correct': False},
+                        {'text': 'Error', 'correct': False},
+                        {'text': 'None', 'correct': False},
+                    ],
+                    'explanation': 'The "in" operator checks KEYS, not values! "dark" is a value in the dictionary, not a key. The keys are "theme" and "font_size".',
                 },
             },
             {
@@ -960,6 +983,13 @@ squares = [n ** 2 for n in range(10)]
                     'starter_code': '# 1. Squares of 1 through 8\nsquares = [n ** 2 for n in range(1, 9)]\nprint(squares)\n\n# 2. Even numbers from 1 to 15\nevens = [n for n in range(1, 16) if n % 2 == 0]\nprint(evens)\n\n# 3. Lengths of words\nwords = ["Python", "is", "absolutely", "wonderful"]\nlengths = [len(w) for w in words]\nprint(lengths)\n',
                     'expected_output': '[1, 4, 9, 16, 25, 36, 49, 64]\n[2, 4, 6, 8, 10, 12, 14]\n[6, 2, 10, 9]',
                     'hint': 'Use [expression for item in range()] syntax. Add an if clause to filter. Use len(word) to get the length of each word.',
+                },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this list comprehension will print? Type your guess!',
+                    'code_snippet': 'numbers = [1, 2, 3, 4, 5, 6]\nresult = [n * 2 for n in numbers if n > 3]\nprint(result)',
+                    'expected_output': '[8, 10, 12]',
+                    'explanation': 'The comprehension first filters numbers greater than 3 (keeping 4, 5, 6), then multiplies each by 2. So we get [8, 10, 12]!',
                 },
             },
             {

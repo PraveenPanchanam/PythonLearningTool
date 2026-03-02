@@ -126,6 +126,13 @@ These simple methods save you from writing loops to calculate statistics - panda
                     'expected_output': 'Mon    72\nTue    75\nWed    68\nThu    71\nFri    80\ndtype: int64\n73.2\n80',
                     'hint': 'Pass the dictionary directly to pd.Series(). Use .mean() and .max() methods on the Series to compute statistics.',
                 },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'import pandas as pd\ngrades = pd.Series({"Math": 90, "Science": 85, "Art": 95})\nprint(grades.max())',
+                    'expected_output': '95',
+                    'explanation': 'The .max() method finds the largest value in the Series. Among 90, 85, and 95, the maximum is 95 (the Art grade)!',
+                },
             },
             {
                 'id': 'creating-dataframes',
@@ -342,6 +349,17 @@ This kind of column-wise calculation is where pandas truly shines compared to wr
                     'expected_output': '   Product  Price  Quantity  Revenue\n0   Laptop    999         5     4995\n3  Monitor    349        15     5235\n2  Keyboard     79        30     2370\n1    Mouse     29        50     1450',
                     'hint': 'Multiply the Price and Quantity columns using products[\'Price\'] * products[\'Quantity\']. Use sort_values(\'Revenue\', ascending=False) to sort from highest to lowest.',
                 },
+                'game': {
+                    'type': 'fill_blank',
+                    'instructions': 'Fill in the blanks to create a DataFrame and add a new column:',
+                    'code_template': 'import {0} as pd\ndf = pd.{1}({{"Name": ["Alice", "Bob"], "Score": [90, 85]}})\ndf["Grade"] = df["{2}"].apply(lambda x: "A" if x >= 90 else "B")\nprint(df)',
+                    'blanks': [
+                        {'id': 0, 'answer': 'pandas', 'hint': 'What library do we import for DataFrames?'},
+                        {'id': 1, 'answer': 'DataFrame', 'hint': 'What class creates a table from a dictionary?'},
+                        {'id': 2, 'answer': 'Score', 'hint': 'Which column do we use to calculate grades?'},
+                    ],
+                    'explanation': 'We import pandas as pd, use pd.DataFrame() to create a table, and then add a new "Grade" column based on the "Score" column!',
+                },
             },
         ],
     },
@@ -422,6 +440,19 @@ print(employees.loc[0:1, ['Name', 'Department']])
                     'starter_code': 'import pandas as pd\n\nproducts = pd.DataFrame({\n    \'Product\': [\'Laptop\', \'Phone\', \'Tablet\', \'Monitor\'],\n    \'Price\': [999, 699, 399, 299],\n    \'Category\': [\'Electronics\', \'Electronics\', \'Electronics\', \'Accessories\']\n})\n\n# Select first two rows using iloc\nfirst_two = products.iloc[0:2]\nprint(first_two)\nprint()\n\n# Filter products with Price > 500 and show only Product and Price\nexpensive = products[products[\'Price\'] > 500]\nprint(expensive[[\'Product\', \'Price\']])\n',
                     'expected_output': '  Product  Price     Category\n0  Laptop    999  Electronics\n1   Phone    699  Electronics\n\n  Product  Price\n0  Laptop    999\n1   Phone    699',
                     'hint': 'Use products.iloc[0:2] for the first two rows. For filtering, use products[products[\'Price\'] > 500] and then select only the columns you need with [[\'Product\', \'Price\']].',
+                },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Think about the difference between loc and iloc:',
+                    'code_snippet': 'import pandas as pd\ndf = pd.DataFrame({"Name": ["Alice", "Bob"], "Age": [25, 30]})\n# Using iloc vs loc',
+                    'question': 'What does df.iloc[0, 1] return?',
+                    'options': [
+                        {'text': '25 (first row, second column by position)', 'correct': True},
+                        {'text': 'Alice (first row, first column)', 'correct': False},
+                        {'text': 'Error (iloc needs column names)', 'correct': False},
+                        {'text': '30 (second row, first column)', 'correct': False},
+                    ],
+                    'explanation': 'iloc uses integer positions! Row 0 is Alice\'s row, column 1 is Age. So df.iloc[0, 1] returns 25 (Alice\'s age).',
                 },
             },
             {
@@ -505,6 +536,13 @@ m_products = sales[sales['Product'].str.startswith('M')]
                     'starter_code': 'import pandas as pd\n\nsales = pd.DataFrame({\n    \'Product\': [\'Laptop\', \'Mouse\', \'Keyboard\', \'Monitor\', \'Webcam\'],\n    \'Price\': [999, 29, 79, 349, 59],\n    \'Units_Sold\': [10, 200, 80, 25, 150]\n})\n\n# Filter: Price < 100 AND Units_Sold > 100\nresult = sales[(sales[\'Price\'] < 100) & (sales[\'Units_Sold\'] > 100)]\n\n# Print the filtered result\nprint(result)\n',
                     'expected_output': '  Product  Price  Units_Sold\n1   Mouse     29         200\n4  Webcam     59         150',
                     'hint': 'Use the & operator to combine two conditions. Remember to wrap each condition in parentheses: (sales[\'Price\'] < 100) & (sales[\'Units_Sold\'] > 100).',
+                },
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'How many rows will the filter return? Type just the number!',
+                    'code_snippet': 'import pandas as pd\ndf = pd.DataFrame({"Name": ["A", "B", "C", "D"], "Score": [90, 60, 85, 45]})\nresult = df[df["Score"] > 70]\nprint(len(result))',
+                    'expected_output': '2',
+                    'explanation': 'df["Score"] > 70 checks each score: 90>70 (True), 60>70 (False), 85>70 (True), 45>70 (False). Only 2 rows pass the filter (A and C)!',
                 },
             },
             {
@@ -817,6 +855,17 @@ This is exactly what `groupby().sum()` does with your data.""",
                     'starter_code': 'import pandas as pd\n\nsales = pd.DataFrame({\n    \'Region\': [\'East\', \'West\', \'East\', \'West\', \'East\'],\n    \'Product\': [\'Widget\', \'Widget\', \'Gadget\', \'Gadget\', \'Widget\'],\n    \'Sales\': [200, 150, 300, 250, 180]\n})\n\n# Total sales by region\nregion_totals = sales.groupby(\'Region\')[\'Sales\'].sum()\nprint(region_totals)\nprint()\n\n# Average sales by region\nregion_avg = sales.groupby(\'Region\')[\'Sales\'].mean()\nprint(region_avg)\n',
                     'expected_output': 'Region\nEast    680\nWest    400\nName: Sales, dtype: int64\n\nRegion\nEast    226.666667\nWest    200.000000\nName: Sales, dtype: float64',
                     'hint': 'Use sales.groupby(\'Region\')[\'Sales\'].sum() for totals and .mean() for averages.',
+                },
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these steps in the correct order to group data and calculate totals:',
+                    'code_blocks': [
+                        'import pandas as pd',
+                        'sales = pd.DataFrame({"Region": ["East", "West", "East"], "Amount": [100, 200, 150]})',
+                        'totals = sales.groupby("Region")["Amount"].sum()',
+                        'print(totals)',
+                    ],
+                    'explanation': 'First import pandas, then create the DataFrame, use groupby() to group by Region and sum the amounts, then print the result!',
                 },
             },
             {

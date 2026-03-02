@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from 'components/_game_widgets.html' import render_game %}
 {% block title %}{{ lesson.title }} - Python Learning Tool{% endblock %}
 
 {% block extra_css %}
@@ -41,11 +42,19 @@
                     {% if section.exercise %}
                     <span class="badge bg-primary ms-2"><i class="bi bi-code-square"></i> Exercise</span>
                     {% endif %}
+                    {% if is_kid and section.game %}
+                    <span class="badge bg-warning text-dark ms-2"><i class="bi bi-controller"></i> Game</span>
+                    {% endif %}
                 </div>
 
                 <div class="description-content">
                     {{ section.content|markdown }}
                 </div>
+
+                {# Render game widget for kid users #}
+                {% if is_kid and section.game %}
+                {{ render_game(section.id, section.game) }}
+                {% endif %}
 
                 {% if section.exercise %}
                 <div class="exercise-box mt-3">
@@ -148,6 +157,9 @@
                         {% if section.exercise %}
                         <i class="bi bi-code-square text-muted ms-1"></i>
                         {% endif %}
+                        {% if is_kid and section.game %}
+                        <i class="bi bi-controller text-warning ms-1"></i>
+                        {% endif %}
                     </a>
                     {% endfor %}
                 </nav>
@@ -168,4 +180,7 @@
     window.CSRF_TOKEN = "{{ csrf_token() }}";
 </script>
 <script src="{{ url_for('static', filename='js/lesson.js') }}"></script>
+{% if is_kid %}
+<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+{% endif %}
 {% endblock %}

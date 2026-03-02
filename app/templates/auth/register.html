@@ -43,6 +43,19 @@
                         </div>
                     </div>
 
+                    <!-- Age Group -->
+                    <div class="mb-3">
+                        <label for="age_group" class="form-label fw-bold">
+                            <i class="bi bi-person-badge"></i> Age Group
+                        </label>
+                        <select class="form-select" name="age_group" id="age_group">
+                            <option value="under_12" {{ 'selected' if age_group|default('') == 'under_12' }}>Under 12</option>
+                            <option value="12_to_17" {{ 'selected' if age_group|default('') == '12_to_17' }}>12 - 17</option>
+                            <option value="18_plus" {{ 'selected' if age_group|default('18_plus') == '18_plus' }}>18+</option>
+                        </select>
+                        <div class="form-text">Kids under 12 get fun interactive learning games!</div>
+                    </div>
+
                     <!-- Python Experience Level -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">

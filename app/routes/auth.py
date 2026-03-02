@@ -7,6 +7,7 @@ from app.models.user import User
 auth_bp = Blueprint('auth', __name__)
 
 VALID_PYTHON_LEVELS = ['complete_beginner', 'some_experience', 'python_beginner', 'intermediate']
+VALID_AGE_GROUPS = ['under_12', '12_to_17', '18_plus']
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -21,6 +22,7 @@ def register():
         password = request.form.get('password', '')
         confirm_password = request.form.get('confirm_password', '')
         python_level = request.form.get('python_level', 'complete_beginner')
+        age_group = request.form.get('age_group', '18_plus')
 
         errors = []
         if not username or len(username) < 3 or len(username) > 30:
@@ -37,6 +39,8 @@ def register():
             errors.append('Passwords do not match.')
         if python_level not in VALID_PYTHON_LEVELS:
             python_level = 'complete_beginner'
+        if age_group not in VALID_AGE_GROUPS:
+            age_group = '18_plus'
 
         if User.query.filter_by(username=username).first():
             errors.append('Username already taken.')
@@ -48,9 +52,10 @@ def register():
                 flash(error, 'danger')
             return render_template('auth/register.html',
                                    username=username, email=email,
-                                   python_level=python_level)
+                                   python_level=python_level,
+                                   age_group=age_group)
 
-        user = User(username=username, email=email, python_level=python_level)
+        user = User(username=username, email=email, python_level=python_level, age_group=age_group)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()

@@ -74,6 +74,13 @@ l
 o
 ```""",
                 'exercise': None,
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'for i in range(3):\n    print(i)',
+                    'expected_output': '0\n1\n2',
+                    'explanation': 'range(3) generates numbers 0, 1, 2 (it starts at 0 and stops before 3). The loop prints each number on a new line!',
+                },
             },
             {
                 'id': 'the-range-function',
@@ -517,6 +524,17 @@ while i < 5:
 
 The `for` version is preferred here because it is shorter and cannot accidentally become infinite.""",
                 'exercise': None,
+                'game': {
+                    'type': 'fill_blank',
+                    'instructions': 'Fill in the blanks to make a while loop that counts from 1 to 3:',
+                    'code_template': 'count = {0}\n{1} count <= 3:\n    print(count)\n    count = count + {2}',
+                    'blanks': [
+                        {'id': 0, 'answer': '1', 'hint': 'What number should count start at?'},
+                        {'id': 1, 'answer': 'while', 'hint': 'What keyword starts a while loop?'},
+                        {'id': 2, 'answer': '1', 'hint': 'How much should we add each time to count up by 1?'},
+                    ],
+                    'explanation': 'A while loop needs a starting value (1), the while keyword with a condition (count <= 3), and we increase count by 1 each time to eventually stop the loop!',
+                },
             },
             {
                 'id': 'investment-growth-exercise',
@@ -907,6 +925,19 @@ if not found:
     handle_not_found()
 ```""",
                 'exercise': None,
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'for i in range(5):\n    if i == 3:\n        break\n    print(i)',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': '0  1  2 (each on new line)', 'correct': True},
+                        {'text': '0  1  2  3 (each on new line)', 'correct': False},
+                        {'text': '0  1  2  3  4 (each on new line)', 'correct': False},
+                        {'text': '3', 'correct': False},
+                    ],
+                    'explanation': 'The loop prints 0, 1, 2 normally. When i reaches 3, the break statement stops the loop BEFORE printing 3. So we only see 0, 1, 2!',
+                },
             },
             {
                 'id': 'seating-chart-exercise',

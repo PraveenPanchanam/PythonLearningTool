@@ -57,6 +57,17 @@ greet_customer()  # Call it for customer 2
 3. **Maintainability** -- Fix a bug in one place instead of hunting through repeated code.
 4. **Abstraction** -- Use a function without knowing its internal details (like pressing a microwave button without understanding the electronics).""",
                 'exercise': None,
+                'game': {
+                    'type': 'drag_order',
+                    'instructions': 'Arrange these code blocks to define a function and call it:',
+                    'code_blocks': [
+                        'def say_hello():',
+                        '    print("Hello!")',
+                        '',
+                        'say_hello()',
+                    ],
+                    'explanation': 'First we define the function with def and its body (indented). Then we leave a blank line, and call the function by writing its name with parentheses!',
+                },
             },
             {
                 'id': 'defining-functions',
@@ -299,6 +310,19 @@ if square(6) > 30:
                     'starter_code': '# Define the conversion function\ndef celsius_to_fahrenheit(celsius):\n    fahrenheit = celsius * 9/5 + 32\n    return fahrenheit\n\n# Convert and print three temperatures\nprint(celsius_to_fahrenheit(0))\nprint(celsius_to_fahrenheit(100))\nprint(celsius_to_fahrenheit(37))\n',
                     'expected_output': '32.0\n212.0\n98.60000000000001',
                     'hint': 'Use the formula celsius * 9/5 + 32. The function should return the result, not print it. Use print() when calling the function.',
+                },
+                'game': {
+                    'type': 'quiz',
+                    'instructions': 'Look at this code and pick the correct answer:',
+                    'code_snippet': 'def double(x):\n    return x * 2\n\nprint(double(5))',
+                    'question': 'What will this code print?',
+                    'options': [
+                        {'text': '10', 'correct': True},
+                        {'text': '5', 'correct': False},
+                        {'text': '25', 'correct': False},
+                        {'text': 'double(5)', 'correct': False},
+                    ],
+                    'explanation': 'The function double() takes a number and returns it multiplied by 2. double(5) calculates 5 * 2 = 10 and returns it, which gets printed!',
                 },
             },
             {
@@ -615,6 +639,13 @@ hours, minutes = divmod(135, 60)
 print(f"{hours} hours and {minutes} minutes")  # 2 hours and 15 minutes
 ```""",
                 'exercise': None,
+                'game': {
+                    'type': 'predict_output',
+                    'instructions': 'What do you think this code will print? Type your guess!',
+                    'code_snippet': 'def add(a, b):\n    return a + b\n\nresult = add(3, 7)\nprint(result)',
+                    'expected_output': '10',
+                    'explanation': 'The function add() takes two numbers, adds them with +, and returns the result. add(3, 7) returns 10, which gets stored in result and printed!',
+                },
             },
             {
                 'id': 'variable-scope',

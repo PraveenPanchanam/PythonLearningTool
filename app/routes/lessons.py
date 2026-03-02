@@ -37,6 +37,10 @@ def view_lesson(lesson_id):
     # Count exercises for progress tracking
     exercise_count = sum(1 for s in sections if s.get('exercise'))
 
+    # Detect kid user and count games
+    is_kid = getattr(current_user, 'age_group', '18_plus') == 'under_12'
+    game_count = sum(1 for s in sections if s.get('game')) if is_kid else 0
+
     return render_template(
         'lessons/view.html',
         lesson=lesson,
@@ -45,6 +49,8 @@ def view_lesson(lesson_id):
         completion=completion,
         show_reminder=show_reminder,
         exercise_count=exercise_count,
+        is_kid=is_kid,
+        game_count=game_count,
     )
 
 
