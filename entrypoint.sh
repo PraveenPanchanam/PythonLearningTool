@@ -126,6 +126,7 @@ with app.app_context():
     from app.models.lesson import Lesson
     from app.models.lesson_completion import LessonCompletion
     from app.models.nudge import Nudge
+    from app.models.feedback import Feedback
 
     models = [
         ('User', User),
@@ -135,6 +136,7 @@ with app.app_context():
         ('Lesson', Lesson),
         ('LessonCompletion', LessonCompletion),
         ('Nudge', Nudge),
+        ('Feedback', Feedback),
     ]
 
     for name, model in models:

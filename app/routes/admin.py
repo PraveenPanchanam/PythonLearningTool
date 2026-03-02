@@ -13,6 +13,7 @@ from app.models.submission import Submission
 from app.models.lesson import Lesson
 from app.models.lesson_completion import LessonCompletion
 from app.models.nudge import Nudge
+from app.models.feedback import Feedback
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -370,3 +371,19 @@ def get_nudge_templates():
     nudge_type = request.args.get('type', 'encouragement')
     templates = NUDGE_TEMPLATES.get(nudge_type, NUDGE_TEMPLATES['encouragement'])
     return jsonify(templates)
+
+
+# ── Feedback Management ────────────────────────────────────────
+@admin_bp.route('/feedback')
+@admin_required
+def feedback_list():
+    """View all user feedback."""
+    feedback_items = Feedback.query.order_by(Feedback.created_at.desc()).all()
+    avg_rating = db.session.query(func.avg(Feedback.rating)).scalar()
+    total_count = len(feedback_items)
+    return render_template(
+        'admin/feedback.html',
+        feedback=feedback_items,
+        avg_rating=round(avg_rating, 1) if avg_rating else 0,
+        total_count=total_count,
+    )

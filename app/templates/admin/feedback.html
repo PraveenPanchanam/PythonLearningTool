@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Feedback — Admin — Python Learning Tool{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.admin_dashboard') }}">Admin</a></li>
+        <li class="breadcrumb-item active">Feedback</li>
+    </ol>
+</nav>
+
+<h3 class="mb-4"><i class="bi bi-chat-heart"></i> User Feedback</h3>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 bg-primary text-white">
+            <div class="card-body text-center">
+                <h2 class="mb-0">{{ total_count }}</h2>
+                <small>Total Feedback</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 bg-warning text-dark">
+            <div class="card-body text-center">
+                <h2 class="mb-0">
+                    {{ avg_rating }}
+                    <small class="fs-5">/ 5</small>
+                </h2>
+                <small>Average Rating</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 bg-success text-white">
+            <div class="card-body text-center">
+                <h2 class="mb-0">
+                    {% for i in range(1, 6) %}
+                        {% if i <= (avg_rating | round(0, 'floor') | int) %}
+                            <i class="bi bi-star-fill"></i>
+                        {% elif i - avg_rating < 1 and i - avg_rating > 0 %}
+                            <i class="bi bi-star-half"></i>
+                        {% else %}
+                            <i class="bi bi-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </h2>
+                <small>Star Rating</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feedback Table -->
+{% if feedback %}
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 140px;">Date</th>
+                        <th style="width: 130px;">Name</th>
+                        <th style="width: 180px;">Email</th>
+                        <th style="width: 110px;">Rating</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in feedback %}
+                    <tr>
+                        <td class="text-muted small">{{ item.created_at.strftime('%b %d, %Y') }}<br>{{ item.created_at.strftime('%I:%M %p') }}</td>
+                        <td class="fw-semibold">{{ item.name }}</td>
+                        <td class="text-muted small">{{ item.email }}</td>
+                        <td>
+                            {% for i in range(1, 6) %}
+                                <i class="bi bi-star-fill{% if i > item.rating %} text-muted opacity-25{% else %} text-warning{% endif %}"></i>
+                            {% endfor %}
+                        </td>
+                        <td>{{ item.message }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <i class="bi bi-chat-dots display-4"></i>
+    <p class="mt-3">No feedback received yet.</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,86 +1,370 @@
 {% extends 'base.html' %}
-{% block title %}Python Learning Tool - Learn Python from Beginner to Advanced{% endblock %}
+
+{% block title %}Learn Python Free — Build Data Analyst, Data Engineer & Data Scientist Skills | Python Learning Tool{% endblock %}
+
+{% block meta_description %}Master Python programming from scratch with 11 structured chapters, 50+ auto-graded assignments, and interactive lessons. Launch your career as a Data Analyst, Data Engineer, or Data Scientist.{% endblock %}
+
+{% block meta_keywords %}learn python free, python for data science, data analyst course, data engineer skills, data scientist training, python tutorial, python assignments, machine learning python{% endblock %}
+
+{% block og_title %}Python Learning Tool — Master Python for Data Careers{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-    <h1 class="display-4 fw-bold text-primary mb-3">
-        <i class="bi bi-code-slash"></i> Python Learning Tool
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1 — Hero Banner
+     ═══════════════════════════════════════════ -->
+<section class="hero-section text-center">
+    <h1 class="display-4 fw-bold mb-3" style="color: var(--plt-heading-color);">
+        Master Python.<br class="d-none d-md-block"> Launch Your Data Career.
     </h1>
-    <p class="lead text-muted mb-4">
-        Master Python programming from beginner to advanced with interactive assignments,
-        instant feedback, and progress tracking.
+    <p class="lead mx-auto mb-4" style="max-width: 680px; color: var(--plt-subheading-color);">
+        Python is the #1 language for data science, machine learning, and automation.
+        Start your journey with structured lessons, hands-on assignments, and real-world skills
+        that top employers demand.
     </p>
-    <div class="d-flex justify-content-center gap-3 mb-5">
-        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4">
-            Get Started <i class="bi bi-arrow-right"></i>
+    <div class="hero-stats mb-4">
+        <span class="me-3"><i class="bi bi-book text-primary"></i> 11 Chapters</span>
+        <span class="me-3"><i class="bi bi-code-square text-success"></i> 50+ Assignments</span>
+        <span><i class="bi bi-mortarboard text-warning"></i> 28 Lessons</span>
+    </div>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4 shadow-sm">
+            Start Learning Free <i class="bi bi-arrow-right"></i>
         </a>
         <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg px-4">
             Login
         </a>
     </div>
-</div>
+</section>
 
-<div class="row g-4 mb-5">
-    <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-                <div class="display-5 text-primary mb-3"><i class="bi bi-book"></i></div>
-                <h5>8 Structured Chapters</h5>
-                <p class="text-muted">From data types and variables to OOP and advanced concepts, organized by difficulty.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-                <div class="display-5 text-success mb-3"><i class="bi bi-check-circle"></i></div>
-                <h5>Auto-Graded Assignments</h5>
-                <p class="text-muted">Submit your code and get instant feedback with test cases and output validation.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-                <div class="display-5 text-warning mb-3"><i class="bi bi-graph-up"></i></div>
-                <h5>Track Your Progress</h5>
-                <p class="text-muted">Monitor your scores, see completion status, and track your learning journey.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <h3 class="text-center mb-4">Course Curriculum</h3>
-        <div class="row g-3">
-            {% set chapters = [
-                ('Data Types & Variables', 'beginner', 'bi-123'),
-                ('Conditional Statements', 'beginner', 'bi-signpost-split'),
-                ('Loops', 'beginner', 'bi-arrow-repeat'),
-                ('Functions', 'intermediate', 'bi-braces'),
-                ('Data Structures', 'intermediate', 'bi-collection'),
-                ('File I/O & Error Handling', 'intermediate', 'bi-file-earmark-code'),
-                ('Object-Oriented Programming', 'advanced', 'bi-diagram-3'),
-                ('Modules & Advanced Concepts', 'advanced', 'bi-puzzle'),
-                ('NumPy Fundamentals', 'data-science', 'bi-grid-3x3'),
-                ('Pandas for Data Analysis', 'data-science', 'bi-table'),
-                ('Scikit-learn for ML', 'data-science', 'bi-robot')
-            ] %}
-            {% for title, level, icon in chapters %}
-            <div class="col-md-6 col-lg-3">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center p-3">
-                        <i class="bi {{ icon }} fs-3 text-primary"></i>
-                        <h6 class="mt-2 mb-1">{{ title }}</h6>
-                        <span class="badge bg-{{ 'success' if level == 'beginner' else ('warning text-dark' if level == 'intermediate' else ('info' if level == 'data-science' else 'danger')) }}">
-                            {{ level|capitalize|replace('-', ' ') }}
-                        </span>
-                    </div>
+<!-- ═══════════════════════════════════════════
+     SECTION 2 — Why Python Matters
+     ═══════════════════════════════════════════ -->
+<section class="py-5">
+    <h2 class="text-center fw-bold mb-2" style="color: var(--plt-heading-color);">Why Learn Python?</h2>
+    <p class="text-center mb-5" style="color: var(--plt-subheading-color);">
+        The language behind AI, data analytics, and the world's top tech companies.
+    </p>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm feature-accent">
+                <div class="card-body text-center p-4">
+                    <div class="display-5 text-primary mb-3"><i class="bi bi-rocket-takeoff"></i></div>
+                    <h5 class="fw-bold">#1 Language for Data</h5>
+                    <p class="text-muted mb-0">
+                        Python powers data science, AI, and automation at companies like Google, Netflix, and NASA.
+                        It's the most widely used language in data analytics and machine learning.
+                    </p>
                 </div>
             </div>
-            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm feature-accent" style="border-top-color: var(--bs-success) !important;">
+                <div class="card-body text-center p-4">
+                    <div class="display-5 text-success mb-3"><i class="bi bi-graph-up-arrow"></i></div>
+                    <h5 class="fw-bold">High Industry Demand</h5>
+                    <p class="text-muted mb-0">
+                        Python developers are among the most sought-after professionals.
+                        Average salaries exceed $120K, with demand growing year over year across all industries.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm feature-accent" style="border-top-color: var(--bs-warning) !important;">
+                <div class="card-body text-center p-4">
+                    <div class="display-5 text-warning mb-3"><i class="bi bi-bullseye"></i></div>
+                    <h5 class="fw-bold">Beginner Friendly</h5>
+                    <p class="text-muted mb-0">
+                        Python's clean syntax and massive community make it the ideal first programming language.
+                        You can build real projects within weeks of starting.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3 — Python in the Real World
+     ═══════════════════════════════════════════ -->
+<section class="py-5">
+    <h2 class="text-center fw-bold mb-2" style="color: var(--plt-heading-color);">Python Powers the World Around You</h2>
+    <p class="text-center mb-5" style="color: var(--plt-subheading-color);">
+        From your favorite apps to space exploration — Python is everywhere.
+    </p>
+    <div class="row g-4">
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 border-0 shadow-sm text-center p-3 realworld-card">
+                <div class="fs-1 mb-2">🎮</div>
+                <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">Games</h6>
+                <p class="text-muted mb-0" style="font-size: 0.78rem;">Minecraft, Civilization IV, and Roblox tools are built with Python</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 border-0 shadow-sm text-center p-3 realworld-card">
+                <div class="fs-1 mb-2">📱</div>
+                <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">Instagram</h6>
+                <p class="text-muted mb-0" style="font-size: 0.78rem;">Instagram's backend handles billions of users with Python</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 border-0 shadow-sm text-center p-3 realworld-card">
+                <div class="fs-1 mb-2">🎵</div>
+                <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">Spotify</h6>
+                <p class="text-muted mb-0" style="font-size: 0.78rem;">Python powers the music recommendations you hear every day</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 border-0 shadow-sm text-center p-3 realworld-card">
+                <div class="fs-1 mb-2">🚀</div>
+                <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">NASA & SpaceX</h6>
+                <p class="text-muted mb-0" style="font-size: 0.78rem;">Space missions, satellite data, and rocket telemetry run on Python</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 border-0 shadow-sm text-center p-3 realworld-card">
+                <div class="fs-1 mb-2">🤖</div>
+                <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">AI & ChatGPT</h6>
+                <p class="text-muted mb-0" style="font-size: 0.78rem;">Every major AI model is trained and built using Python frameworks</p>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card h-100 border-0 shadow-sm text-center p-3 realworld-card">
+                <div class="fs-1 mb-2">🎬</div>
+                <h6 class="fw-bold mb-1" style="font-size: 0.85rem;">Movies & VFX</h6>
+                <p class="text-muted mb-0" style="font-size: 0.78rem;">Pixar, Disney, and Marvel use Python for visual effects and animation</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4 — Career Paths
+     ═══════════════════════════════════════════ -->
+<section class="py-5">
+    <h2 class="text-center fw-bold mb-2" style="color: var(--plt-heading-color);">Your Career Starts Here</h2>
+    <p class="text-center mb-5" style="color: var(--plt-subheading-color);">
+        Python opens doors to three of the most exciting and well-paying career paths in tech.
+    </p>
+    <div class="row g-4">
+        <!-- Data Analyst -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm career-card" style="border-top-color: var(--bs-info);">
+                <div class="card-body p-4">
+                    <div class="career-icon text-info mb-3"><i class="bi bi-bar-chart-line"></i></div>
+                    <h4 class="fw-bold">Data Analyst</h4>
+                    <p class="text-muted">
+                        Turn raw data into actionable insights. Data Analysts help businesses make better decisions
+                        through visualization, reporting, and statistical analysis.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">Python</span>
+                        <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">SQL</span>
+                        <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">Pandas</span>
+                        <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">Visualization</span>
+                    </div>
+                    <p class="salary mb-3">$65K — $110K <small class="text-muted fw-normal">/ year</small></p>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-info btn-sm">
+                        Explore Curriculum <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Data Engineer -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm career-card" style="border-top-color: var(--bs-success);">
+                <div class="card-body p-4">
+                    <div class="career-icon text-success mb-3"><i class="bi bi-database"></i></div>
+                    <h4 class="fw-bold">Data Engineer</h4>
+                    <p class="text-muted">
+                        Build the data infrastructure that powers analytics. Data Engineers design pipelines,
+                        manage databases, and ensure data flows reliably across organizations.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Python</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">SQL</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">ETL</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Cloud</span>
+                    </div>
+                    <p class="salary mb-3">$90K — $150K <small class="text-muted fw-normal">/ year</small></p>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-success btn-sm">
+                        Explore Curriculum <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Data Scientist -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm career-card" style="border-top-color: var(--bs-warning);">
+                <div class="card-body p-4">
+                    <div class="career-icon text-warning mb-3"><i class="bi bi-cpu"></i></div>
+                    <h4 class="fw-bold">Data Scientist</h4>
+                    <p class="text-muted">
+                        Apply machine learning and statistics to solve complex problems. Data Scientists
+                        build predictive models and drive innovation with AI across every industry.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Python</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">ML</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Statistics</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">NumPy</span>
+                    </div>
+                    <p class="salary mb-3">$100K — $170K <small class="text-muted fw-normal">/ year</small></p>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-warning btn-sm">
+                        Explore Curriculum <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5 — Curriculum Overview
+     ═══════════════════════════════════════════ -->
+<section class="py-5">
+    <h2 class="text-center fw-bold mb-2" style="color: var(--plt-heading-color);">Structured Curriculum</h2>
+    <p class="text-center mb-5" style="color: var(--plt-subheading-color);">
+        11 chapters covering Python fundamentals through data science and machine learning.
+    </p>
+    <div class="row g-3 justify-content-center">
+        {% set chapters = [
+            ('1', 'Data Types & Variables', 'beginner', 'bi-123'),
+            ('2', 'Conditional Statements', 'beginner', 'bi-signpost-split'),
+            ('3', 'Loops', 'beginner', 'bi-arrow-repeat'),
+            ('4', 'Functions', 'intermediate', 'bi-braces'),
+            ('5', 'Data Structures', 'intermediate', 'bi-collection'),
+            ('6', 'File I/O & Error Handling', 'intermediate', 'bi-file-earmark-code'),
+            ('7', 'Object-Oriented Programming', 'advanced', 'bi-diagram-3'),
+            ('8', 'Modules & Advanced Concepts', 'advanced', 'bi-puzzle'),
+            ('9', 'NumPy Fundamentals', 'data-science', 'bi-grid-3x3'),
+            ('10', 'Pandas for Data Analysis', 'data-science', 'bi-table'),
+            ('11', 'Scikit-learn for ML', 'data-science', 'bi-robot')
+        ] %}
+        {% for num, title, level, icon in chapters %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm chapter-card-hover">
+                <div class="card-body text-center p-3">
+                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-circle mb-2" style="width:36px;height:36px;line-height:36px;font-size:0.9rem;">{{ num }}</span>
+                    <h6 class="mb-1" style="font-size: 0.9rem;">{{ title }}</h6>
+                    <span class="badge bg-{{ 'success' if level == 'beginner' else ('warning text-dark' if level == 'intermediate' else ('info' if level == 'data-science' else 'danger')) }}" style="font-size: 0.7rem;">
+                        {{ level|capitalize|replace('-', ' ') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 6 — Feedback
+     ═══════════════════════════════════════════ -->
+<section class="feedback-section rounded-3 p-4 p-md-5 my-5" id="feedback">
+    <div class="row align-items-center">
+        <div class="col-md-5 mb-4 mb-md-0">
+            <h2 class="fw-bold mb-3" style="color: var(--plt-heading-color);">
+                <i class="bi bi-chat-heart text-primary"></i> Share Your Feedback
+            </h2>
+            <p style="color: var(--plt-subheading-color);">
+                Your feedback helps us improve! Whether you're a student, educator, or tech professional,
+                we'd love to hear about your experience with the platform.
+            </p>
+            <p class="text-muted small mb-0">
+                <i class="bi bi-shield-check"></i> Your information is kept private and used only to improve the platform.
+            </p>
+        </div>
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('main.submit_feedback') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="feedback-name" class="form-label fw-semibold">Name</label>
+                                <input type="text" class="form-control" id="feedback-name" name="name"
+                                       placeholder="Your name" required minlength="2" maxlength="100">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="feedback-email" class="form-label fw-semibold">Email</label>
+                                <input type="email" class="form-control" id="feedback-email" name="email"
+                                       placeholder="your@email.com" required maxlength="120">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Rating</label>
+                                <div class="star-rating">
+                                    <input type="radio" id="star5" name="rating" value="5">
+                                    <label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                                    <input type="radio" id="star3" name="rating" value="3" checked>
+                                    <label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                                    <input type="radio" id="star1" name="rating" value="1">
+                                    <label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="feedback-message" class="form-label fw-semibold">Message</label>
+                                <textarea class="form-control" id="feedback-message" name="message" rows="3"
+                                          placeholder="Tell us about your experience..." required minlength="10" maxlength="2000"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send"></i> Submit Feedback
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 7 — Final CTA
+     ═══════════════════════════════════════════ -->
+<section class="text-center py-5">
+    <h2 class="fw-bold mb-3" style="color: var(--plt-heading-color);">
+        Ready to Start Your Python Journey?
+    </h2>
+    <p class="lead mb-4" style="color: var(--plt-subheading-color);">
+        Join learners building real Python skills — completely free.
+    </p>
+    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-5 shadow-sm">
+        Create Free Account <i class="bi bi-arrow-right"></i>
+    </a>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- JSON-LD Structured Data for SEO -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "Python Learning Tool",
+    "description": "Master Python programming from scratch with interactive lessons, auto-graded assignments, and a structured 11-chapter curriculum covering data science and machine learning.",
+    "provider": {
+        "@type": "Organization",
+        "name": "QUALSHARP LLC"
+    },
+    "educationalLevel": "Beginner to Advanced",
+    "programmingLanguage": "Python",
+    "teaches": [
+        "Python Programming",
+        "Data Analysis with Pandas",
+        "Machine Learning with Scikit-learn",
+        "NumPy for Scientific Computing",
+        "Object-Oriented Programming"
+    ],
+    "numberOfCredits": 11,
+    "isAccessibleForFree": true,
+    "inLanguage": "en"
+}
+</script>
 {% endblock %}

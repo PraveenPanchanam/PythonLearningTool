@@ -157,7 +157,7 @@ def create_app(config_name=None):
 
     # Import models (for Flask-Migrate to detect them)
     with app.app_context():
-        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion, Nudge  # noqa: F401
+        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion, Nudge, Feedback  # noqa: F401
         # In development, auto-create tables. In production, use: flask db upgrade
         if app.debug:
             db.create_all()

@@ -757,4 +757,126 @@ pre code {
     .drag-block {
         font-size: 0.85rem;
     }
+
+    /* Hero responsive */
+    .hero-section {
+        padding: 3rem 0 2rem;
+    }
+    .hero-stats span {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    .career-card .career-icon {
+        font-size: 2rem;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   Hero Landing Page
+   ═══════════════════════════════════════════ */
+.hero-section {
+    padding: 5rem 0 3rem;
+}
+.hero-section .display-4 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+.hero-stats {
+    font-size: 1.1rem;
+    color: var(--plt-subheading-color);
+}
+.hero-stats i {
+    margin-right: 0.25rem;
+}
+
+/* Feature cards with colored top border */
+.feature-accent {
+    border-top: 4px solid var(--bs-primary) !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.feature-accent:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* Career Path Cards */
+.career-card {
+    border: none !important;
+    border-top: 4px solid !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.career-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.career-card .career-icon {
+    font-size: 2.5rem;
+}
+.career-card .salary {
+    font-weight: 600;
+    color: var(--bs-success);
+}
+
+/* Real World examples grid */
+.realworld-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.realworld-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* Curriculum chapter cards */
+.chapter-card-hover {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.chapter-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Star Rating (feedback form) */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.25rem;
+}
+.star-rating input {
+    display: none;
+}
+.star-rating label {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #ddd;
+    transition: color 0.15s;
+}
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #ffc107;
+}
+
+/* Feedback section subtle bg */
+.feedback-section {
+    background-color: var(--plt-exercise-bg);
+}
+
+/* Dark mode overrides for hero page */
+[data-bs-theme="dark"] .feature-accent:hover,
+[data-bs-theme="dark"] .career-card:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+[data-bs-theme="dark"] .realworld-card:hover,
+[data-bs-theme="dark"] .chapter-card-hover:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+[data-bs-theme="dark"] .star-rating label {
+    color: #444;
+}
+[data-bs-theme="dark"] .star-rating label:hover,
+[data-bs-theme="dark"] .star-rating label:hover ~ label,
+[data-bs-theme="dark"] .star-rating input:checked ~ label {
+    color: #ffc107;
 }
