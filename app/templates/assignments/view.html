@@ -4,6 +4,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/monokai.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/eclipse.min.css">
 {% endblock %}
 
 {% block content %}
@@ -36,7 +37,7 @@
         <form id="submit-form" method="POST" action="{{ url_for('assignments.submit_assignment', assignment_id=assignment.id) }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="card mb-3">
-                <div class="card-header bg-dark text-light d-flex justify-content-between align-items-center">
+                <div class="card-header editor-card-header d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-code-slash"></i> Code Editor</span>
                     <small class="text-muted">Python 3</small>
                 </div>

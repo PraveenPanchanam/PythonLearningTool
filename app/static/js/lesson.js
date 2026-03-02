@@ -8,12 +8,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const passedExercises = new Set();
     let totalExercises = 0;
 
+    // Dynamic CodeMirror theme based on current site theme
+    function getCodeMirrorTheme() {
+        return document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'monokai' : 'eclipse';
+    }
+
     // Initialize CodeMirror editors for each exercise
     document.querySelectorAll('.lesson-code-editor').forEach(function (textarea) {
         const sectionId = textarea.dataset.sectionId;
         const editor = CodeMirror.fromTextArea(textarea, {
             mode: 'python',
-            theme: 'monokai',
+            theme: getCodeMirrorTheme(),
             lineNumbers: true,
             indentUnit: 4,
             tabSize: 4,
@@ -29,6 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
         editor.setSize(null, 150);
         editors[sectionId] = editor;
         totalExercises++;
+    });
+
+    // Listen for theme changes and update all editors
+    window.addEventListener('themechange', function () {
+        var newTheme = getCodeMirrorTheme();
+        Object.keys(editors).forEach(function (key) {
+            editors[key].setOption('theme', newTheme);
+        });
     });
 
     // Run & Check button handlers
