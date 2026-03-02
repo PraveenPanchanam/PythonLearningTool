@@ -160,8 +160,9 @@
                     </p>
                     <div class="mb-3">
                         <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">Python</span>
-                        <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">SQL</span>
                         <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">Pandas</span>
+                        <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">NumPy</span>
+                        <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">SQL</span>
                         <span class="badge bg-info bg-opacity-10 text-info me-1 mb-1">Visualization</span>
                     </div>
                     <p class="salary mb-3">$65K — $110K <small class="text-muted fw-normal">/ year</small></p>
@@ -183,9 +184,10 @@
                     </p>
                     <div class="mb-3">
                         <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Python</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">NumPy</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Pandas</span>
                         <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">SQL</span>
                         <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">ETL</span>
-                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Cloud</span>
                     </div>
                     <p class="salary mb-3">$90K — $150K <small class="text-muted fw-normal">/ year</small></p>
                     <a href="{{ url_for('auth.register') }}" class="btn btn-outline-success btn-sm">
@@ -206,9 +208,10 @@
                     </p>
                     <div class="mb-3">
                         <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Python</span>
-                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">ML</span>
-                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Statistics</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Scikit-Learn</span>
                         <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">NumPy</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Pandas</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">ML</span>
                     </div>
                     <p class="salary mb-3">$100K — $170K <small class="text-muted fw-normal">/ year</small></p>
                     <a href="{{ url_for('auth.register') }}" class="btn btn-outline-warning btn-sm">
@@ -217,6 +220,112 @@
                 </div>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4B — Master Data Science with Python
+     ═══════════════════════════════════════════ -->
+<section class="py-5">
+    <h2 class="text-center fw-bold mb-2" style="color: var(--plt-heading-color);">
+        Master Data Science with Python
+    </h2>
+    <p class="text-center mb-5" style="color: var(--plt-subheading-color);">
+        Our curriculum includes dedicated chapters on the three most essential data science libraries.
+    </p>
+    <div class="row g-4">
+        <!-- NumPy -->
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm ds-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="ds-icon bg-primary bg-opacity-10 text-primary me-3">
+                            <i class="bi bi-grid-3x3"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">NumPy</h5>
+                            <small class="text-muted">Chapter 9</small>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-3">
+                        The foundation of scientific computing in Python. Learn array operations, linear algebra,
+                        broadcasting, and high-performance numerical computing.
+                    </p>
+                    <div class="mb-2">
+                        <span class="badge bg-primary bg-opacity-10 text-primary me-1 mb-1">Arrays</span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary me-1 mb-1">Linear Algebra</span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary me-1 mb-1">Broadcasting</span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary me-1 mb-1">Scientific Computing</span>
+                    </div>
+                    <div class="mt-auto">
+                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> Hands-on Assignments</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Pandas -->
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm ds-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="ds-icon bg-success bg-opacity-10 text-success me-3">
+                            <i class="bi bi-table"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">Pandas</h5>
+                            <small class="text-muted">Chapter 10</small>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-3">
+                        The essential data analysis toolkit. Master DataFrames, data cleaning, aggregation,
+                        merging, and turning messy data into actionable insights.
+                    </p>
+                    <div class="mb-2">
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">DataFrames</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Data Cleaning</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Aggregation</span>
+                        <span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">Data Analysis</span>
+                    </div>
+                    <div class="mt-auto">
+                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> Hands-on Assignments</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Scikit-Learn -->
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm ds-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="ds-icon bg-warning bg-opacity-10 text-warning me-3">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0">Scikit-Learn</h5>
+                            <small class="text-muted">Chapter 11</small>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-3">
+                        Your gateway to machine learning. Build classification, regression, and clustering models.
+                        Learn model evaluation, feature engineering, and real-world ML workflows.
+                    </p>
+                    <div class="mb-2">
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Classification</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Regression</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">Clustering</span>
+                        <span class="badge bg-warning bg-opacity-10 text-warning me-1 mb-1">ML Pipelines</span>
+                    </div>
+                    <div class="mt-auto">
+                        <span class="badge bg-success"><i class="bi bi-check-circle"></i> Hands-on Assignments</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4">
+            Start Data Science Track <i class="bi bi-arrow-right"></i>
+        </a>
     </div>
 </section>
 
@@ -257,6 +366,47 @@
         {% endfor %}
     </div>
 </section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5B — Latest from Our Blog
+     ═══════════════════════════════════════════ -->
+{% if latest_posts %}
+<section class="py-5">
+    <h2 class="text-center fw-bold mb-2" style="color: var(--plt-heading-color);">Latest from Our Blog</h2>
+    <p class="text-center mb-5" style="color: var(--plt-subheading-color);">
+        Tips, tutorials, and insights on Python, data science, and career growth.
+    </p>
+    <div class="row g-4">
+        {% for post in latest_posts %}
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm blog-card-hover">
+                <div class="card-body p-4">
+                    <div class="mb-2">
+                        {% for tag in post.tag_list %}
+                        <span class="badge bg-primary bg-opacity-10 text-primary me-1">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <h5 class="fw-bold mb-2">
+                        <a href="{{ url_for('blog.blog_detail', slug=post.slug) }}" class="text-decoration-none" style="color: var(--plt-heading-color);">
+                            {{ post.title }}
+                        </a>
+                    </h5>
+                    <p class="text-muted small mb-2">{{ post.excerpt }}</p>
+                    <small class="text-muted">
+                        <i class="bi bi-calendar3"></i> {{ post.published_at.strftime('%b %d, %Y') if post.published_at else '' }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('blog.blog_list') }}" class="btn btn-outline-primary">
+            View All Posts <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+</section>
+{% endif %}
 
 <!-- ═══════════════════════════════════════════
      SECTION 6 — Feedback

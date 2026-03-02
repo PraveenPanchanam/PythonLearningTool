@@ -127,6 +127,8 @@ with app.app_context():
     from app.models.lesson_completion import LessonCompletion
     from app.models.nudge import Nudge
     from app.models.feedback import Feedback
+    from app.models.certificate import Certificate
+    from app.models.blog_post import BlogPost
 
     models = [
         ('User', User),
@@ -137,6 +139,8 @@ with app.app_context():
         ('LessonCompletion', LessonCompletion),
         ('Nudge', Nudge),
         ('Feedback', Feedback),
+        ('Certificate', Certificate),
+        ('BlogPost', BlogPost),
     ]
 
     for name, model in models:
@@ -182,6 +186,139 @@ with app.app_context():
             from app.lessons_data.loader import load_all_lessons
             load_all_lessons()
             print('  Lessons loaded.')
+"
+
+echo ""
+echo "Seeding blog posts if needed..."
+python -c "
+from app import create_app
+from app.extensions import db
+from app.models.blog_post import BlogPost
+from app.models.user import User
+from datetime import datetime
+
+app = create_app('production')
+with app.app_context():
+    if BlogPost.query.count() == 0:
+        # Find admin user for authorship
+        admin = User.query.filter_by(is_admin=True).first()
+        author_id = admin.id if admin else None
+
+        posts = [
+            {
+                'title': 'Why Every Data Analyst Needs to Know Pandas',
+                'slug': 'why-every-data-analyst-needs-pandas',
+                'tags': 'pandas, data-analysis, python',
+                'meta_description': 'Discover why Pandas is the must-have Python library for data analysts and how it transforms raw data into actionable insights.',
+                'content': '''Pandas is the backbone of data analysis in Python, and for good reason. If you are pursuing a career as a Data Analyst, mastering Pandas is not optional — it is essential.
+
+## What Makes Pandas So Powerful?
+
+Pandas provides two core data structures — **Series** and **DataFrame** — that make working with structured data intuitive and fast. Whether you are cleaning messy CSV files, aggregating sales reports, or merging datasets from multiple sources, Pandas has you covered.
+
+## Real-World Applications
+
+- **Data Cleaning:** Handle missing values, duplicates, and inconsistent formats in minutes
+- **Aggregation:** Group data by categories and compute statistics with a single line of code
+- **Merging:** Combine data from multiple tables just like SQL JOINs
+- **Time Series:** Analyze trends, resample data, and compute rolling averages effortlessly
+
+## Why Employers Care
+
+Job postings for Data Analysts consistently list Pandas as a required skill. Companies like Google, Amazon, and Netflix rely on Pandas-powered workflows for daily analytics. Learning Pandas is one of the highest-ROI investments you can make in your data career.
+
+## Get Started Today
+
+Our **Chapter 10: Pandas for Data Analysis** covers everything from basic DataFrame operations to advanced groupby, merge, and pivot techniques — all with hands-on assignments that mirror real-world scenarios.
+
+Ready to level up your data skills? [Start learning now](/register).
+''',
+            },
+            {
+                'title': 'From Zero to Machine Learning: Your Python Learning Path',
+                'slug': 'zero-to-machine-learning-python-path',
+                'tags': 'machine-learning, scikit-learn, career',
+                'meta_description': 'A clear roadmap from Python beginner to building your first machine learning models with Scikit-Learn.',
+                'content': '''Machine learning might sound intimidating, but with the right learning path, anyone can go from zero to building real ML models. Here is exactly how to get there using Python.
+
+## The Learning Path
+
+### Stage 1: Python Fundamentals (Chapters 1-6)
+Start with the basics — variables, loops, functions, and data structures. These are the building blocks that everything else rests on. You cannot skip this step.
+
+### Stage 2: Advanced Python (Chapters 7-8)
+Object-oriented programming and modules give you the tools to write clean, reusable code — exactly what ML projects demand.
+
+### Stage 3: NumPy (Chapter 9)
+NumPy is the mathematical engine behind every ML library. Understanding arrays, vectorized operations, and linear algebra fundamentals is critical.
+
+### Stage 4: Pandas (Chapter 10)
+Real ML projects start with data preparation. Pandas teaches you to load, clean, and transform data — the step that takes 80% of a data scientist's time.
+
+### Stage 5: Scikit-Learn (Chapter 11)
+Now you are ready. Scikit-Learn makes building classification, regression, and clustering models accessible. You will learn model selection, evaluation, and best practices.
+
+## Why This Path Works
+
+Each stage builds on the previous one. By the time you reach Scikit-Learn, you will have the Python fluency, numerical computing skills, and data manipulation expertise needed to succeed.
+
+## Start Your ML Journey
+
+Our structured curriculum takes you through all five stages with hands-on assignments at every step. [Create your free account](/register) and start building toward your ML career today.
+''',
+            },
+            {
+                'title': 'NumPy vs Python Lists: Why Scientists Choose NumPy',
+                'slug': 'numpy-vs-python-lists-performance',
+                'tags': 'numpy, performance, python',
+                'meta_description': 'Learn why NumPy arrays dramatically outperform Python lists for numerical computing and data science workloads.',
+                'content': '''If you have worked with Python lists, you might wonder why data scientists insist on using NumPy arrays instead. The answer comes down to three things: speed, memory, and functionality.
+
+## Speed: 10x to 100x Faster
+
+NumPy operations are implemented in optimized C code and operate on contiguous memory blocks. A simple element-wise addition on a million numbers can be **50-100x faster** with NumPy compared to a Python list comprehension.
+
+## Memory Efficiency
+
+A Python list of 1 million integers uses roughly 28 MB of memory. The same data in a NumPy array uses just 8 MB — **3.5x less memory**. This matters when working with large datasets.
+
+## Built-in Math
+
+NumPy provides hundreds of mathematical functions out of the box:
+
+- **Linear Algebra:** matrix multiplication, eigenvalues, SVD
+- **Statistics:** mean, median, standard deviation, correlation
+- **Random:** generate random numbers, sample distributions
+- **Broadcasting:** perform operations on arrays of different shapes automatically
+
+## When to Use Which
+
+Use **Python lists** when you need a general-purpose container for mixed data types. Use **NumPy arrays** whenever you are doing numerical computation, scientific analysis, or preparing data for machine learning.
+
+## Learn NumPy Hands-On
+
+Our **Chapter 9: NumPy Fundamentals** teaches you array creation, indexing, broadcasting, and real-world numerical computing — complete with auto-graded assignments. [Start learning](/register) today.
+''',
+            },
+        ]
+
+        for p in posts:
+            post = BlogPost(
+                title=p['title'],
+                slug=p['slug'],
+                content=p['content'],
+                meta_description=p['meta_description'],
+                tags=p['tags'],
+                author_id=author_id,
+                is_published=True,
+                published_at=datetime.utcnow(),
+            )
+            db.session.add(post)
+
+        db.session.commit()
+        print(f'  ✓ Seeded {len(posts)} blog posts.')
+    else:
+        print(f'  Blog posts already exist ({BlogPost.query.count()} posts). Skipping seed.')
 "
 
 echo ""

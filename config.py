@@ -27,6 +27,9 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', 'noreply@pythonlearningtool.com')
 
+    # Google Analytics 4
+    GA4_MEASUREMENT_ID = os.environ.get('GA4_MEASUREMENT_ID')
+
     # Logging
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
 

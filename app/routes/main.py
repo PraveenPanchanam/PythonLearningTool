@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user
 from app.extensions import db, limiter
 from app.models.feedback import Feedback
+from app.models.blog_post import BlogPost
 
 main_bp = Blueprint('main', __name__)
 
@@ -10,7 +11,11 @@ main_bp = Blueprint('main', __name__)
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.overview'))
-    return render_template('index.html')
+    # Latest 3 published blog posts for "Latest from Our Blog" section
+    latest_posts = BlogPost.query.filter_by(is_published=True).order_by(
+        BlogPost.published_at.desc()
+    ).limit(3).all()
+    return render_template('index.html', latest_posts=latest_posts)
 
 
 @main_bp.route('/feedback', methods=['POST'])

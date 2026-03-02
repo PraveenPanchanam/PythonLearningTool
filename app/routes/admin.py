@@ -14,6 +14,7 @@ from app.models.lesson import Lesson
 from app.models.lesson_completion import LessonCompletion
 from app.models.nudge import Nudge
 from app.models.feedback import Feedback
+from app.models.blog_post import BlogPost
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -387,3 +388,122 @@ def feedback_list():
         avg_rating=round(avg_rating, 1) if avg_rating else 0,
         total_count=total_count,
     )
+
+
+# ── Blog Management ────────────────────────────────────────
+
+@admin_bp.route('/blog')
+@admin_required
+def blog_list():
+    """Admin view of all blog posts (published and drafts)."""
+    posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
+    return render_template('admin/blog_list.html', posts=posts)
+
+
+@admin_bp.route('/blog/new', methods=['GET', 'POST'])
+@admin_required
+def blog_create():
+    """Create a new blog post."""
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        content = request.form.get('content', '').strip()
+        meta_description = request.form.get('meta_description', '').strip()
+        tags = request.form.get('tags', '').strip()
+        is_published = request.form.get('is_published') == 'on'
+
+        errors = []
+        if not title or len(title) < 5:
+            errors.append('Title must be at least 5 characters.')
+        if not content or len(content) < 50:
+            errors.append('Content must be at least 50 characters.')
+
+        slug = BlogPost.generate_slug(title)
+        if BlogPost.query.filter_by(slug=slug).first():
+            errors.append('A post with a similar title already exists.')
+
+        if errors:
+            for e in errors:
+                flash(e, 'danger')
+            return render_template('admin/blog_form.html',
+                                   post=None, form_title=title, form_content=content,
+                                   form_meta=meta_description, form_tags=tags)
+
+        post = BlogPost(
+            title=title,
+            slug=slug,
+            content=content,
+            meta_description=meta_description or title,
+            tags=tags,
+            author_id=current_user.id,
+            is_published=is_published,
+            published_at=datetime.utcnow() if is_published else None,
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        flash('Blog post created successfully!', 'success')
+        return redirect(url_for('admin.blog_list'))
+
+    return render_template('admin/blog_form.html', post=None)
+
+
+@admin_bp.route('/blog/<int:post_id>/edit', methods=['GET', 'POST'])
+@admin_required
+def blog_edit(post_id):
+    """Edit an existing blog post."""
+    post = db.session.get(BlogPost, post_id)
+    if not post:
+        abort(404)
+
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        content = request.form.get('content', '').strip()
+        meta_description = request.form.get('meta_description', '').strip()
+        tags = request.form.get('tags', '').strip()
+        is_published = request.form.get('is_published') == 'on'
+
+        errors = []
+        if not title or len(title) < 5:
+            errors.append('Title must be at least 5 characters.')
+        if not content or len(content) < 50:
+            errors.append('Content must be at least 50 characters.')
+
+        new_slug = BlogPost.generate_slug(title)
+        existing = BlogPost.query.filter_by(slug=new_slug).first()
+        if existing and existing.id != post.id:
+            errors.append('A post with a similar title already exists.')
+
+        if errors:
+            for e in errors:
+                flash(e, 'danger')
+            return render_template('admin/blog_form.html', post=post)
+
+        post.title = title
+        post.slug = new_slug
+        post.content = content
+        post.meta_description = meta_description or title
+        post.tags = tags
+
+        was_published = post.is_published
+        post.is_published = is_published
+        if is_published and not was_published:
+            post.published_at = datetime.utcnow()
+
+        db.session.commit()
+        flash('Blog post updated successfully!', 'success')
+        return redirect(url_for('admin.blog_list'))
+
+    return render_template('admin/blog_form.html', post=post)
+
+
+@admin_bp.route('/blog/<int:post_id>/delete', methods=['POST'])
+@admin_required
+def blog_delete(post_id):
+    """Delete a blog post."""
+    post = db.session.get(BlogPost, post_id)
+    if not post:
+        abort(404)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Blog post deleted.', 'info')
+    return redirect(url_for('admin.blog_list'))

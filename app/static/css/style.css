@@ -880,3 +880,106 @@ pre code {
 [data-bs-theme="dark"] .star-rating input:checked ~ label {
     color: #ffc107;
 }
+
+/* ═══════════════════════════════════════════
+   Data Science Section Cards
+   ═══════════════════════════════════════════ */
+.ds-card {
+    border-left: 4px solid transparent;
+    transition: transform 0.2s, box-shadow 0.2s, border-left-color 0.2s;
+}
+.ds-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.ds-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] .ds-card:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   Blog Cards (Landing Page)
+   ═══════════════════════════════════════════ */
+.blog-card-hover {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.blog-card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+[data-bs-theme="dark"] .blog-card-hover:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* ═══════════════════════════════════════════
+   Blog List & Detail Pages
+   ═══════════════════════════════════════════ */
+.blog-post-card {
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.blog-post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+[data-bs-theme="dark"] .blog-post-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+}
+
+/* ═══════════════════════════════════════════
+   Certificate Page
+   ═══════════════════════════════════════════ */
+.certificate-wrapper {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+.certificate-inner {
+    background: var(--plt-body-bg);
+    border-radius: 0.75rem;
+    border: 3px dashed rgba(102, 126, 234, 0.3);
+}
+.certificate-seal {
+    font-size: 3rem;
+    color: #667eea;
+}
+.certificate-divider {
+    width: 120px;
+    border-top: 2px solid rgba(102, 126, 234, 0.3);
+    margin: 1rem auto;
+}
+.ls-wide {
+    letter-spacing: 0.15em;
+}
+
+[data-bs-theme="dark"] .certificate-wrapper {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+[data-bs-theme="dark"] .certificate-inner {
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+/* Share buttons */
+.share-section .btn {
+    min-width: 120px;
+}
+
+@media print {
+    .certificate-wrapper {
+        box-shadow: none !important;
+        background: white !important;
+        padding: 2rem !important;
+    }
+    .certificate-inner {
+        border: 2px solid #667eea;
+    }
+}

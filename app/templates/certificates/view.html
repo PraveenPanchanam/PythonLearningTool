@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}{{ cert_title }}{% endblock %}
+
+{% block meta_description %}{{ cert_description }}{% endblock %}
+{% block og_title %}{{ cert_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+@media print {
+    .navbar, .footer-custom, .share-section, .btn, .no-print { display: none !important; }
+    .certificate-wrapper { box-shadow: none !important; margin: 0 !important; }
+    body { background: white !important; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- JSON-LD for Certificate (SEO) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "EducationalOccupationalCredential",
+    "name": "{{ cert_title }}",
+    "description": "{{ cert_description }}",
+    "credentialCategory": "certificate",
+    "recognizedBy": {
+        "@type": "Organization",
+        "name": "QUALSHARP LLC"
+    },
+    "dateCreated": "{{ cert.issued_at.strftime('%Y-%m-%d') }}"
+}
+</script>
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+
+        <!-- Certificate Card -->
+        <div class="certificate-wrapper p-4 p-md-5 mb-4">
+            <div class="certificate-inner text-center py-5 px-3 px-md-5">
+                <div class="certificate-seal mb-3">
+                    <i class="bi bi-patch-check-fill"></i>
+                </div>
+                <h6 class="text-uppercase text-muted ls-wide mb-1">Certificate of Completion</h6>
+                <hr class="certificate-divider mx-auto">
+                <h2 class="fw-bold mb-3" style="color: var(--plt-heading-color);">
+                    {% if cert.certificate_type == 'chapter' and cert.chapter %}
+                        Chapter {{ cert.chapter.order }}: {{ cert.chapter.title }}
+                    {% else %}
+                        Python Learning Tool — Full Course
+                    {% endif %}
+                </h2>
+                <p class="text-muted mb-1">This is to certify that</p>
+                <h3 class="fw-bold text-primary mb-3">{{ cert.user.username }}</h3>
+                <p class="text-muted mb-1">
+                    has successfully completed
+                    {% if cert.certificate_type == 'chapter' and cert.chapter %}
+                        <strong>Chapter {{ cert.chapter.order }}: {{ cert.chapter.title }}</strong>
+                    {% else %}
+                        <strong>the entire Python Learning Tool curriculum</strong>
+                        <br>covering Python fundamentals through data science and machine learning
+                    {% endif %}
+                </p>
+                <hr class="certificate-divider mx-auto">
+                <div class="d-flex justify-content-center gap-4 flex-wrap mt-3">
+                    <div>
+                        <small class="text-muted d-block">Date Issued</small>
+                        <strong>{{ cert.issued_at.strftime('%B %d, %Y') }}</strong>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Certificate ID</small>
+                        <strong class="text-monospace" style="font-size:0.85rem;">{{ cert.token[:12] }}</strong>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Issued By</small>
+                        <strong>QUALSHARP LLC</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section text-center mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-share"></i> Share Your Achievement</h5>
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url|urlencode }}"
+                   target="_blank" rel="noopener" class="btn btn-outline-primary">
+                    <i class="bi bi-linkedin"></i> LinkedIn
+                </a>
+                <!-- Twitter / X -->
+                <a href="https://twitter.com/intent/tweet?text={{ (cert_description ~ ' ' ~ share_url)|urlencode }}"
+                   target="_blank" rel="noopener" class="btn btn-outline-dark">
+                    <i class="bi bi-twitter-x"></i> X / Twitter
+                </a>
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}"
+                   target="_blank" rel="noopener" class="btn btn-outline-primary">
+                    <i class="bi bi-facebook"></i> Facebook
+                </a>
+                <!-- Copy Link -->
+                <button class="btn btn-outline-secondary" onclick="copyLink()">
+                    <i class="bi bi-clipboard"></i> Copy Link
+                </button>
+                <!-- Print -->
+                <button class="btn btn-outline-success" onclick="window.print()">
+                    <i class="bi bi-printer"></i> Print
+                </button>
+            </div>
+            <div id="copy-feedback" class="text-success mt-2" style="display:none;">
+                <i class="bi bi-check-lg"></i> Link copied to clipboard!
+            </div>
+        </div>
+
+        <!-- CTA for non-authenticated visitors -->
+        {% if not current_user.is_authenticated %}
+        <div class="text-center no-print">
+            <hr>
+            <h5 class="fw-bold mb-2">Want to earn your own certificate?</h5>
+            <p class="text-muted mb-3">Learn Python for free — from basics to data science and machine learning.</p>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+                Start Learning Free <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function copyLink() {
+    navigator.clipboard.writeText("{{ share_url }}").then(function() {
+        document.getElementById('copy-feedback').style.display = 'block';
+        setTimeout(function() {
+            document.getElementById('copy-feedback').style.display = 'none';
+        }, 3000);
+    });
+}
+</script>
+{% endblock %}

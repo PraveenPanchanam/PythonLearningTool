@@ -6,3 +6,5 @@ from app.models.lesson import Lesson
 from app.models.lesson_completion import LessonCompletion
 from app.models.nudge import Nudge
 from app.models.feedback import Feedback
+from app.models.certificate import Certificate
+from app.models.blog_post import BlogPost

@@ -40,6 +40,7 @@ def create_app(config_name=None):
                 "'unsafe-inline'",
                 'cdn.jsdelivr.net',
                 'cdnjs.cloudflare.com',
+                'www.googletagmanager.com',
             ],
             'style-src': [
                 "'self'",
@@ -51,7 +52,17 @@ def create_app(config_name=None):
                 "'self'",
                 'cdn.jsdelivr.net',
             ],
-            'img-src': "'self' data:",
+            'img-src': [
+                "'self'",
+                'data:',
+                'www.googletagmanager.com',
+            ],
+            'connect-src': [
+                "'self'",
+                'www.google-analytics.com',
+                'analytics.google.com',
+                'www.googletagmanager.com',
+            ],
         }
         force_https = os.environ.get('FORCE_HTTPS', 'false').lower() == 'true'
         Talisman(
@@ -128,6 +139,9 @@ def create_app(config_name=None):
     from app.routes.dashboard import dashboard_bp
     from app.routes.lessons import lessons_bp
     from app.routes.admin import admin_bp
+    from app.routes.seo import seo_bp
+    from app.routes.blog import blog_bp
+    from app.routes.certificates import certificates_bp
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(main_bp)
@@ -136,6 +150,14 @@ def create_app(config_name=None):
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
     app.register_blueprint(lessons_bp, url_prefix='/lessons')
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(seo_bp)
+    app.register_blueprint(blog_bp, url_prefix='/blog')
+    app.register_blueprint(certificates_bp, url_prefix='/certificate')
+
+    # Inject GA4 measurement ID into all templates
+    @app.context_processor
+    def inject_analytics():
+        return {'GA4_MEASUREMENT_ID': app.config.get('GA4_MEASUREMENT_ID')}
 
     # Track user activity (last active time + IP)
     @app.before_request
@@ -158,7 +180,7 @@ def create_app(config_name=None):
 
     # Import models (for Flask-Migrate to detect them)
     with app.app_context():
-        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion, Nudge, Feedback  # noqa: F401
+        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion, Nudge, Feedback, Certificate, BlogPost  # noqa: F401
         # In development, auto-create tables. In production, use: flask db upgrade
         if app.debug:
             db.create_all()

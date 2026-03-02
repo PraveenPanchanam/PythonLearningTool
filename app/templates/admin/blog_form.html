@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if post else 'New' }} Blog Post — Admin{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <h2 class="mb-4">
+            <i class="bi bi-{{ 'pencil' if post else 'plus-lg' }}"></i>
+            {{ 'Edit' if post else 'New' }} Blog Post
+        </h2>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="title" class="form-label fw-semibold">Title</label>
+                    <input type="text" class="form-control" id="title" name="title"
+                           value="{{ post.title if post else (form_title or '') }}"
+                           required minlength="5" maxlength="200"
+                           placeholder="Enter a compelling title">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="tags" class="form-label fw-semibold">Tags</label>
+                    <input type="text" class="form-control" id="tags" name="tags"
+                           value="{{ post.tags if post else (form_tags or '') }}"
+                           placeholder="python, data-science, pandas (comma-separated)">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="meta_description" class="form-label fw-semibold">Meta Description</label>
+                    <input type="text" class="form-control" id="meta_description" name="meta_description"
+                           value="{{ post.meta_description if post else (form_meta or '') }}"
+                           maxlength="300"
+                           placeholder="SEO description (optional, defaults to title)">
+                </div>
+
+                <div class="col-12">
+                    <label for="content" class="form-label fw-semibold">Content (Markdown)</label>
+                    <textarea class="form-control font-monospace" id="content" name="content"
+                              rows="18" required minlength="50"
+                              placeholder="Write your blog post in Markdown...">{{ post.content if post else (form_content or '') }}</textarea>
+                    <div class="form-text">
+                        Supports Markdown: **bold**, *italic*, `code`, ```code blocks```, ## headings, [links](url), etc.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="is_published" name="is_published"
+                               {{ 'checked' if (post and post.is_published) else '' }}>
+                        <label class="form-check-label" for="is_published">
+                            <strong>Publish</strong> — Make this post publicly visible
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> {{ 'Update' if post else 'Create' }} Post
+                        </button>
+                        <a href="{{ url_for('admin.blog_list') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

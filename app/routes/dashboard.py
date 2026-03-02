@@ -10,6 +10,7 @@ from app.models.submission import Submission
 from app.models.lesson import Lesson
 from app.models.lesson_completion import LessonCompletion
 from app.models.nudge import Nudge
+from app.models.certificate import Certificate
 from app.utils.learning_plan import get_learning_plan, get_level_display_name, get_start_chapter
 
 dashboard_bp = Blueprint('dashboard', __name__)
@@ -80,6 +81,29 @@ def overview():
         user_id=current_user.id, read_at=None
     ).order_by(Nudge.created_at.desc()).all()
 
+    # Get user certificates and compute chapter completion for cert eligibility
+    user_certificates = Certificate.query.filter_by(user_id=current_user.id).all()
+    cert_map = {}
+    for c in user_certificates:
+        cert_map[c.chapter_id] = c  # chapter_id=None for course cert
+
+    # Build certificate info per chapter
+    for cs in chapter_stats:
+        ch_id = cs['chapter'].id
+        cs['certificate'] = cert_map.get(ch_id)
+        # A chapter is fully complete if all assignments AND lessons are done
+        cs['chapter_complete'] = (
+            cs['total'] > 0
+            and cs['completed'] == cs['total']
+            and cs['lesson_total'] > 0
+            and cs['lesson_completed'] == cs['lesson_total']
+        )
+
+    course_certificate = cert_map.get(None)
+    course_complete = all(
+        cs.get('chapter_complete', False) for cs in chapter_stats
+    ) if chapter_stats else False
+
     return render_template(
         'dashboard/overview.html',
         chapter_stats=chapter_stats,
@@ -95,6 +119,8 @@ def overview():
         learning_plan=get_learning_plan(current_user.python_level or 'complete_beginner'),
         start_chapter=get_start_chapter(current_user.python_level or 'complete_beginner'),
         unread_nudges=unread_nudges,
+        course_certificate=course_certificate,
+        course_complete=course_complete,
     )
 
 

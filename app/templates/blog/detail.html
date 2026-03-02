@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} — Python Learning Tool Blog{% endblock %}
+{% block meta_description %}{{ post.meta_description or post.excerpt }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('blog.blog_list') }}">Blog</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post.title[:40] }}...</li>
+            </ol>
+        </nav>
+
+        <article>
+            <h1 class="fw-bold mb-3">{{ post.title }}</h1>
+            <div class="d-flex align-items-center gap-3 mb-4 text-muted">
+                <span><i class="bi bi-person"></i> {{ post.author.username }}</span>
+                <span><i class="bi bi-calendar3"></i> {{ post.published_at.strftime('%B %d, %Y') if post.published_at else '' }}</span>
+            </div>
+            {% if post.tag_list %}
+            <div class="mb-4">
+                {% for tag in post.tag_list %}
+                <span class="badge bg-primary bg-opacity-10 text-primary me-1">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="blog-content">
+                {{ post.content|markdown }}
+            </div>
+        </article>
+
+        <hr class="my-4">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{{ url_for('blog.blog_list') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> All Posts
+            </a>
+            <div>
+                <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ url_for('blog.blog_detail', slug=post.slug, _external=True)|urlencode }}"
+                   target="_blank" rel="noopener" class="btn btn-sm btn-outline-dark me-1">
+                    <i class="bi bi-twitter-x"></i>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ url_for('blog.blog_detail', slug=post.slug, _external=True)|urlencode }}"
+                   target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="card border-0 bg-primary bg-opacity-10 mt-4">
+            <div class="card-body text-center p-4">
+                <h5 class="fw-bold mb-2">Ready to start learning Python?</h5>
+                <p class="text-muted mb-3">Join our free platform with hands-on assignments and interactive lessons.</p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Start Learning Free <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ post.title }}",
+    "description": "{{ post.meta_description or post.excerpt }}",
+    "author": {"@type": "Person", "name": "{{ post.author.username }}"},
+    "publisher": {"@type": "Organization", "name": "QUALSHARP LLC"},
+    {% if post.published_at %}"datePublished": "{{ post.published_at.strftime('%Y-%m-%d') }}",{% endif %}
+    {% if post.updated_at %}"dateModified": "{{ post.updated_at.strftime('%Y-%m-%d') }}",{% endif %}
+    "mainEntityOfPage": "{{ url_for('blog.blog_detail', slug=post.slug, _external=True) }}"
+}
+</script>
+{% endblock %}
