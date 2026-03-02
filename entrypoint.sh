@@ -197,7 +197,8 @@ with app.app_context():
     admin_email = os.environ.get('ADMIN_EMAIL')
     admin_password = os.environ.get('ADMIN_PASSWORD')
     if admin_username and admin_email and admin_password:
-        if not User.query.filter_by(username=admin_username).first():
+        admin = User.query.filter_by(username=admin_username).first()
+        if not admin:
             admin = User(
                 username=admin_username,
                 email=admin_email,
@@ -209,7 +210,13 @@ with app.app_context():
             db.session.commit()
             print(f'  Admin user created.')
         else:
-            print('  Admin user already exists.')
+            # Ensure password stays in sync with env var
+            if not admin.check_password(admin_password):
+                admin.set_password(admin_password)
+                db.session.commit()
+                print('  Admin password updated from env.')
+            else:
+                print('  Admin user OK.')
     else:
         print('  No ADMIN env vars set. Skipping admin creation.')
 "
