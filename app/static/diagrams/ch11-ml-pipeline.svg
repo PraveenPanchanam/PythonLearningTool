@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 380" width="740" height="380" style="background:transparent">
+  <style>
+    text { font-family: 'Segoe Print', 'Comic Sans MS', 'Caveat', cursive; }
+    .title { font-size: 20px; font-weight: bold; fill: #1e1e1e; }
+    .label { font-size: 14px; fill: #1e1e1e; }
+    .code { font-family: 'Courier New', monospace; font-size: 11px; fill: #1e1e1e; }
+    .small { font-size: 12px; fill: #666; }
+    .step-label { font-size: 12px; font-weight: bold; fill: white; }
+    rect.stage { stroke: #1e1e1e; stroke-width: 2; rx: 10; }
+    rect.data { fill: #fff3bf; }
+    rect.prep { fill: #d0ebff; }
+    rect.split { fill: #e8d0ff; }
+    rect.train { fill: #d3f9d8; }
+    rect.eval { fill: #ffc9c9; }
+    rect.pred { fill: #c3fae8; }
+    line.arrow { stroke: #495057; stroke-width: 2.5; fill: none; marker-end: url(#arrML); }
+    circle.num { fill: #495057; }
+    .num-text { font-size: 14px; font-weight: bold; fill: white; }
+  </style>
+  <defs>
+    <marker id="arrML" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#495057"/>
+    </marker>
+  </defs>
+
+  <text x="370" y="28" text-anchor="middle" class="title">Machine Learning Pipeline with Scikit-Learn</text>
+
+  <!-- Stage 1: Raw Data -->
+  <circle class="num" cx="70" cy="68" r="12"/>
+  <text x="70" y="73" text-anchor="middle" class="num-text">1</text>
+  <rect class="stage data" x="20" y="82" width="100" height="60"/>
+  <text x="70" y="106" text-anchor="middle" class="label">Raw Data</text>
+  <text x="70" y="124" text-anchor="middle" class="code">CSV / DB</text>
+  <line class="arrow" x1="120" y1="112" x2="150" y2="112"/>
+
+  <!-- Stage 2: Preprocessing -->
+  <circle class="num" cx="210" cy="68" r="12"/>
+  <text x="210" y="73" text-anchor="middle" class="num-text">2</text>
+  <rect class="stage prep" x="152" y="82" width="116" height="60"/>
+  <text x="210" y="106" text-anchor="middle" class="label">Preprocess</text>
+  <text x="210" y="124" text-anchor="middle" class="code">Clean, Scale</text>
+  <line class="arrow" x1="268" y1="112" x2="298" y2="112"/>
+
+  <!-- Stage 3: Split -->
+  <circle class="num" cx="358" cy="68" r="12"/>
+  <text x="358" y="73" text-anchor="middle" class="num-text">3</text>
+  <rect class="stage split" x="300" y="82" width="116" height="60"/>
+  <text x="358" y="106" text-anchor="middle" class="label">Train/Test</text>
+  <text x="358" y="124" text-anchor="middle" class="code">Split Data</text>
+
+  <!-- Split arrows -->
+  <line class="arrow" x1="416" y1="96" x2="460" y2="80"/>
+  <line class="arrow" x1="416" y1="128" x2="460" y2="144"/>
+
+  <!-- Stage 4: Train -->
+  <circle class="num" cx="520" cy="48" r="12"/>
+  <text x="520" y="53" text-anchor="middle" class="num-text">4</text>
+  <rect class="stage train" x="462" y="62" width="116" height="48"/>
+  <text x="520" y="82" text-anchor="middle" class="label">Train Model</text>
+  <text x="520" y="100" text-anchor="middle" class="code">model.fit()</text>
+
+  <!-- Test set -->
+  <rect class="stage split" x="462" y="124" width="116" height="38"/>
+  <text x="520" y="148" text-anchor="middle" class="small">Test Set (held out)</text>
+
+  <!-- Stage 5: Evaluate -->
+  <line class="arrow" x1="578" y1="86" x2="610" y2="112"/>
+  <line class="arrow" x1="578" y1="143" x2="610" y2="120"/>
+  <circle class="num" cx="672" cy="88" r="12"/>
+  <text x="672" y="93" text-anchor="middle" class="num-text">5</text>
+  <rect class="stage eval" x="612" y="100" width="116" height="48"/>
+  <text x="670" y="120" text-anchor="middle" class="label">Evaluate</text>
+  <text x="670" y="138" text-anchor="middle" class="code">score()</text>
+
+  <!-- Stage 6: Predict -->
+  <line class="arrow" x1="578" y1="82" x2="610" y2="206"/>
+  <circle class="num" cx="672" cy="188" r="12"/>
+  <text x="672" y="193" text-anchor="middle" class="num-text">6</text>
+  <rect class="stage pred" x="612" y="200" width="116" height="48"/>
+  <text x="670" y="220" text-anchor="middle" class="label">Predict</text>
+  <text x="670" y="238" text-anchor="middle" class="code">predict(new)</text>
+
+  <!-- Code summary -->
+  <text x="30" y="200" class="code">from sklearn.model_selection import train_test_split</text>
+  <text x="30" y="218" class="code">from sklearn.preprocessing import StandardScaler</text>
+  <text x="30" y="236" class="code">from sklearn.linear_model import LogisticRegression</text>
+  <text x="30" y="264" class="code">X_train, X_test, y_train, y_test = train_test_split(X, y)</text>
+  <text x="30" y="282" class="code">scaler = StandardScaler().fit(X_train)</text>
+  <text x="30" y="300" class="code">model = LogisticRegression().fit(scaler.transform(X_train), y_train)</text>
+  <text x="30" y="318" class="code">score = model.score(scaler.transform(X_test), y_test)</text>
+  <text x="30" y="336" class="code">predictions = model.predict(scaler.transform(new_data))</text>
+
+  <text x="370" y="372" text-anchor="middle" class="small">The ML pipeline: Load Data &#8594; Preprocess &#8594; Split &#8594; Train &#8594; Evaluate &#8594; Predict</text>
+</svg>

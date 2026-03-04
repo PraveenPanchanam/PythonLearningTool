@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Whiteboard - Python Learning Tool{% endblock %}
+
+{% block meta_description %}Interactive whiteboard for drawing diagrams while learning Python. Create visual notes for data structures, algorithms, and more.{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/diagrams.css') }}" rel="stylesheet">
+<style>
+    /* Full-height layout for whiteboard */
+    .whiteboard-page { min-height: 75vh; }
+    #whiteboard-container {
+        height: 70vh;
+        border: 1px solid var(--diagram-border);
+        border-radius: 0.5rem;
+        overflow: hidden;
+        background: var(--diagram-bg);
+        position: relative;
+    }
+    #whiteboard-container .loading-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--diagram-bg);
+        z-index: 10;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="whiteboard-page">
+    <div class="row g-3">
+        <!-- Main editor area -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h4 class="mb-0">
+                    <i class="bi bi-easel text-primary"></i> Whiteboard
+                    {% if lesson %}
+                    <small class="text-muted fs-6">— {{ lesson.title }}</small>
+                    {% endif %}
+                </h4>
+                <div class="d-flex align-items-center gap-2">
+                    <span id="save-status" class="save-status"></span>
+                    <input type="text" id="diagram-title" class="form-control form-control-sm"
+                           placeholder="Diagram title..." style="max-width: 220px;"
+                           value="">
+                    <button id="save-btn" class="btn btn-sm btn-primary" title="Save diagram">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                    <button id="new-btn" class="btn btn-sm btn-outline-secondary" title="New blank diagram">
+                        <i class="bi bi-file-earmark-plus"></i> New
+                    </button>
+                </div>
+            </div>
+
+            <div id="whiteboard-container">
+                <div class="loading-overlay" id="whiteboard-loading">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-2" role="status">
+                            <span class="visually-hidden">Loading editor...</span>
+                        </div>
+                        <p class="text-muted small">Loading Excalidraw editor...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 bg-light whiteboard-sidebar" data-bs-theme-independent>
+                <div class="card-body">
+                    <!-- Saved diagrams -->
+                    <h6 class="mb-2"><i class="bi bi-folder2-open"></i> Saved Diagrams</h6>
+                    <div id="saved-list">
+                        {% for d in diagrams %}
+                        <a href="#" class="saved-item load-diagram-btn" data-id="{{ d.id }}">
+                            <i class="bi bi-file-earmark-image"></i> {{ d.title }}
+                            <small class="text-muted d-block">{{ d.updated_at|timeago }}</small>
+                        </a>
+                        {% else %}
+                        <p class="small text-muted mb-0">No saved diagrams yet.</p>
+                        {% endfor %}
+                    </div>
+
+                    {% if template_diagrams %}
+                    <hr>
+                    <!-- Lesson template diagrams -->
+                    <h6 class="mb-2"><i class="bi bi-diagram-3"></i> Lesson Templates</h6>
+                    {% for td in template_diagrams %}
+                    <a href="#" class="template-item load-template-btn"
+                       data-url="{{ url_for('static', filename=td.data_file) }}"
+                       data-title="{{ td.title }}">
+                        <i class="bi bi-box-arrow-in-down-right"></i> {{ td.title }}
+                    </a>
+                    {% endfor %}
+                    {% endif %}
+
+                    <hr>
+                    <!-- Tips -->
+                    <h6 class="mb-2"><i class="bi bi-lightbulb"></i> Tips</h6>
+                    <ul class="small text-muted ps-3 mb-0">
+                        <li>Draw shapes, add text, and connect with arrows</li>
+                        <li>Use <kbd>Ctrl+Z</kbd> to undo</li>
+                        <li>Scroll to zoom, drag to pan</li>
+                        <li>Press <kbd>1-6</kbd> to switch tools</li>
+                        <li>Your work auto-saves every 30 seconds</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.CSRF_TOKEN = "{{ csrf_token() }}";
+    window.WHITEBOARD_CONFIG = {
+        saveUrl: "{{ url_for('whiteboard.save_diagram') }}",
+        loadUrl: "{{ url_for('whiteboard.whiteboard_index') }}",
+        deleteUrl: "{{ url_for('whiteboard.whiteboard_index') }}",
+        listUrl: "{{ url_for('whiteboard.list_diagrams') }}",
+        lessonId: {{ lesson.id if lesson else 'null' }},
+        currentDiagramId: null
+    };
+</script>
+<script type="module" src="{{ url_for('static', filename='js/whiteboard.js') }}"></script>
+{% endblock %}

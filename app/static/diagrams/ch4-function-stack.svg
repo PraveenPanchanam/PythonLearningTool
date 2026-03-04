@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" style="background:transparent">
+  <style>
+    text { font-family: 'Segoe Print', 'Comic Sans MS', 'Caveat', cursive; }
+    .title { font-size: 20px; font-weight: bold; fill: #1e1e1e; }
+    .label { font-size: 14px; fill: #1e1e1e; }
+    .code { font-family: 'Courier New', monospace; font-size: 13px; fill: #1e1e1e; }
+    .small { font-size: 12px; fill: #666; }
+    .scope-label { font-size: 13px; font-weight: bold; fill: #495057; }
+    rect.frame { stroke: #1e1e1e; stroke-width: 2; rx: 6; }
+    rect.global { fill: #e7f5ff; }
+    rect.func1 { fill: #fff3bf; }
+    rect.func2 { fill: #d3f9d8; }
+    rect.return-box { fill: #ffc9c9; stroke: #e03131; stroke-width: 2; rx: 6; }
+    line.arrow { stroke: #e03131; stroke-width: 2; fill: none; marker-end: url(#arr4); }
+    path.arrow { stroke: #e03131; stroke-width: 2; fill: none; marker-end: url(#arr4); }
+    .num { font-size: 18px; font-weight: bold; fill: #e03131; }
+  </style>
+  <defs>
+    <marker id="arr4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e03131"/>
+    </marker>
+  </defs>
+
+  <text x="350" y="28" text-anchor="middle" class="title">Function Call Stack &amp; Scope</text>
+
+  <!-- Code on the left -->
+  <text x="30" y="65" class="scope-label">Code:</text>
+  <text x="30" y="88" class="code">def greet(name):</text>
+  <text x="30" y="106" class="code">    msg = f"Hi {name}!"</text>
+  <text x="30" y="124" class="code">    return msg</text>
+  <text x="30" y="154" class="code">def main():</text>
+  <text x="30" y="172" class="code">    user = "Alice"</text>
+  <text x="30" y="190" class="code">    result = greet(user)</text>
+  <text x="30" y="208" class="code">    print(result)</text>
+  <text x="30" y="238" class="code">main()</text>
+
+  <!-- Call stack on the right -->
+  <text x="480" y="65" class="scope-label">Call Stack:</text>
+
+  <!-- Step indicators -->
+  <text x="410" y="102" class="num">3</text>
+  <rect class="frame func2" x="430" y="80" width="240" height="70"/>
+  <text x="440" y="100" class="scope-label">greet() frame</text>
+  <text x="450" y="120" class="code">name = "Alice"</text>
+  <text x="450" y="138" class="code">msg = "Hi Alice!"</text>
+
+  <text x="410" y="172" class="num">2</text>
+  <rect class="frame func1" x="430" y="156" width="240" height="70"/>
+  <text x="440" y="176" class="scope-label">main() frame</text>
+  <text x="450" y="196" class="code">user = "Alice"</text>
+  <text x="450" y="214" class="code">result = ???</text>
+
+  <text x="410" y="248" class="num">1</text>
+  <rect class="frame global" x="430" y="232" width="240" height="50"/>
+  <text x="440" y="252" class="scope-label">Global frame</text>
+  <text x="450" y="268" class="code">greet, main</text>
+
+  <!-- Return arrow -->
+  <rect class="return-box" x="430" y="300" width="240" height="36"/>
+  <text x="550" y="322" text-anchor="middle" class="code">return "Hi Alice!"</text>
+  <path class="arrow" d="M550,296 L550,290 C550,286 520,286 480,286"/>
+
+  <!-- Stack direction indicator -->
+  <text x="690" y="180" text-anchor="end" class="small" transform="rotate(-90, 690, 180)">Stack grows up</text>
+
+  <!-- Footer -->
+  <text x="350" y="370" text-anchor="middle" class="small">Each function call creates a new frame with its own local variables</text>
+  <text x="350" y="390" text-anchor="middle" class="small">When a function returns, its frame is removed from the stack</text>
+</svg>

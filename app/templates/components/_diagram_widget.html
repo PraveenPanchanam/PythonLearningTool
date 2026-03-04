@@ -1,0 +1,39 @@
+{% macro render_diagram(section_id, diagram, lesson_id=None) %}
+<div class="diagram-container" id="diagram-{{ diagram.id }}" data-diagram-id="{{ diagram.id }}">
+    <div class="diagram-header d-flex align-items-center justify-content-between">
+        <span class="diagram-title">
+            <i class="bi bi-diagram-3 text-info"></i> {{ diagram.title }}
+        </span>
+        <div class="d-flex gap-1">
+            {% if diagram.data_file is defined and diagram.data_file %}
+            <button class="btn btn-sm btn-outline-secondary diagram-toggle-btn"
+                    data-diagram-id="{{ diagram.id }}"
+                    data-excalidraw-url="{{ url_for('static', filename=diagram.data_file) }}"
+                    title="Switch to interactive view (pan &amp; zoom)">
+                <i class="bi bi-arrows-fullscreen"></i> Interactive
+            </button>
+            {% endif %}
+            {% if diagram.data_file is defined and diagram.data_file and lesson_id %}
+            <a href="{{ url_for('whiteboard.whiteboard_for_lesson', lesson_id=lesson_id) }}"
+               class="btn btn-sm btn-outline-info diagram-toggle-btn"
+               title="Open in Whiteboard to draw your own version">
+                <i class="bi bi-easel"></i> Whiteboard
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="diagram-svg-wrapper" id="svg-{{ diagram.id }}">
+        <img src="{{ url_for('static', filename=diagram.file) }}"
+             alt="{{ diagram.title }}"
+             class="diagram-svg"
+             loading="lazy">
+    </div>
+    <div class="diagram-excalidraw-wrapper" id="excalidraw-{{ diagram.id }}" style="display:none;">
+        <div class="d-flex justify-content-center align-items-center" style="min-height:350px;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading interactive view...</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

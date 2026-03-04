@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 360" width="700" height="360" style="background:transparent">
+  <style>
+    text { font-family: 'Segoe Print', 'Comic Sans MS', 'Caveat', cursive; }
+    .title { font-size: 20px; font-weight: bold; fill: #1e1e1e; }
+    .label { font-size: 14px; fill: #1e1e1e; }
+    .code { font-family: 'Courier New', monospace; font-size: 12px; fill: #1e1e1e; }
+    .small { font-size: 12px; fill: #666; }
+    .step-label { font-size: 13px; font-weight: bold; fill: #495057; }
+    rect.box { stroke: #1e1e1e; stroke-width: 2; rx: 8; }
+    rect.file { fill: #fff3bf; }
+    rect.program { fill: #d0ebff; }
+    rect.data { fill: #d3f9d8; }
+    rect.context { fill: #e8d0ff; stroke: #7950f2; stroke-width: 2; rx: 8; stroke-dasharray: 8 4; }
+    line.arrow { stroke: #e03131; stroke-width: 2.5; fill: none; marker-end: url(#arr6); }
+    path.arrow { stroke: #e03131; stroke-width: 2.5; fill: none; marker-end: url(#arr6); }
+    .mode { font-size: 12px; font-weight: bold; fill: #e03131; }
+  </style>
+  <defs>
+    <marker id="arr6" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e03131"/>
+    </marker>
+  </defs>
+
+  <text x="350" y="28" text-anchor="middle" class="title">File I/O: Reading &amp; Writing Files</text>
+
+  <!-- READING (top) -->
+  <text x="350" y="60" text-anchor="middle" class="step-label">Reading a File</text>
+
+  <rect class="box file" x="30" y="75" width="140" height="60"/>
+  <text x="100" y="100" text-anchor="middle" class="label">data.txt</text>
+  <text x="100" y="118" text-anchor="middle" class="small">&#128196; on disk</text>
+
+  <line class="arrow" x1="170" y1="105" x2="255" y2="105"/>
+  <text x="212" y="96" text-anchor="middle" class="mode">open("r")</text>
+
+  <rect class="box program" x="260" y="75" width="170" height="60"/>
+  <text x="345" y="98" text-anchor="middle" class="label">Python Program</text>
+  <text x="345" y="118" text-anchor="middle" class="code">content = f.read()</text>
+
+  <line class="arrow" x1="430" y1="105" x2="515" y2="105"/>
+  <text x="472" y="96" text-anchor="middle" class="small">process</text>
+
+  <rect class="box data" x="520" y="75" width="150" height="60"/>
+  <text x="595" y="100" text-anchor="middle" class="label">Variable</text>
+  <text x="595" y="118" text-anchor="middle" class="code">"Hello World"</text>
+
+  <!-- WRITING (bottom) -->
+  <text x="350" y="175" text-anchor="middle" class="step-label">Writing to a File</text>
+
+  <rect class="box data" x="30" y="190" width="150" height="60"/>
+  <text x="105" y="215" text-anchor="middle" class="label">Data in Python</text>
+  <text x="105" y="233" text-anchor="middle" class="code">"Result: 42"</text>
+
+  <line class="arrow" x1="180" y1="220" x2="255" y2="220"/>
+  <text x="218" y="211" text-anchor="middle" class="small">prepare</text>
+
+  <rect class="box program" x="260" y="190" width="170" height="60"/>
+  <text x="345" y="213" text-anchor="middle" class="label">Python Program</text>
+  <text x="345" y="233" text-anchor="middle" class="code">f.write(data)</text>
+
+  <line class="arrow" x1="430" y1="220" x2="515" y2="220"/>
+  <text x="472" y="211" text-anchor="middle" class="mode">open("w")</text>
+
+  <rect class="box file" x="520" y="190" width="150" height="60"/>
+  <text x="595" y="215" text-anchor="middle" class="label">output.txt</text>
+  <text x="595" y="233" text-anchor="middle" class="small">&#128196; on disk</text>
+
+  <!-- Context manager -->
+  <rect class="context" x="80" y="280" width="540" height="50"/>
+  <text x="350" y="302" text-anchor="middle" class="code">with open("file.txt", "r") as f:</text>
+  <text x="350" y="320" text-anchor="middle" class="small">Context manager automatically closes the file (recommended!)</text>
+
+  <text x="350" y="352" text-anchor="middle" class="small">Modes: "r" = read, "w" = write (overwrite), "a" = append, "r+" = read+write</text>
+</svg>

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" width="720" height="420" style="background:transparent">
+  <style>
+    text { font-family: 'Segoe Print', 'Comic Sans MS', 'Caveat', cursive; }
+    .title { font-size: 20px; font-weight: bold; fill: #1e1e1e; }
+    .subtitle { font-size: 16px; font-weight: bold; fill: #495057; }
+    .label { font-size: 14px; fill: #1e1e1e; }
+    .code { font-family: 'Courier New', monospace; font-size: 13px; fill: #1e1e1e; }
+    .yn { font-size: 13px; font-weight: bold; }
+    .yes { fill: #2f9e44; }
+    .no { fill: #e03131; }
+    .small { font-size: 12px; fill: #666; }
+    rect.action { fill: #d0ebff; stroke: #1971c2; stroke-width: 2; rx: 8; }
+    rect.start { fill: #b2f2bb; stroke: #2f9e44; stroke-width: 2; rx: 20; }
+    rect.end { fill: #ffc9c9; stroke: #e03131; stroke-width: 2; rx: 20; }
+    polygon.decision { fill: #fff3bf; stroke: #e8590c; stroke-width: 2; }
+    line.flow, path.flow { stroke: #495057; stroke-width: 2; fill: none; marker-end: url(#arr3); }
+    .divider { stroke: #dee2e6; stroke-width: 1; stroke-dasharray: 6 4; }
+  </style>
+  <defs>
+    <marker id="arr3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#495057"/>
+    </marker>
+  </defs>
+
+  <text x="360" y="28" text-anchor="middle" class="title">for Loop vs while Loop</text>
+
+  <!-- Divider -->
+  <line class="divider" x1="360" y1="42" x2="360" y2="410"/>
+
+  <!-- FOR LOOP (left) -->
+  <text x="175" y="58" text-anchor="middle" class="subtitle">for loop</text>
+
+  <rect class="start" x="115" y="70" width="120" height="34"/>
+  <text x="175" y="92" text-anchor="middle" class="label">Start</text>
+  <line class="flow" x1="175" y1="104" x2="175" y2="130"/>
+
+  <rect class="action" x="90" y="132" width="170" height="36"/>
+  <text x="175" y="154" text-anchor="middle" class="code">i = next item</text>
+  <line class="flow" x1="175" y1="168" x2="175" y2="195"/>
+
+  <polygon class="decision" points="175,197 280,237 175,277 70,237"/>
+  <text x="175" y="233" text-anchor="middle" class="code">more items?</text>
+
+  <line class="flow" x1="175" y1="277" x2="175" y2="307"/>
+  <text x="187" y="298" class="yn yes">Yes</text>
+
+  <rect class="action" x="100" y="308" width="150" height="36"/>
+  <text x="175" y="330" text-anchor="middle" class="code">loop body</text>
+
+  <!-- Loop back arrow for "for" -->
+  <path class="flow" d="M100,326 L50,326 L50,150 L85,150" />
+
+  <line class="flow" x1="280" y1="237" x2="330" y2="237"/>
+  <text x="290" y="229" class="yn no">No</text>
+  <rect class="end" x="295" y="222" width="55" height="30"/>
+  <text x="322" y="241" text-anchor="middle" class="label">End</text>
+
+  <!-- WHILE LOOP (right) -->
+  <text x="540" y="58" text-anchor="middle" class="subtitle">while loop</text>
+
+  <rect class="start" x="480" y="70" width="120" height="34"/>
+  <text x="540" y="92" text-anchor="middle" class="label">Start</text>
+  <line class="flow" x1="540" y1="104" x2="540" y2="135"/>
+
+  <polygon class="decision" points="540,137 650,177 540,217 430,177"/>
+  <text x="540" y="175" text-anchor="middle" class="code">condition?</text>
+
+  <line class="flow" x1="540" y1="217" x2="540" y2="250"/>
+  <text x="552" y="240" class="yn yes">Yes</text>
+
+  <rect class="action" x="465" y="252" width="150" height="36"/>
+  <text x="540" y="274" text-anchor="middle" class="code">loop body</text>
+
+  <rect class="action" x="465" y="306" width="150" height="36"/>
+  <text x="540" y="328" text-anchor="middle" class="code">update state</text>
+
+  <!-- Loop back arrow for "while" -->
+  <path class="flow" d="M465,324 L410,324 L410,155 L425,155" />
+
+  <line class="flow" x1="650" y1="177" x2="700" y2="177"/>
+  <text x="660" y="169" class="yn no">No</text>
+  <rect class="end" x="665" y="162" width="50" height="30"/>
+  <text x="690" y="181" text-anchor="middle" class="label">End</text>
+
+  <!-- Footer -->
+  <text x="175" y="400" text-anchor="middle" class="small">Iterates over a sequence</text>
+  <text x="540" y="400" text-anchor="middle" class="small">Repeats while condition is True</text>
+</svg>

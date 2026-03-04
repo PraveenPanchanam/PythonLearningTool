@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 420" width="700" height="420" style="background:transparent">
+  <style>
+    text { font-family: 'Segoe Print', 'Comic Sans MS', 'Caveat', cursive; }
+    .title { font-size: 20px; font-weight: bold; fill: #1e1e1e; }
+    .class-name { font-size: 16px; font-weight: bold; fill: #1e1e1e; }
+    .attr { font-family: 'Courier New', monospace; font-size: 12px; fill: #1e1e1e; }
+    .method { font-family: 'Courier New', monospace; font-size: 12px; fill: #1971c2; }
+    .small { font-size: 12px; fill: #666; }
+    .section-label { font-size: 11px; fill: #868e96; }
+    rect.class-box { stroke: #1e1e1e; stroke-width: 2; rx: 6; }
+    rect.parent { fill: #fff3bf; }
+    rect.child1 { fill: #d0ebff; }
+    rect.child2 { fill: #d3f9d8; }
+    rect.child3 { fill: #e8d0ff; }
+    line.inherit { stroke: #1e1e1e; stroke-width: 2; fill: none; marker-end: url(#triangle); }
+    line.sep { stroke: #868e96; stroke-width: 1; }
+  </style>
+  <defs>
+    <marker id="triangle" markerWidth="12" markerHeight="10" refX="12" refY="5" orient="auto">
+      <polygon points="0 0, 12 5, 0 10" fill="none" stroke="#1e1e1e" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <text x="350" y="28" text-anchor="middle" class="title">Class Inheritance Hierarchy</text>
+
+  <!-- Parent: Animal -->
+  <rect class="class-box parent" x="235" y="50" width="230" height="110"/>
+  <text x="350" y="72" text-anchor="middle" class="class-name">Animal</text>
+  <line class="sep" x1="240" y1="80" x2="460" y2="80"/>
+  <text x="248" y="96" class="section-label">attributes:</text>
+  <text x="248" y="112" class="attr">self.name</text>
+  <text x="248" y="128" class="attr">self.sound</text>
+  <line class="sep" x1="240" y1="134" x2="460" y2="134"/>
+  <text x="248" y="150" class="method">def speak(self)</text>
+
+  <!-- Inheritance arrows -->
+  <line class="inherit" x1="170" y1="200" x2="310" y2="164"/>
+  <line class="inherit" x1="350" y1="210" x2="350" y2="164"/>
+  <line class="inherit" x1="530" y1="200" x2="390" y2="164"/>
+
+  <!-- Child: Dog -->
+  <rect class="class-box child1" x="40" y="210" width="200" height="110"/>
+  <text x="140" y="232" text-anchor="middle" class="class-name">Dog(Animal)</text>
+  <line class="sep" x1="45" y1="240" x2="235" y2="240"/>
+  <text x="53" y="256" class="attr">self.breed</text>
+  <line class="sep" x1="45" y1="264" x2="235" y2="264"/>
+  <text x="53" y="280" class="method">def fetch(self)</text>
+  <text x="53" y="296" class="method">def speak(self)</text>
+  <text x="175" y="296" class="small">override</text>
+
+  <!-- Child: Cat -->
+  <rect class="class-box child2" x="260" y="210" width="180" height="110"/>
+  <text x="350" y="232" text-anchor="middle" class="class-name">Cat(Animal)</text>
+  <line class="sep" x1="265" y1="240" x2="435" y2="240"/>
+  <text x="273" y="256" class="attr">self.indoor</text>
+  <line class="sep" x1="265" y1="264" x2="435" y2="264"/>
+  <text x="273" y="280" class="method">def purr(self)</text>
+  <text x="273" y="296" class="method">def speak(self)</text>
+  <text x="380" y="296" class="small">override</text>
+
+  <!-- Child: Bird -->
+  <rect class="class-box child3" x="460" y="210" width="200" height="110"/>
+  <text x="560" y="232" text-anchor="middle" class="class-name">Bird(Animal)</text>
+  <line class="sep" x1="465" y1="240" x2="655" y2="240"/>
+  <text x="473" y="256" class="attr">self.can_fly</text>
+  <line class="sep" x1="465" y1="264" x2="655" y2="264"/>
+  <text x="473" y="280" class="method">def fly(self)</text>
+  <text x="473" y="296" class="method">def speak(self)</text>
+  <text x="590" y="296" class="small">override</text>
+
+  <!-- Instance example -->
+  <text x="350" y="360" text-anchor="middle" class="small">Children inherit attributes &amp; methods from the parent class</text>
+  <text x="350" y="380" text-anchor="middle" class="small">Children can override methods to change behavior (polymorphism)</text>
+  <text x="350" y="400" text-anchor="middle" class="small">&#9650; hollow arrow = "inherits from" (IS-A relationship)</text>
+</svg>

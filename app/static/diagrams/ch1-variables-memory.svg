@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" width="720" height="340" style="background:transparent">
+  <style>
+    text { font-family: 'Segoe Print', 'Comic Sans MS', 'Caveat', cursive; }
+    .title { font-size: 20px; font-weight: bold; fill: #1e1e1e; }
+    .label { font-size: 16px; fill: #1e1e1e; }
+    .code { font-family: 'Courier New', monospace; font-size: 14px; fill: #e03131; }
+    .small { font-size: 13px; fill: #666; }
+    rect.box { fill: #fff9db; stroke: #1e1e1e; stroke-width: 2; rx: 6; }
+    rect.mem { fill: #d0ebff; stroke: #1971c2; stroke-width: 2; rx: 6; }
+    line.arrow, path.arrow { stroke: #e03131; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+    .dashed { stroke-dasharray: 8 4; stroke: #868e96; stroke-width: 1.5; fill: none; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e03131"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="360" y="30" text-anchor="middle" class="title">How Python Variables Work in Memory</text>
+
+  <!-- Variable boxes (left side) -->
+  <text x="100" y="70" text-anchor="middle" class="small">Variables (Names)</text>
+  <rect class="box" x="30" y="82" width="140" height="42" />
+  <text x="100" y="108" text-anchor="middle" class="code">name</text>
+
+  <rect class="box" x="30" y="142" width="140" height="42" />
+  <text x="100" y="168" text-anchor="middle" class="code">age</text>
+
+  <rect class="box" x="30" y="202" width="140" height="42" />
+  <text x="100" y="228" text-anchor="middle" class="code">score</text>
+
+  <rect class="box" x="30" y="262" width="140" height="42" />
+  <text x="100" y="288" text-anchor="middle" class="code">is_active</text>
+
+  <!-- Memory boxes (right side) -->
+  <text x="520" y="70" text-anchor="middle" class="small">Memory (Objects)</text>
+  <rect class="mem" x="430" y="82" width="180" height="42" />
+  <text x="520" y="102" text-anchor="middle" class="label">"Alice"</text>
+  <text x="520" y="118" text-anchor="middle" class="small">str</text>
+
+  <rect class="mem" x="430" y="142" width="180" height="42" />
+  <text x="520" y="162" text-anchor="middle" class="label">25</text>
+  <text x="520" y="178" text-anchor="middle" class="small">int</text>
+
+  <rect class="mem" x="430" y="202" width="180" height="42" />
+  <text x="520" y="222" text-anchor="middle" class="label">98.5</text>
+  <text x="520" y="238" text-anchor="middle" class="small">float</text>
+
+  <rect class="mem" x="430" y="262" width="180" height="42" />
+  <text x="520" y="282" text-anchor="middle" class="label">True</text>
+  <text x="520" y="298" text-anchor="middle" class="small">bool</text>
+
+  <!-- Arrows -->
+  <line class="arrow" x1="170" y1="103" x2="425" y2="103"/>
+  <line class="arrow" x1="170" y1="163" x2="425" y2="163"/>
+  <line class="arrow" x1="170" y1="223" x2="425" y2="223"/>
+  <line class="arrow" x1="170" y1="283" x2="425" y2="283"/>
+
+  <!-- Annotation -->
+  <text x="300" y="330" text-anchor="middle" class="small">Variables are labels pointing to objects in memory</text>
+</svg>

@@ -1,0 +1,128 @@
+/* =============================================
+   Diagram Styles — Phases 1, 2, 3
+   ============================================= */
+
+/* --- Custom Properties --- */
+:root {
+    --diagram-border: #dee2e6;
+    --diagram-bg: #ffffff;
+    --diagram-header-bg: #f8f9fa;
+}
+
+[data-bs-theme="dark"] {
+    --diagram-border: #4a5568;
+    --diagram-bg: #1c2128;
+    --diagram-header-bg: #2d333b;
+}
+
+/* --- Phase 1: Diagram Container --- */
+.diagram-container {
+    border: 1px solid var(--diagram-border);
+    border-radius: 0.5rem;
+    background: var(--diagram-bg);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.diagram-header {
+    padding: 0.6rem 1rem;
+    background: var(--diagram-header-bg);
+    border-bottom: 1px solid var(--diagram-border);
+}
+
+.diagram-header .diagram-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.diagram-svg-wrapper {
+    padding: 1rem;
+    text-align: center;
+}
+
+.diagram-svg-wrapper img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Dark mode: invert SVG colors with filter */
+[data-bs-theme="dark"] .diagram-svg-wrapper img {
+    filter: invert(0.88) hue-rotate(180deg);
+}
+
+/* --- Phase 2: Interactive Viewer --- */
+.diagram-excalidraw-wrapper {
+    min-height: 350px;
+    border-radius: 0 0 0.5rem 0.5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.diagram-toggle-btn {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+}
+
+/* Hide interactive toggle on mobile (too heavy for small devices) */
+@media (max-width: 576px) {
+    .diagram-toggle-btn {
+        display: none;
+    }
+}
+
+/* --- Phase 3: Whiteboard --- */
+.whiteboard-container {
+    border: 1px solid var(--diagram-border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: var(--diagram-bg);
+}
+
+.whiteboard-sidebar .saved-item {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.85rem;
+    transition: background 0.15s;
+}
+
+.whiteboard-sidebar .saved-item:hover {
+    background: var(--diagram-header-bg);
+}
+
+.whiteboard-sidebar .saved-item.active {
+    background: var(--bs-primary);
+    color: white;
+}
+
+.whiteboard-sidebar .template-item {
+    display: block;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    color: var(--bs-info);
+    font-size: 0.8rem;
+    transition: background 0.15s;
+}
+
+.whiteboard-sidebar .template-item:hover {
+    background: var(--diagram-header-bg);
+}
+
+/* Auto-save indicator */
+.save-status {
+    font-size: 0.75rem;
+    transition: opacity 0.3s;
+}
+
+.save-status.saving {
+    color: var(--bs-warning);
+}
+
+.save-status.saved {
+    color: var(--bs-success);
+}
