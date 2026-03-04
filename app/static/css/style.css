@@ -983,3 +983,36 @@ pre code {
         border: 2px solid #667eea;
     }
 }
+
+
+/* ========================================
+   Growth Dashboard
+   ======================================== */
+
+.kpi-card {
+    background: var(--plt-body-bg, #f8f9fa);
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.kpi-number {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.kpi-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 4px;
+}
+
+/* Dark mode for growth dashboard */
+[data-bs-theme="dark"] .kpi-card {
+    background: #1e1e2e;
+}
+[data-bs-theme="dark"] .kpi-label {
+    color: #a6adb5;
+}

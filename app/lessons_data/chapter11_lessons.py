@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'what-is-machine-learning',
                 'title': 'What is Machine Learning?',
+                'diagram': {
+                    'id': 'ch11-ml-pipeline',
+                    'title': 'Machine Learning Pipeline with Scikit-Learn',
+                    'file': 'diagrams/ch11-ml-pipeline.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch11-ml-pipeline.json',
+                },
                 'content': """## What is Machine Learning?
 
 **Machine learning (ML)** is a way to teach computers to learn patterns from data and make predictions or decisions without being explicitly programmed for every scenario.

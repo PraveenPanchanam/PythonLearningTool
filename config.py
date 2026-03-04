@@ -30,6 +30,12 @@ class Config:
     # Google Analytics 4
     GA4_MEASUREMENT_ID = os.environ.get('GA4_MEASUREMENT_ID')
 
+    # Growth engine cron secret
+    CRON_SECRET = os.environ.get('CRON_SECRET')
+
+    # Base URL for email links
+    BASE_URL = os.environ.get('BASE_URL', 'https://python-learning-tool.onrender.com')
+
     # Logging
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
 

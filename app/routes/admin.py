@@ -409,6 +409,8 @@ def blog_create():
         content = request.form.get('content', '').strip()
         meta_description = request.form.get('meta_description', '').strip()
         tags = request.form.get('tags', '').strip()
+        category = request.form.get('category', '').strip() or None
+        scheduled_at_str = request.form.get('scheduled_at', '').strip()
         is_published = request.form.get('is_published') == 'on'
 
         errors = []
@@ -420,6 +422,14 @@ def blog_create():
         slug = BlogPost.generate_slug(title)
         if BlogPost.query.filter_by(slug=slug).first():
             errors.append('A post with a similar title already exists.')
+
+        # Parse scheduled_at
+        scheduled_at = None
+        if scheduled_at_str:
+            try:
+                scheduled_at = datetime.fromisoformat(scheduled_at_str)
+            except ValueError:
+                errors.append('Invalid scheduled date format.')
 
         if errors:
             for e in errors:
@@ -434,9 +444,11 @@ def blog_create():
             content=content,
             meta_description=meta_description or title,
             tags=tags,
+            category=category,
             author_id=current_user.id,
             is_published=is_published,
             published_at=datetime.utcnow() if is_published else None,
+            scheduled_at=scheduled_at,
         )
         db.session.add(post)
         db.session.commit()
@@ -460,6 +472,8 @@ def blog_edit(post_id):
         content = request.form.get('content', '').strip()
         meta_description = request.form.get('meta_description', '').strip()
         tags = request.form.get('tags', '').strip()
+        category = request.form.get('category', '').strip() or None
+        scheduled_at_str = request.form.get('scheduled_at', '').strip()
         is_published = request.form.get('is_published') == 'on'
 
         errors = []
@@ -473,6 +487,14 @@ def blog_edit(post_id):
         if existing and existing.id != post.id:
             errors.append('A post with a similar title already exists.')
 
+        # Parse scheduled_at
+        scheduled_at = None
+        if scheduled_at_str:
+            try:
+                scheduled_at = datetime.fromisoformat(scheduled_at_str)
+            except ValueError:
+                errors.append('Invalid scheduled date format.')
+
         if errors:
             for e in errors:
                 flash(e, 'danger')
@@ -483,6 +505,8 @@ def blog_edit(post_id):
         post.content = content
         post.meta_description = meta_description or title
         post.tags = tags
+        post.category = category
+        post.scheduled_at = scheduled_at
 
         was_published = post.is_published
         post.is_published = is_published

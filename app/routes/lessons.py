@@ -37,6 +37,9 @@ def view_lesson(lesson_id):
     # Count exercises for progress tracking
     exercise_count = sum(1 for s in sections if s.get('exercise'))
 
+    # Check if any sections have diagrams
+    has_diagrams = any(s.get('diagram') for s in sections)
+
     # Detect kid user and count games
     is_kid = getattr(current_user, 'age_group', '18_plus') == 'under_12'
     game_count = sum(1 for s in sections if s.get('game')) if is_kid else 0
@@ -51,6 +54,7 @@ def view_lesson(lesson_id):
         exercise_count=exercise_count,
         is_kid=is_kid,
         game_count=game_count,
+        has_diagrams=has_diagrams,
     )
 
 

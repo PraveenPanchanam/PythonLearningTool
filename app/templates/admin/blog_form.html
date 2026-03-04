@@ -36,6 +36,25 @@
                            placeholder="SEO description (optional, defaults to title)">
                 </div>
 
+                <div class="col-md-6">
+                    <label for="category" class="form-label fw-semibold">Category</label>
+                    <select class="form-select" id="category" name="category">
+                        <option value="">— No category —</option>
+                        {% for cat in ['numpy', 'pandas', 'scikit-learn', 'career', 'python-tips'] %}
+                        <option value="{{ cat }}" {{ 'selected' if post and post.category == cat else '' }}>
+                            {{ cat|replace('-', ' ')|title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="scheduled_at" class="form-label fw-semibold">Schedule Publishing</label>
+                    <input type="datetime-local" class="form-control" id="scheduled_at" name="scheduled_at"
+                           value="{{ post.scheduled_at.strftime('%Y-%m-%dT%H:%M') if post and post.scheduled_at else '' }}">
+                    <div class="form-text">Leave empty for manual publish. Post will auto-publish at this time.</div>
+                </div>
+
                 <div class="col-12">
                     <label for="content" class="form-label fw-semibold">Content (Markdown)</label>
                     <textarea class="form-control font-monospace" id="content" name="content"

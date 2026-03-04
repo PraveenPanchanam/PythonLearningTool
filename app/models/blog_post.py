@@ -14,8 +14,11 @@ class BlogPost(db.Model):
     meta_description = db.Column(db.String(300), nullable=True)
     tags = db.Column(db.String(500), nullable=True)
 
+    category = db.Column(db.String(50), nullable=True)  # numpy, pandas, scikit-learn, career, python-tips
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     is_published = db.Column(db.Boolean, default=False)
+    view_count = db.Column(db.Integer, default=0)
+    scheduled_at = db.Column(db.DateTime, nullable=True)  # For scheduled publishing
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

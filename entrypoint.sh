@@ -129,6 +129,9 @@ with app.app_context():
     from app.models.feedback import Feedback
     from app.models.certificate import Certificate
     from app.models.blog_post import BlogPost
+    from app.models.blog_post_view import BlogPostView
+    from app.models.engagement_event import EngagementEvent
+    from app.models.diagram_note import DiagramNote
 
     models = [
         ('User', User),
@@ -141,6 +144,9 @@ with app.app_context():
         ('Feedback', Feedback),
         ('Certificate', Certificate),
         ('BlogPost', BlogPost),
+        ('BlogPostView', BlogPostView),
+        ('EngagementEvent', EngagementEvent),
+        ('DiagramNote', DiagramNote),
     ]
 
     for name, model in models:
@@ -375,6 +381,36 @@ with app.app_context():
         if not admin_email: missing.append('ADMIN_EMAIL')
         if not admin_password: missing.append('ADMIN_PASSWORD')
         print(f'  Missing env vars: {missing}. Skipping admin creation.')
+"
+
+echo ""
+echo "Seeding growth engine content if needed..."
+python -c "
+from app import create_app
+from app.extensions import db
+from app.growth.content_pipeline import get_pending_posts, seed_scheduled_posts
+from app.models.user import User
+
+app = create_app('production')
+with app.app_context():
+    pending = get_pending_posts()
+    if pending:
+        admin = User.query.filter_by(is_admin=True).first()
+        author_id = admin.id if admin else None
+        count = seed_scheduled_posts(author_id=author_id, interval_days=3)
+        print(f'  Seeded {count} growth blog posts as scheduled drafts.')
+    else:
+        print('  All growth blog posts already in database. Skipping.')
+"
+
+echo ""
+echo "Updating lesson content with latest diagram data..."
+python -c "
+from app import create_app
+from app.lessons_data.loader import update_lesson_content
+app = create_app('production')
+with app.app_context():
+    update_lesson_content()
 "
 
 echo ""

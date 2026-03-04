@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'what-is-oop',
                 'title': 'What Is Object-Oriented Programming?',
+                'diagram': {
+                    'id': 'ch7-inheritance',
+                    'title': 'Class Inheritance Hierarchy',
+                    'file': 'diagrams/ch7-inheritance.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch7-inheritance.json',
+                },
                 'content': """## What Is Object-Oriented Programming?
 
 **Object-Oriented Programming (OOP)** is a way of organizing code around **objects** - bundles of related data and behavior. Instead of writing a long sequence of instructions, you model your program after real-world things.

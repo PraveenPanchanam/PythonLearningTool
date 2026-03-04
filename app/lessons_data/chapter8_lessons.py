@@ -14,6 +14,12 @@ LESSONS = [
             {
                 'id': 'understanding-decorators',
                 'title': 'Understanding Decorators',
+                'diagram': {
+                    'id': 'ch8-decorator-pattern',
+                    'title': 'How Decorators Work',
+                    'file': 'diagrams/ch8-decorator-pattern.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch8-decorator-pattern.json',
+                },
                 'content': """## Understanding Decorators
 
 A **decorator** is a function that takes another function as input and returns a new function that usually extends or modifies the original function's behaviour. Decorators are used everywhere in real-world Python -- web frameworks, logging systems, access control, and performance monitoring all rely on them.

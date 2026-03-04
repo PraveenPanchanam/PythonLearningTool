@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %}Engagement Rules - Python Learning Tool{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="bi bi-envelope-heart"></i> Engagement Rules</h3>
+    <div>
+        <form method="post" action="{{ url_for('growth_admin.run_engagement_now') }}" class="d-inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="bi bi-play-circle"></i> Run All Rules Now
+            </button>
+        </form>
+        <a href="{{ url_for('growth_admin.growth_dashboard') }}" class="btn btn-outline-secondary btn-sm ms-1">
+            <i class="bi bi-arrow-left"></i> Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Period Selector -->
+<div class="mb-3">
+    <div class="btn-group btn-group-sm">
+        {% for d in [7, 14, 30, 90] %}
+        <a href="?days={{ d }}" class="btn {{ 'btn-primary' if selected_days == d else 'btn-outline-primary' }}">
+            {{ d }}d
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Summary -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 kpi-card">
+            <div class="card-body text-center">
+                <div class="kpi-number text-primary">{{ engagement.total }}</div>
+                <div class="kpi-label">Total Events ({{ selected_days }}d)</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 kpi-card">
+            <div class="card-body text-center">
+                <div class="kpi-number text-success">{{ engagement.counts|length }}</div>
+                <div class="kpi-label">Active Rule Types</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 kpi-card">
+            <div class="card-body text-center">
+                <div class="kpi-number text-info">7</div>
+                <div class="kpi-label">Total Rules</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rule Descriptions + Counts -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-gear"></i> Rule Status</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Rule</th>
+                        <th>Description</th>
+                        <th class="text-center">Events ({{ selected_days }}d)</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rule_key, description in rule_descriptions.items() %}
+                    <tr>
+                        <td>
+                            <strong>{{ rule_key.replace('_', ' ').title() }}</strong>
+                        </td>
+                        <td><small class="text-muted">{{ description }}</small></td>
+                        <td class="text-center">
+                            <span class="badge bg-{{ 'primary' if engagement.counts.get(rule_key, 0) > 0 else 'light text-muted' }}">
+                                {{ engagement.counts.get(rule_key, 0) }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            {% if engagement.counts.get(rule_key, 0) > 0 %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-light text-muted">Idle</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Events Log -->
+{% if engagement.recent_events %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Events</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Time</th>
+                        <th>User</th>
+                        <th>Event</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in engagement.recent_events %}
+                    <tr>
+                        <td>
+                            <small class="text-muted">{{ event.created_at|timeago }}</small>
+                        </td>
+                        <td>
+                            {% if event.user %}
+                            <a href="{{ url_for('admin.student_detail', user_id=event.user_id) }}" class="text-decoration-none">
+                                {{ event.user.username }}
+                            </a>
+                            {% else %}
+                            <span class="text-muted">User #{{ event.user_id }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ event.event_type.replace('_', ' ') }}</span>
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ event.event_data or '—' }}</small>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="card-body text-center text-muted py-5">
+        <i class="bi bi-inbox fs-1 mb-2 d-block"></i>
+        No engagement events in this period. Run the engagement rules to start.
+    </div>
+</div>
+{% endif %}
+{% endblock %}

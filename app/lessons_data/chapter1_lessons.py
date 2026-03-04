@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'what-are-variables',
                 'title': 'What Are Variables?',
+                'diagram': {
+                    'id': 'ch1-variables-memory',
+                    'title': 'How Python Variables Work in Memory',
+                    'file': 'diagrams/ch1-variables-memory.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch1-variables-memory.json',
+                },
                 'content': """## What Are Variables?
 
 A **variable** is a named container that stores a value in your computer's memory. Think of it as a labeled box where you can put data and retrieve it later by referring to its label.

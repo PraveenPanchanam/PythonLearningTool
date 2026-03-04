@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'why-functions',
                 'title': 'Why Functions? A Real-World Perspective',
+                'diagram': {
+                    'id': 'ch4-function-stack',
+                    'title': 'Function Call Stack & Scope',
+                    'file': 'diagrams/ch4-function-stack.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch4-function-stack.json',
+                },
                 'content': """## Why Functions? A Real-World Perspective
 
 Imagine you run a bakery and every morning you follow the same steps to make bread: measure flour, add water, knead the dough, let it rise, and bake. You don't reinvent the process each day -- you follow a **recipe**. In programming, a **function** is exactly like a recipe: a named set of instructions you can reuse whenever you need them.

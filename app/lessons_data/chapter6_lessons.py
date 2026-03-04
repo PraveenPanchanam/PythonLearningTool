@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'why-file-io-matters',
                 'title': 'Why File I/O Matters',
+                'diagram': {
+                    'id': 'ch6-file-io-flow',
+                    'title': 'File I/O: Reading & Writing Files',
+                    'file': 'diagrams/ch6-file-io-flow.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch6-file-io-flow.json',
+                },
                 'content': """## Why File I/O Matters
 
 Almost every real-world program needs to read data from files or write data to them. Consider these everyday scenarios:

@@ -41,20 +41,24 @@ def create_app(config_name=None):
                 'cdn.jsdelivr.net',
                 'cdnjs.cloudflare.com',
                 'www.googletagmanager.com',
+                'esm.sh',
             ],
             'style-src': [
                 "'self'",
                 "'unsafe-inline'",
                 'cdn.jsdelivr.net',
                 'cdnjs.cloudflare.com',
+                'esm.sh',
             ],
             'font-src': [
                 "'self'",
                 'cdn.jsdelivr.net',
+                'esm.sh',
             ],
             'img-src': [
                 "'self'",
                 'data:',
+                'blob:',
                 'www.googletagmanager.com',
             ],
             'connect-src': [
@@ -62,6 +66,11 @@ def create_app(config_name=None):
                 'www.google-analytics.com',
                 'analytics.google.com',
                 'www.googletagmanager.com',
+                'esm.sh',
+            ],
+            'worker-src': [
+                "'self'",
+                'blob:',
             ],
         }
         force_https = os.environ.get('FORCE_HTTPS', 'false').lower() == 'true'
@@ -142,6 +151,9 @@ def create_app(config_name=None):
     from app.routes.seo import seo_bp
     from app.routes.blog import blog_bp
     from app.routes.certificates import certificates_bp
+    from app.routes.cron import cron_bp
+    from app.routes.growth_admin import growth_admin_bp
+    from app.routes.whiteboard import whiteboard_bp
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(main_bp)
@@ -153,6 +165,22 @@ def create_app(config_name=None):
     app.register_blueprint(seo_bp)
     app.register_blueprint(blog_bp, url_prefix='/blog')
     app.register_blueprint(certificates_bp, url_prefix='/certificate')
+    app.register_blueprint(cron_bp, url_prefix='/cron')
+    app.register_blueprint(growth_admin_bp, url_prefix='/admin/growth')
+    app.register_blueprint(whiteboard_bp, url_prefix='/whiteboard')
+
+    # Register Growth Engine CLI commands
+    from app.growth.cli import growth_cli
+    app.cli.add_command(growth_cli)
+
+    # Register lesson content update CLI command
+    import click
+
+    @app.cli.command('update-diagrams')
+    def update_diagrams_cmd():
+        """Update lesson content with latest diagram data from source files."""
+        from app.lessons_data.loader import update_lesson_content
+        update_lesson_content()
 
     # Inject GA4 measurement ID into all templates
     @app.context_processor
@@ -180,7 +208,7 @@ def create_app(config_name=None):
 
     # Import models (for Flask-Migrate to detect them)
     with app.app_context():
-        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion, Nudge, Feedback, Certificate, BlogPost  # noqa: F401
+        from app.models import User, Chapter, Assignment, Submission, Lesson, LessonCompletion, Nudge, Feedback, Certificate, BlogPost, BlogPostView, EngagementEvent, DiagramNote  # noqa: F401
         # In development, auto-create tables. In production, use: flask db upgrade
         if app.debug:
             db.create_all()

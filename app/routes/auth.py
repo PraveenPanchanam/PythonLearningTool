@@ -86,6 +86,14 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        # Send welcome email (non-blocking)
+        try:
+            from app.growth.engagement_rules import send_welcome_email
+            send_welcome_email(user)
+        except Exception:
+            import logging
+            logging.getLogger(__name__).warning('Welcome email failed', exc_info=True)
+
         flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('auth.login'))
 

@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'introduction-to-lists',
                 'title': 'Introduction to Lists',
+                'diagram': {
+                    'id': 'ch5-data-structures',
+                    'title': 'Python Data Structures Comparison',
+                    'file': 'diagrams/ch5-data-structures.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch5-data-structures.json',
+                },
                 'content': """## Introduction to Lists
 
 In everyday life, you make lists all the time: a grocery list, a to-do list, a playlist of songs. A Python **list** works the same way -- it is an ordered collection of items stored under a single name.

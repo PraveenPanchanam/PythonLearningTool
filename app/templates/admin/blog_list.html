@@ -18,6 +18,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Status</th>
+                        <th>Category</th>
+                        <th class="text-center">Views</th>
                         <th>Tags</th>
                         <th>Date</th>
                         <th>Actions</th>
@@ -33,9 +35,19 @@
                         <td>
                             {% if post.is_published %}
                             <span class="badge bg-success">Published</span>
+                            {% elif post.scheduled_at %}
+                            <span class="badge bg-warning text-dark">Scheduled</span>
                             {% else %}
                             <span class="badge bg-secondary">Draft</span>
                             {% endif %}
+                        </td>
+                        <td>
+                            {% if post.category %}
+                            <span class="badge bg-info">{{ post.category }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <strong>{{ post.view_count or 0 }}</strong>
                         </td>
                         <td>
                             {% for tag in post.tag_list[:3] %}

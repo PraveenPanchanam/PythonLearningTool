@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'what-is-pandas',
                 'title': 'What is Pandas?',
+                'diagram': {
+                    'id': 'ch10-dataframe',
+                    'title': 'Pandas DataFrame Structure',
+                    'file': 'diagrams/ch10-dataframe.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch10-dataframe.json',
+                },
                 'content': """## What is Pandas?
 
 **Pandas** is Python's most popular library for data analysis and manipulation. If you have ever worked with spreadsheets like Excel or Google Sheets, pandas gives you the same power (and much more) directly in Python.

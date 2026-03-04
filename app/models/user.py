@@ -22,6 +22,7 @@ class User(UserMixin, db.Model):
     last_active_at = db.Column(db.DateTime, nullable=True)
     last_ip = db.Column(db.String(45), nullable=True)        # supports IPv6
     last_location = db.Column(db.String(100), nullable=True)  # "City, Country"
+    welcome_email_sent = db.Column(db.Boolean, default=False)
 
     submissions = db.relationship('Submission', backref='user', lazy='dynamic')
     lesson_completions = db.relationship('LessonCompletion', backref='user', lazy='dynamic')

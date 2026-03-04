@@ -14,6 +14,12 @@ LESSONS = [
             {
                 'id': 'what-is-numpy',
                 'title': 'What Is NumPy and Why Use It?',
+                'diagram': {
+                    'id': 'ch9-numpy-shapes',
+                    'title': 'NumPy Array Shapes: 1D, 2D, and 3D',
+                    'file': 'diagrams/ch9-numpy-shapes.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch9-numpy-shapes.json',
+                },
                 'content': """## What Is NumPy and Why Use It?
 
 **NumPy** (Numerical Python) is the foundation of scientific computing in Python. It provides a powerful array object and a collection of mathematical functions that operate on arrays at blazing speed.

@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'why-loops',
                 'title': 'Why Loops?',
+                'diagram': {
+                    'id': 'ch3-loops-flow',
+                    'title': 'for Loop vs while Loop',
+                    'file': 'diagrams/ch3-loops-flow.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch3-loops-flow.json',
+                },
                 'content': """## Why Loops?
 
 Imagine you are a teacher and you need to calculate the final grade for every student in a class of 30. Without loops, you would write the same calculation 30 times:

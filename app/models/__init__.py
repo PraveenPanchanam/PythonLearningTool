@@ -8,3 +8,6 @@ from app.models.nudge import Nudge
 from app.models.feedback import Feedback
 from app.models.certificate import Certificate
 from app.models.blog_post import BlogPost
+from app.models.blog_post_view import BlogPostView
+from app.models.engagement_event import EngagementEvent
+from app.models.diagram_note import DiagramNote

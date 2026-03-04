@@ -62,3 +62,54 @@ def load_all_lessons():
 
     db.session.commit()
     print("All lessons loaded successfully!")
+
+
+def update_lesson_content():
+    """Update existing lesson content from lesson data modules.
+
+    This preserves lesson IDs and user completion records while
+    refreshing the section content (e.g. adding diagram fields).
+    """
+    from app.lessons_data import (
+        chapter1_lessons,
+        chapter2_lessons,
+        chapter3_lessons,
+        chapter4_lessons,
+        chapter5_lessons,
+        chapter6_lessons,
+        chapter7_lessons,
+        chapter8_lessons,
+        chapter9_lessons,
+        chapter10_lessons,
+        chapter11_lessons,
+    )
+
+    lesson_modules = [
+        chapter1_lessons, chapter2_lessons, chapter3_lessons,
+        chapter4_lessons, chapter5_lessons, chapter6_lessons,
+        chapter7_lessons, chapter8_lessons, chapter9_lessons,
+        chapter10_lessons, chapter11_lessons,
+    ]
+
+    updated = 0
+    for module in lesson_modules:
+        chapter_order = module.CHAPTER_ORDER
+        chapter = Chapter.query.filter_by(order=chapter_order).first()
+        if not chapter:
+            continue
+
+        for lesson_data in module.LESSONS:
+            lesson = Lesson.query.filter_by(
+                chapter_id=chapter.id, order=lesson_data['order']
+            ).first()
+            if lesson:
+                new_content = json.dumps(lesson_data['sections'])
+                if lesson.content != new_content:
+                    lesson.content = new_content
+                    updated += 1
+
+    if updated:
+        db.session.commit()
+        print(f"  Updated content for {updated} lessons.")
+    else:
+        print("  Lesson content already up to date.")

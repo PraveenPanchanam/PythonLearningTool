@@ -11,6 +11,12 @@ LESSONS = [
             {
                 'id': 'why-conditions-matter',
                 'title': 'Why Conditions Matter',
+                'diagram': {
+                    'id': 'ch2-conditionals-flow',
+                    'title': 'if / elif / else Flowchart',
+                    'file': 'diagrams/ch2-conditionals-flow.svg',
+                    'data_file': 'diagrams/excalidraw-data/ch2-conditionals-flow.json',
+                },
                 'content': """## Why Conditions Matter
 
 Every day, you make hundreds of decisions without even thinking about it:
